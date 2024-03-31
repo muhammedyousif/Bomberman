@@ -1,8 +1,8 @@
 package Entities;
 
+import java.awt.*;
+
 public class Bomberman extends Entity {
-    private int x;
-    private int y;
     private String playername;
     private int playerId;
     private float speed;
@@ -17,5 +17,12 @@ public class Bomberman extends Entity {
 
     public Bomberman(int x,int y){
         super(x,y);
+    }
+
+    public void update(){
+
+    }
+    public void render(Graphics g){
+
     }
 }
