@@ -1,4 +1,4 @@
-package Entities;
+package bomberman.Sprite;
 
 public enum Headed{
     UP,

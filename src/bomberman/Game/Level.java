@@ -1,4 +1,4 @@
-package Game;
+package bomberman.Game;
 
 import java.awt.image.BufferedImage;
 import java.awt.Image;
@@ -29,7 +29,7 @@ public class Level {
             for (char blockType : line.toCharArray()) {
                 if(blockType == '1'){
                     Image image = new ImageIcon("data/images/wall.jpg").getImage();
-                    grid.add(new Wall(x*block_width, y*block_height, ,image, block_height,block_width));
+                    grid.add(new Wall(x*block_width, y*block_height,block_height,block_width,image));
                 }
                 else if(blockType == '2'){
                     Image image = new ImageIcon("data/images/box.png").getImage();

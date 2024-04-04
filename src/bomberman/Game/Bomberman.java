@@ -1,5 +1,6 @@
-package Entities;
+package bomberman.Game;
 
+import bomberman.Sprite.*;
 import java.awt.*;
 
 public class Bomberman{

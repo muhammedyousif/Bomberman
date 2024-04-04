@@ -1,4 +1,4 @@
-package Game;
+package bomberman.Game;
 
 public class GameLogic {
     private Level level;

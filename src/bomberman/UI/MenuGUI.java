@@ -1,4 +1,4 @@
-package UI;
+package bomberman.UI;
 
 public class MenuGUI {
 }
