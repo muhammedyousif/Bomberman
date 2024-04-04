@@ -1,5 +1,5 @@
 package bomberman.Sprite;
-import java.awt.Image;
+import java.awt.*;
 import javax.swing.*;
 
 
@@ -22,5 +22,6 @@ public class Sprite {
     public void draw(Graphics g) {
         g.drawImage(image, x, y, width, height, null);
     }
+
 
 }
