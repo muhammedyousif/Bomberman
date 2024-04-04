@@ -1,5 +1,6 @@
 package bomberman.Sprite;
 import java.awt.Image;
+import bomberman.Game.*;
 public class Bomb extends Sprite {
     private float timeLeft;
     private int strength;

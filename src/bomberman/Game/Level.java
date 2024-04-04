@@ -43,6 +43,9 @@ public class Level {
         }
     }
 
+    public ArrayList<Sprite> getGrid(){
+        return this.grid;
+    }
 
     public void draw(Graphics g) {
         for (Sprite sprite : grid) {
