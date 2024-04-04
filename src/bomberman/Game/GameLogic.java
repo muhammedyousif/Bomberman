@@ -17,12 +17,12 @@ public class GameLogic {
             System.out.println(e);
         }
         this.players = new ArrayList<>();
-        players.add(new Bomberman(200,200,1,new ImageIcon("src/Assets/bomberman.jpg").getImage(), level));
+        players.add(new Bomberman(60,60,1,new ImageIcon("src/Assets/bombermanleft.jpg").getImage(), level));
     }
 
     public void pressed(String button){
         for(Bomberman bomberman : players){
-            bomberman.pressed("W");
+            bomberman.pressed(button);
         }
     }
 

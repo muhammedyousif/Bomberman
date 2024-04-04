@@ -20,7 +20,7 @@ import javax.swing.Timer;
 import java.awt.Font;
 
 public class GameEngine extends JPanel{
-    private Image background = new ImageIcon("src/bomberman/Assets/background.jpg").getImage();
+    private Image background = new ImageIcon("src/bomberman/Assets/background.png").getImage();
     private GameLogic gameLogic;
     public GameEngine(){
         int FPS = 60;
@@ -53,13 +53,20 @@ public class GameEngine extends JPanel{
                 gameLogic.pressed("D");
             }
         });
+        this.getInputMap().put(KeyStroke.getKeyStroke("E"), "pressed E");
+        this.getActionMap().put("pressed E", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                gameLogic.pressed("E");
+            }
+        });
         Timer newFrameTimer = new Timer(1000/FPS, new NewFrameListener());
         newFrameTimer.start();
     }
     @Override
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs);
-        grphcs.drawImage(background, 0, 0, 1600, 900, null);
+        grphcs.drawImage(background, 0, 0, 900, 780, null);
         gameLogic.drawEverything(grphcs);
 
     }

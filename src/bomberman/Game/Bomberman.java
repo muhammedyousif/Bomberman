@@ -23,7 +23,7 @@ import javax.swing.Timer;
 
 public class Bomberman extends JPanel{
     private String playername;
-    private int speed;
+    private int speed = 5;
     private int hp;
     private boolean paused;
     private boolean alive=true;
@@ -37,15 +37,16 @@ public class Bomberman extends JPanel{
     private int playerId;
     private Level level;
     private ArrayList<Bomb> bombs;
-    private Image image = new ImageIcon("src/bomberman/Assets/bomberman.jpg").getImage();
-    public final int width = 30;
-    public final int height = 30;
+    private Image image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
+    public final int width = 40;
+    public final int height = 50;
     //private Binds binds;
     public Bomberman(int x,int y,int playerId, Image image, Level level){
         this.x = x;
         this.y = y;
         this.playerId = playerId;
         this.level = level;
+        this.bombs = new ArrayList<>();
     }
 
     public void pressed(String button){
@@ -61,6 +62,9 @@ public class Bomberman extends JPanel{
         if(Objects.equals(button, "D")){
             moveRight();
         }
+        if(Objects.equals(button, "E")){
+            placeBomb();
+        }
     }
 
     public void moveUp(){
@@ -70,6 +74,7 @@ public class Bomberman extends JPanel{
         }
     }
     public void moveLeft(){
+        this.image = new ImageIcon("src/bomberman/Assets/bombermanleft.png").getImage();
         this.x = this.x - this.speed;
         if(checkCollision()){
             this.x = this.x + this.speed;
@@ -82,11 +87,18 @@ public class Bomberman extends JPanel{
         }
     }
     public void moveRight(){
+        this.image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
         this.x = this.x + this.speed;
         if(checkCollision()){
             this.x = this.x - this.speed;
         }
     }
+    public void placeBomb(){
+        int middlepos_x = this.x + (this.width/2);
+        int middlepos_y = this.y + (this.height/2);
+        bombs.add(this.level.placeBomb(middlepos_x,middlepos_y));
+    }
+
 
     public boolean collides(Sprite sprite) {
         Rectangle rect = new Rectangle(this.x, this.y, this.width, this.height);
