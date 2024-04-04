@@ -1,11 +1,11 @@
-package Sprite;
+package bomberman.Sprite;
 import java.awt.Image;
 public class Bomb extends Sprite {
     private float timeLeft;
     private int strength;
     private Level level;
-    public Bomb(int x,int y,int height,int width){
-        super(x,y,height,width);
+    public Bomb(int x,int y,int height,int width, Image image){
+        super(x,y,width,height,image);
 
     }
 }

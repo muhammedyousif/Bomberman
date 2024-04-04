@@ -1,4 +1,4 @@
-package Sprite;
+package bomberman.Sprite;
 import java.awt.Image;
 import javax.swing.*;
 
