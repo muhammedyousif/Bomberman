@@ -1,6 +1,9 @@
 package bomberman;
+
+import bomberman.UI.MenuGUI;
+
 public class Main {
     public static void main(String[] args){
-        System.out.println("he");
+        MenuGUI menuGUI = new MenuGUI();
     }
 }
