@@ -32,7 +32,7 @@ public class MenuGUI {
         });
         JMenuItem restartMenuItem = new JMenuItem("Restart");
         fileMenu.add(restartMenuItem);
-        frame.setPreferredSize(new Dimension(1600,900));
+        frame.setPreferredSize(new Dimension(920,843));
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
