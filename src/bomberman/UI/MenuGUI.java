@@ -1,5 +1,6 @@
 package bomberman.UI;
 
+import bomberman.Game.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +32,7 @@ public class MenuGUI {
         });
         JMenuItem restartMenuItem = new JMenuItem("Restart");
         fileMenu.add(restartMenuItem);
-        frame.setPreferredSize(new Dimension(915,928));
+        frame.setPreferredSize(new Dimension(1600,900));
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);

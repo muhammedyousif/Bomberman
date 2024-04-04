@@ -5,10 +5,10 @@ import javax.swing.*;
 
 public class Sprite {
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    public int x;
+    public int y;
+    public int width;
+    public int height;
     private Image image;
 
     public Sprite(int x, int y, int width, int height, Image image) {
