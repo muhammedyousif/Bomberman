@@ -12,7 +12,7 @@ public class GameLogic {
     private GameMode gamemode;
     public GameLogic(){
         try{
-            this.level = new Level("src/bomberman/Assets/level.txt");
+            this.level = new Level("src/bomberman/Assets/level1.txt");
         }catch(Exception e){
             System.out.println(e);
         }
@@ -47,12 +47,13 @@ public class GameLogic {
         }
     }
 
-    public Level getLevel() {
-        return level;
+
+    public void updateMonsters() {
+        for (Monster monster : level.getMonsters()) {
+            monster.move();
+
+        }
     }
 
-    public ArrayList<Bomberman> getPlayers() {
-        return players;
-    }
 }
 

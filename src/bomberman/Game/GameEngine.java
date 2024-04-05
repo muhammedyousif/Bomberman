@@ -163,6 +163,7 @@ public class GameEngine extends JPanel implements Runnable{
     class NewFrameListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {
+            gameLogic.updateMonsters();
             repaint();
         }
     }

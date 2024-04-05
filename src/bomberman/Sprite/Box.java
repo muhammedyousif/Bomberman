@@ -1,7 +1,24 @@
 package bomberman.Sprite;
-import java.awt.Image;
+import java.awt.*;
+import bomberman.Game.*;
+
+import javax.swing.*;
+
 public class Box extends Sprite{
-    public Box(int x,int y,int width, int height, Image image){
+    private Level level;
+    public Box(int x,int y,int width, int height, Image image,Level level){
         super(x,y,width,height,image);
+        this.level = level;
+    }
+    public boolean shouldDropPowerUp() {
+        int randomNumber = (int) (Math.random() * 100);
+        return randomNumber < 50;
+    }
+    public void blowUp(){
+        if(shouldDropPowerUp()){
+            Image image = new ImageIcon("src/bomberman/Assets/powerup.png").getImage();
+            level.grid.add(new PowerUp(this.x+5, this.y+5, 50, 50, image));
+        }
+        level.grid.remove(this);
     }
 }
