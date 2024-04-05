@@ -3,22 +3,16 @@ package bomberman.Game;
 import bomberman.Sprite.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.Console;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
-import java.util.logging.Logger;
-import javax.swing.AbstractAction;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
+
+import static bomberman.Game.Constants.*;
 
 
 public class Bomberman extends JPanel{
@@ -40,6 +34,12 @@ public class Bomberman extends JPanel{
     private Image image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
     public final int width = 40;
     public final int height = 50;
+    private int player_action= IDLE;
+    private BufferedImage[][] animations;
+    private int aniTick;
+    private int aniSpeed=40; //minel kisebb a szam annal gyorsabb az animacio
+    private int aniIndex;
+
     //private Binds binds;
     public Bomberman(int x,int y,int playerId, Image image, Level level){
         this.x = x;
@@ -47,6 +47,7 @@ public class Bomberman extends JPanel{
         this.playerId = playerId;
         this.level = level;
         this.bombs = new ArrayList<>();
+        loadAnimations();
     }
 
     public void pressed(String button){
@@ -68,30 +69,36 @@ public class Bomberman extends JPanel{
     }
 
     public void moveUp(){
+        player_action=RUNNING_UP;
+
         this.y = this.y - this.speed;
         if(checkCollision()){
             this.y = this.y + this.speed;
         }
     }
     public void moveLeft(){
-        this.image = new ImageIcon("src/bomberman/Assets/bombermanleft.png").getImage();
+        player_action=RUNNING_LEFT;
+        //this.image = new ImageIcon("src/bomberman/Assets/bombermanleft.png").getImage();
         this.x = this.x - this.speed;
         if(checkCollision()){
             this.x = this.x + this.speed;
         }
     }
     public void moveDown(){
+        player_action=RUNNING_DOWN;
         this.y = this.y + this.speed;
         if(checkCollision()){
             this.y = this.y - this.speed;
         }
     }
     public void moveRight(){
-        this.image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
+        player_action=RUNNING_RIGHT;
+        //this.image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
         this.x = this.x + this.speed;
         if(checkCollision()){
             this.x = this.x - this.speed;
         }
+
     }
     public void placeBomb(){
         int middlepos_x = this.x + (this.width/2);
@@ -114,18 +121,50 @@ public class Bomberman extends JPanel{
         }
         return false;
     }
-
-
-
-
-
     public void update(){
+        updateAnimation();
 
     }
 
+    private void loadAnimations() {
+        InputStream is = getClass().getResourceAsStream("/bomberman/Assets/pink.png");
+        try {
+            BufferedImage img = ImageIO.read(is);
+            animations = new BufferedImage[7][6];
+            for(int i =0;i<animations.length;i++){
+                for(int j =0;j<animations[i].length;j++) {
+                    animations[i][j] = img.getSubimage(j * 16, i*26, 16, 26);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                is.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void updateAnimation() {
+        aniTick++;
+        if (aniTick>=aniSpeed){
+            aniTick=0;
+            aniIndex++;
+            if (aniIndex>=getSprite(player_action)){
+                aniIndex=0;
+            }
+        }
+        System.out.println("Current Animation Index: " + aniIndex);
+
+    }
     public void draw(Graphics g)
     {
-        g.drawImage(this.image, x, y, width, height, null);
+        //g.drawImage(this.image, x, y, width, height, null);
+        g.drawImage(animations[player_action][aniIndex], x, y, width, height, null);
+
         g.drawRect(this.x,this.y,width,height);
     }
 }

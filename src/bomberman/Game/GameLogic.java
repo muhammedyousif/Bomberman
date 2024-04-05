@@ -41,5 +41,12 @@ public class GameLogic {
         }
     }
 
+    public Level getLevel() {
+        return level;
+    }
+
+    public ArrayList<Bomberman> getPlayers() {
+        return players;
+    }
 }
 
