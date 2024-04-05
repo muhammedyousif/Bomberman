@@ -43,7 +43,7 @@ public class Monster extends Sprite {
         return rect.intersects(otherRect);
     }
     public boolean checkCollision(){
-        ArrayList<Sprite> grid = this.level.getGrid();
+        ArrayList<Sprite> grid = this.level.grid;
         for(Sprite sprite : grid) {
             if (collides(sprite)) {
                 return true;

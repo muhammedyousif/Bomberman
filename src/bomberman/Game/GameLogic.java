@@ -12,7 +12,7 @@ public class GameLogic {
     private GameMode gamemode;
     public GameLogic(){
         try{
-            this.level = new Level("src/bomberman/Assets/level.txt");
+            this.level = new Level("src/bomberman/Assets/level1.txt");
         }catch(Exception e){
             System.out.println(e);
         }
