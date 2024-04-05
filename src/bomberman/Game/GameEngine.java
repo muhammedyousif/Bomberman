@@ -65,11 +65,46 @@ public class GameEngine extends JPanel implements Runnable{
                 gameLogic.pressed("E");
             }
         });
+        this.getInputMap().put(KeyStroke.getKeyStroke("released W"), "released W");
+        this.getInputMap().put(KeyStroke.getKeyStroke("released A"), "released A");
+        this.getInputMap().put(KeyStroke.getKeyStroke("released S"), "released S");
+        this.getInputMap().put(KeyStroke.getKeyStroke("released D"), "released D");
+
+        //key release hogy tudjam hogy mar nem mozog (animacionak)
+        this.getActionMap().put("released W", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                gameLogic.released("W"); // Assuming this method sets moving to false
+            }
+        });
+        this.getActionMap().put("released S", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                gameLogic.released("S");
+            }
+        });
+
+        this.getActionMap().put("released A", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                gameLogic.released("A");
+            }
+        });
+
+        this.getActionMap().put("released D", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                gameLogic.released("D");
+            }
+        });
+
+
 //        Timer newFrameTimer = new Timer(1000/FPS, new NewFrameListener());
 //        newFrameTimer.start();
         startGameLoop();
 
     }
+
     @Override
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs);
@@ -79,6 +114,7 @@ public class GameEngine extends JPanel implements Runnable{
     }
     @Override
     public void run() {
+
         double timeframe = 1000000000.0/FPS_SET;
         double timeupdtae = 1000000000.0/UPS_SET;
         long previousTime= System.nanoTime();

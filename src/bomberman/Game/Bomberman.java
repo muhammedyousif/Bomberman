@@ -39,6 +39,7 @@ public class Bomberman extends JPanel{
     private int aniTick;
     private int aniSpeed=40; //minel kisebb a szam annal gyorsabb az animacio
     private int aniIndex;
+    private boolean moving=false;
 
     //private Binds binds;
     public Bomberman(int x,int y,int playerId, Image image, Level level){
@@ -53,20 +54,35 @@ public class Bomberman extends JPanel{
     public void pressed(String button){
         if(Objects.equals(button, "W")){
             moveUp();
+            moving=true;
         }
         if(Objects.equals(button, "A")){
             moveLeft();
+            moving=true;
         }
         if(Objects.equals(button, "S")){
             moveDown();
+            moving=true;
         }
         if(Objects.equals(button, "D")){
             moveRight();
+            moving=true;
         }
         if(Objects.equals(button, "E")){
             placeBomb();
         }
     }
+    public void released(String button) {
+        switch (button) {
+            case "W":
+            case "S":
+            case "A":
+            case "D":
+                moving = false;
+                break;
+        }
+    }
+
 
     public void moveUp(){
         player_action=RUNNING_UP;
@@ -123,7 +139,13 @@ public class Bomberman extends JPanel{
     }
     public void update(){
         updateAnimation();
+        checkState();
+    }
 
+    private void checkState() {
+        if(!moving){
+            player_action=IDLE;
+        }
     }
 
     private void loadAnimations() {
@@ -133,7 +155,7 @@ public class Bomberman extends JPanel{
             animations = new BufferedImage[7][6];
             for(int i =0;i<animations.length;i++){
                 for(int j =0;j<animations[i].length;j++) {
-                    animations[i][j] = img.getSubimage(j * 16, i*26, 16, 26);
+                    animations[i][j] = img.getSubimage(j * 18, i*27, 18, 27);
                 }
             }
         } catch (IOException e) {
@@ -157,7 +179,6 @@ public class Bomberman extends JPanel{
                 aniIndex=0;
             }
         }
-        System.out.println("Current Animation Index: " + aniIndex);
 
     }
     public void draw(Graphics g)

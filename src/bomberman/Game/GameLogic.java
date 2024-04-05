@@ -25,6 +25,12 @@ public class GameLogic {
             bomberman.pressed(button);
         }
     }
+    public void released(String button){
+        for(Bomberman bomberman : players){
+            bomberman.released(button);
+        }
+    }
+
 
     public boolean spritesCollides(Sprite sprite1, Sprite sprite2) {
         Rectangle rect = new Rectangle(sprite1.x, sprite1.y, sprite1.width, sprite1.height);
