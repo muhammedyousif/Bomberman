@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class GameLogic {
     private Level level;
@@ -55,5 +56,8 @@ public class GameLogic {
         }
     }
 
+    public ArrayList<Bomberman> getPlayers() {
+        return players;
+    }
 }
 

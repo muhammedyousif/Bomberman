@@ -37,7 +37,7 @@ public class Bomberman extends JPanel{
     private int player_action= IDLE;
     private BufferedImage[][] animations;
     private int aniTick;
-    private int aniSpeed=40; //minel kisebb a szam annal gyorsabb az animacio
+    private int aniSpeed=25; //minel kisebb a szam annal gyorsabb az animacio
     private int aniIndex;
     private boolean moving=false;
 
