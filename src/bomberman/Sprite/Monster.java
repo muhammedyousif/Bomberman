@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
+
+import static bomberman.Game.Constants.IDLE;
+import static bomberman.Game.Constants.getSprite;
+
 public class Monster extends Sprite {
     private int speed;
     private boolean paused;
@@ -16,6 +20,10 @@ public class Monster extends Sprite {
     private Random random;
     private Level level;
     private BufferedImage[][] animations;
+    private int aniTick;
+    private int aniSpeed=90; //minel kisebb a szam annal gyorsabb az animacio
+    private int aniIndex;
+
 
     public Monster(int x,int y,int width, int height, Image image){
         super(x,y,width,height,image);
@@ -59,13 +67,13 @@ public class Monster extends Sprite {
     }
     public void draw(Graphics g)
     {
-        g.drawImage(animations[0][0], x, y, width, height, null);
+        g.drawImage(animations[0][aniIndex], x, y, 60, 50, null);
     }
     public void setLevel(Level level) {
         this.level = level;
     }
     public void update(){
-
+        updateAnimation();
     }
     private void loadAnimations(){
         InputStream is = getClass().getResourceAsStream("/bomberman/Assets/monstersprite.png");
@@ -74,7 +82,7 @@ public class Monster extends Sprite {
             animations = new BufferedImage[1][3];
             for(int i =0;i<animations.length;i++){
                 for(int j =0;j<animations[i].length;j++) {
-                    animations[i][j] = img.getSubimage(j * 18, i*27, 18, 27);
+                    animations[i][j] = img.getSubimage(j * 20, i*18, 20, 18);
                 }
             }
         } catch (IOException e) {
@@ -86,8 +94,18 @@ public class Monster extends Sprite {
                 e.printStackTrace();
             }
         }
-
+    }
+    private void updateAnimation() {
+        aniTick++;
+        if (aniTick >= aniSpeed) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >=3) {
+                aniIndex = 0;
+            }
+        }
 
     }
+
 
 }
