@@ -172,19 +172,23 @@ public class Bomberman extends JPanel{
 
     private void updateAnimation() {
         aniTick++;
-        if (aniTick>=aniSpeed){
-            aniTick=0;
-            aniIndex++;
-            if (aniIndex>=getSprite(player_action)){
-                aniIndex=0;
+        if (player_action == IDLE) {
+            aniIndex = 0;
+        } else {
+            if (aniTick >= aniSpeed) {
+                aniTick = 0;
+                aniIndex++;
+                if (aniIndex >= animations[player_action].length || aniIndex>=getSprite(player_action)) {
+                    aniIndex = 0;
+                }
             }
         }
-
     }
     public void draw(Graphics g)
     {
+        super.paintComponent(g);
         //g.drawImage(this.image, x, y, width, height, null);
-        g.drawImage(animations[player_action][aniIndex], x, y, width, height, null);
+        g.drawImage(animations[player_action][aniIndex], x, y, width, height, this);
 
         g.drawRect(this.x,this.y,width,height);
     }
