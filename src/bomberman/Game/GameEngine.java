@@ -21,7 +21,7 @@ import java.awt.*;
 
 
 public class GameEngine extends JPanel implements Runnable{
-    private Image background = new ImageIcon("src/bomberman/Assets/background.png").getImage();
+    private Image background = new ImageIcon("src/bomberman/Assets/mapbackground.png").getImage();
     private GameLogic gameLogic;
     private int FPS_SET=120;
     private int UPS_SET= 200;
@@ -108,7 +108,7 @@ public class GameEngine extends JPanel implements Runnable{
     @Override
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs);
-        grphcs.drawImage(background, 0, 0, 900, 780, null);
+        grphcs.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(grphcs);
 
     }
