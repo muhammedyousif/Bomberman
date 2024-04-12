@@ -153,6 +153,9 @@ public class GameEngine extends JPanel implements Runnable{
         for (int i = 0; i <gameLogic.getPlayers().size() ; i++) {
             gameLogic.getPlayers().get(i).update();
         }
+        for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
+            gameLogic.getLevel().getMonsters().get(i).update();
+        }
     }
 
     private void startGameLoop(){
