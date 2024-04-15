@@ -20,7 +20,7 @@ import javax.swing.Timer;
 import java.awt.*;
 
 
-public class GameEngine extends JPanel implements Runnable{
+public class GameEngine extends JPanel implements Runnable,StateMethods{
     private Image background = new ImageIcon("src/bomberman/Assets/mapbackground.png").getImage();
     private GameLogic gameLogic;
     private int FPS_SET=120;
@@ -30,77 +30,8 @@ public class GameEngine extends JPanel implements Runnable{
     public GameEngine(){
         int FPS = 60;
         gameLogic = new GameLogic();
-        this.getInputMap().put(KeyStroke.getKeyStroke("W"), "pressed W");
-        this.getActionMap().put("pressed W", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.pressed("W");
-            }
-        });
-        this.getInputMap().put(KeyStroke.getKeyStroke("S"), "pressed S");
-        this.getActionMap().put("pressed S", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.pressed("S");
-            }
-        });
-        this.getInputMap().put(KeyStroke.getKeyStroke("A"), "pressed A");
-        this.getActionMap().put("pressed A", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.pressed("A");
-            }
-        });
-        this.getInputMap().put(KeyStroke.getKeyStroke("D"), "pressed D");
-        this.getActionMap().put("pressed D", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.pressed("D");
-            }
-        });
-        this.getInputMap().put(KeyStroke.getKeyStroke("E"), "pressed E");
-        this.getActionMap().put("pressed E", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.pressed("E");
-            }
-        });
-        this.getInputMap().put(KeyStroke.getKeyStroke("released W"), "released W");
-        this.getInputMap().put(KeyStroke.getKeyStroke("released A"), "released A");
-        this.getInputMap().put(KeyStroke.getKeyStroke("released S"), "released S");
-        this.getInputMap().put(KeyStroke.getKeyStroke("released D"), "released D");
-
-        //key release hogy tudjam hogy mar nem mozog (animacionak)
-        this.getActionMap().put("released W", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.released("W"); // Assuming this method sets moving to false
-            }
-        });
-        this.getActionMap().put("released S", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.released("S");
-            }
-        });
-
-        this.getActionMap().put("released A", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.released("A");
-            }
-        });
-
-        this.getActionMap().put("released D", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                gameLogic.released("D");
-            }
-        });
-
-
-//        Timer newFrameTimer = new Timer(1000/FPS, new NewFrameListener());
-//        newFrameTimer.start();
+        addKeyListener(new Keyboard(this));
+        setFocusable(true);
         startGameLoop();
 
     }
@@ -161,6 +92,46 @@ public class GameEngine extends JPanel implements Runnable{
     private void startGameLoop(){
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()){
+            case KeyEvent.VK_A:
+                gameLogic.getPlayers().get(0).setLeft(true);
+                break;
+            case KeyEvent.VK_D:
+                gameLogic.getPlayers().get(0).setRight(true);
+                break;
+            case KeyEvent.VK_W:
+                gameLogic.getPlayers().get(0).setUp(true);
+                break;
+            case  KeyEvent.VK_S:
+                gameLogic.getPlayers().get(0).setDown(true);
+                break;
+            case KeyEvent.VK_E:
+                gameLogic.getPlayers().get(0).placeBomb();
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        switch (e.getKeyCode()){
+            case KeyEvent.VK_A:
+                gameLogic.getPlayers().get(0).setLeft(false);
+                break;
+            case KeyEvent.VK_D:
+                gameLogic.getPlayers().get(0).setRight(false);
+                break;
+            case KeyEvent.VK_W:
+                gameLogic.getPlayers().get(0).setUp(false);
+                break;
+            case  KeyEvent.VK_S:
+                gameLogic.getPlayers().get(0).setDown(false);
+                break;
+        }
+
     }
 
     class NewFrameListener implements ActionListener{
