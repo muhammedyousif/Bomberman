@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class Bomb extends Sprite {
 
-    private int timeLeft = 200;
+    private int timeLeft = 300;
     private int strength = 3;
     private Level level;
 
