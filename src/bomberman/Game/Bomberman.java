@@ -39,14 +39,15 @@ public class Bomberman extends Sprite{
     private int aniIndex;
     private boolean moving=false;
     private boolean up,down,left,right;
-    private int xDrawOffset;
-    private int yDrawOffset;
+    private final int xDrawOffset=5;
+    private final int yDrawOffset=4;
     public Bomberman(int x,int y,int width,int height,int playerId, Level level,Image image){
         super(x,y,width,height,image);
         this.playerId = playerId;
         this.level = level;
         this.bombs = new ArrayList<>();
         loadAnimations();
+        initHitbox(x,y,25,40);
     }
 
 
@@ -59,10 +60,9 @@ public class Bomberman extends Sprite{
 
     public void update(){
         updatePOS();
-        updateHitbox();
         updateAnimation();
         setAnimations();
-        System.out.println("Bomberman position: x=" + x + ", y=" + y);
+        //System.out.println("Bomberman position: x=" + x + ", y=" + y);
 
 
     }
@@ -105,8 +105,8 @@ public class Bomberman extends Sprite{
     }
     public void render(Graphics g)
     {
-        g.drawImage(animations[player_action][aniIndex], hitbox.x, hitbox.y, width, height, null);
-        drawHitbox(g);
+        g.drawImage(animations[player_action][aniIndex], hitbox.x-xDrawOffset, hitbox.y-yDrawOffset, width, height, null);
+        //drawHitbox(g);
     }
 
     public void setUp(boolean up) {
@@ -147,12 +147,14 @@ public class Bomberman extends Sprite{
         }
 
 
-        if (canMoveHere(hitbox.x+ xspeed, hitbox.y, width, height)) {
+        if (canMoveHere(hitbox.x+ xspeed, hitbox.y, hitbox.width, hitbox.height)) {
             x+=xspeed;
+            hitbox.x+=xspeed;
         }
 
-        if (canMoveHere(hitbox.x, hitbox.y + yspeed, width, height)) {
+        if (canMoveHere(hitbox.x, hitbox.y + yspeed, hitbox.width, hitbox.height)) {
             y+=yspeed;
+            hitbox.y+=yspeed;
         }
 
         moving = true;
@@ -160,7 +162,7 @@ public class Bomberman extends Sprite{
     private boolean canMoveHere(int x, int y, int width, int height) {
         Rectangle proposedRect = new Rectangle(x, y, width, height);
         for (Sprite sprite : level.grid) {
-            Rectangle spriteRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.width, sprite.height);
+            Rectangle spriteRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
             if (proposedRect.intersects(spriteRect)) {
                 return false;
             }

@@ -16,10 +16,8 @@ public class Sprite {
         this.width = width;
         this.height = height;
         this.image = image;
-        initHitbox();
-
     }
-    private void initHitbox(){
+    protected void initHitbox(int x,int y,int width, int height){
         hitbox=new Rectangle(x,y,width,height);
     }
     public void updateHitbox(){

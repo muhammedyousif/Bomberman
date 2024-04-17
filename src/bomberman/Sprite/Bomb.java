@@ -20,7 +20,7 @@ public class Bomb extends Sprite {
 
     private boolean collides_with_sprite(int x1, int y1,int w1,int h1, Sprite sprite) {
         Rectangle rect = new Rectangle(x1, y1, w1 , h1);
-        Rectangle otherRect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
     public int checkCollisionsLevel(int x1,int y1){
@@ -34,8 +34,8 @@ public class Bomb extends Sprite {
         return -1;
     }
     private boolean collides_with_player(Sprite sprite) {
-        Rectangle rect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-        Rectangle otherRect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        Rectangle rect = new Rectangle(this.x, this.y, this.width, this.height);
+        Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
 
@@ -48,7 +48,7 @@ public class Bomb extends Sprite {
         }
     }
     public void blowUp(){
-        level.explosions.add(new Explosion(hitbox.x,hitbox.y,level));
+        level.explosions.add(new Explosion(x,y,level));
         int idx;
         idx = 1;
         boolean found;
