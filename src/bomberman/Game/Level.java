@@ -23,6 +23,7 @@ public class Level {
         fileToLevel(levelPath);
         getSnapPositions();
         explosions = new ArrayList<Explosion>();
+        bombs = new ArrayList<Bomb>();
     }
 
     private void getSnapPositions(){
@@ -100,15 +101,25 @@ public class Level {
         }
         return monsters;
     }
+
+    public void tickBombs(){
+        for(int i = 0; i < bombs.size(); i++){
+            bombs.get(i).tick();
+        }
+        for(int i = 0; i < explosions.size(); i++){
+            explosions.get(i).tick();
+        }
+    }
+
     public void draw(Graphics g) {
-        for (Sprite sprite : grid) {
-            sprite.draw(g);
+        for (int i = 0; i <grid.size(); i++) {
+            grid.get(i).draw(g);
         }
-        for (Bomb bomb : bombs) {
-            bomb.draw(g);
+        for(int i = 0; i < bombs.size(); i++){
+            bombs.get(i).draw(g);
         }
-        for (Explosion explosion: explosions){
-            explosion.draw(g);
+        for(int i = 0; i < explosions.size();i++){
+            explosions.get(i).draw(g);
         }
     }
 }

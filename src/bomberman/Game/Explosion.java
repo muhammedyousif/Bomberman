@@ -7,13 +7,7 @@ import javax.swing.*;
 import java.awt.Graphics;
 
 public class Explosion {
-    private Timer timer = new Timer(50, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            nextImg();
-        }
-    });
-
+    private int timeBuffer = 20;
     private int current_image_index;
     public int x ;
     public int y;
@@ -28,10 +22,15 @@ public class Explosion {
         str = str.concat(String.valueOf(current_image_index));
         str = str.concat(".png");
         this.image = new ImageIcon(str).getImage();
-
         this.level = level;
-        timer.setRepeats(true);
-        timer.start();
+
+    }
+    public void tick(){
+        timeBuffer = timeBuffer-1;
+        if(timeBuffer == 0){
+            nextImg();
+            timeBuffer = 20;
+        }
     }
 
     private void nextImg(){
@@ -39,7 +38,6 @@ public class Explosion {
         this.current_image_index++;
         if(current_image_index <7){
             String str = "src/bomberman/Assets/explosions/expl";
-            System.out.println(str);
             str = str.concat(String.valueOf(current_image_index));
             str = str.concat(".png");
             this.image = new ImageIcon(str).getImage();
