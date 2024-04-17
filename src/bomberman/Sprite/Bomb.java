@@ -10,11 +10,11 @@ import javax.swing.*;
 public class Bomb extends Sprite {
 
     private int timeLeft = 300;
-    private int strength = 3;
+    private int strength = 2;
     private Level level;
 
     public Bomb(int x,int y,int height,int width, Image image, Level level){
-        super(x-width/2,y-height/2,width,height,image);
+        super(x-42/2,y-42/2,42,42,image);
         this.level = level;
     }
 
