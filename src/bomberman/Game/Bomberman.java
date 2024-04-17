@@ -31,7 +31,7 @@ public class Bomberman extends Sprite{
     private ArrayList<Bomb> bombs;
     private Image image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
     public final int width = 40;
-    public final int height = 50;
+    public final int height = 57;
     private int player_action= IDLE;
     private BufferedImage[][] animations;
     private int aniTick;
@@ -40,14 +40,15 @@ public class Bomberman extends Sprite{
     private boolean moving=false;
     private boolean up,down,left,right;
     private final int xDrawOffset=5;
-    private final int yDrawOffset=4;
+    private final int yDrawOffset=6;
     public Bomberman(int x,int y,int width,int height,int playerId, Level level,Image image){
         super(x,y,width,height,image);
         this.playerId = playerId;
         this.level = level;
         this.bombs = new ArrayList<>();
+        this.bombs = new ArrayList<>();
         loadAnimations();
-        initHitbox(x,y,25,40);
+        initHitbox(x,y,25,44);
     }
 
 
