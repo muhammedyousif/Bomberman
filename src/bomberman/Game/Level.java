@@ -43,18 +43,25 @@ public class Level {
     }
 
     public Bomb placeBomb(int x, int y){
-        int closes_x = 30;
-        int closes_y = 30;
+        int closest_x = 30;
+        int closest_y = 30;
         float distance = 500;
-        for(ArrayList<Integer> touple : snap_positions){
-            if(distance > distance(touple.get(0), touple.get(1),x,y)){
-                distance = distance(touple.get(0), touple.get(1),x,y);
-                closes_y = touple.get(1);
-                closes_x = touple.get(0);
+        for (ArrayList<Integer> tuple : snap_positions) {
+            float currentDistance = distance(tuple.get(0), tuple.get(1), x, y);
+            if (currentDistance < distance) {
+                distance = currentDistance;
+                closest_y = tuple.get(1);
+                closest_x = tuple.get(0);
             }
         }
         Image image = new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
-        Bomb b = new Bomb(closes_x,closes_y,50,50,image,this);
+        Bomb b = new Bomb(closest_x,closest_y,50,50,image,this);
+
+        for (Bomb bomb : bombs) {
+            if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
+                return null;
+            }
+        }
         int index = bombs.size();
         bombs.add(b);
         return bombs.get(index);

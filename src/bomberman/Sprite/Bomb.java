@@ -10,15 +10,15 @@ import javax.swing.*;
 public class Bomb extends Sprite {
 
     private int timeLeft = 300;
-    private int strength = 3;
+    private int strength = 2;
     private Level level;
 
     public Bomb(int x,int y,int height,int width, Image image, Level level){
-        super(x-width/2,y-height/2,width,height,image);
+        super(x-42/2,y-42/2,42,42,image);
         this.level = level;
     }
 
-    private boolean collides_with_sprite(int x1, int y1,int w1,int h1, Sprite sprite) {
+    public boolean collides_with_sprite(int x1, int y1,int w1,int h1, Sprite sprite) {
         Rectangle rect = new Rectangle(x1, y1, w1 , h1);
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
