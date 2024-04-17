@@ -21,16 +21,6 @@ public class GameLogic {
         players.add(new Bomberman(60,60,1,new ImageIcon("src/Assets/bombermanleft.jpg").getImage(), level));
     }
 
-    public void pressed(String button){
-        for(Bomberman bomberman : players){
-            bomberman.pressed(button);
-        }
-    }
-    public void released(String button){
-        for(Bomberman bomberman : players){
-            bomberman.released(button);
-        }
-    }
 
 
     public boolean spritesCollides(Sprite sprite1, Sprite sprite2) {

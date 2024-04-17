@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -17,7 +16,7 @@ import static bomberman.Game.Constants.*;
 
 public class Bomberman extends JPanel{
     private String playername;
-    private int speed = 5;
+    private int speed = 1;
     private int hp;
     private boolean paused;
     private boolean alive=true;
@@ -40,6 +39,7 @@ public class Bomberman extends JPanel{
     private int aniSpeed=25; //minel kisebb a szam annal gyorsabb az animacio
     private int aniIndex;
     private boolean moving=false;
+    private boolean up,down,left,right;
 
     //private Binds binds;
     public Bomberman(int x,int y,int playerId, Image image, Level level){
@@ -51,71 +51,7 @@ public class Bomberman extends JPanel{
         loadAnimations();
     }
 
-    public void pressed(String button){
-        if(Objects.equals(button, "W")){
-            moveUp();
-            moving=true;
-        }
-        if(Objects.equals(button, "A")){
-            moveLeft();
-            moving=true;
-        }
-        if(Objects.equals(button, "S")){
-            moveDown();
-            moving=true;
-        }
-        if(Objects.equals(button, "D")){
-            moveRight();
-            moving=true;
-        }
-        if(Objects.equals(button, "E")){
-            placeBomb();
-        }
-    }
-    public void released(String button) {
-        switch (button) {
-            case "W":
-            case "S":
-            case "A":
-            case "D":
-                moving = false;
-                break;
-        }
-    }
 
-
-    public void moveUp(){
-        player_action=RUNNING_UP;
-
-        this.y = this.y - this.speed;
-        if(checkCollision()){
-            this.y = this.y + this.speed;
-        }
-    }
-    public void moveLeft(){
-        player_action=RUNNING_LEFT;
-        //this.image = new ImageIcon("src/bomberman/Assets/bombermanleft.png").getImage();
-        this.x = this.x - this.speed;
-        if(checkCollision()){
-            this.x = this.x + this.speed;
-        }
-    }
-    public void moveDown(){
-        player_action=RUNNING_DOWN;
-        this.y = this.y + this.speed;
-        if(checkCollision()){
-            this.y = this.y - this.speed;
-        }
-    }
-    public void moveRight(){
-        player_action=RUNNING_RIGHT;
-        //this.image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
-        this.x = this.x + this.speed;
-        if(checkCollision()){
-            this.x = this.x - this.speed;
-        }
-
-    }
     public void placeBomb(){
         int middlepos_x = this.x + (this.width/2);
         int middlepos_y = this.y + (this.height/2);
@@ -123,29 +59,10 @@ public class Bomberman extends JPanel{
     }
 
 
-    public boolean collides(Sprite sprite) {
-        Rectangle rect = new Rectangle(this.x, this.y, this.width, this.height);
-        Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
-        return rect.intersects(otherRect);
-    }
-    public boolean checkCollision(){
-        ArrayList<Sprite> grid = level.grid;
-        for(Sprite sprite : grid) {
-            if (collides(sprite)) {
-                return true;
-            }
-        }
-        return false;
-    }
     public void update(){
         updateAnimation();
-        checkState();
-    }
-
-    private void checkState() {
-        if(!moving){
-            player_action=IDLE;
-        }
+        setAnimations();
+        updatePOS();
     }
 
     private void loadAnimations() {
@@ -187,9 +104,83 @@ public class Bomberman extends JPanel{
     public void draw(Graphics g)
     {
         super.paintComponent(g);
-        //g.drawImage(this.image, x, y, width, height, null);
         g.drawImage(animations[player_action][aniIndex], x, y, width, height, this);
-
         g.drawRect(this.x,this.y,width,height);
     }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+    private void updatePOS() {
+        moving = false;
+
+        int xspeed = 0;
+        int yspeed = 0;
+
+
+        if (left) {
+            xspeed -= speed;
+        }
+        if (right) {
+            xspeed += speed;
+        }
+
+
+        if (up) {
+            yspeed -= speed;
+        }
+        if (down) {
+            yspeed += speed;
+        }
+
+
+        if (canMoveHere(x + xspeed, y, width, height)) {
+            x += xspeed;
+        }
+
+        if (canMoveHere(x, y + yspeed, width, height)) {
+            y += yspeed;
+        }
+
+        moving = true;
+    }
+    private boolean canMoveHere(int x, int y, int width, int height) {
+        Rectangle proposedRect = new Rectangle(x, y, width, height);
+        for (Sprite sprite : level.grid) {
+            Rectangle spriteRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
+            if (proposedRect.intersects(spriteRect)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public void setAnimations(){
+
+        if (up){
+            player_action=RUNNING_UP;
+        } else if (down) {
+            player_action=RUNNING_DOWN;
+        }
+        if (right){
+            player_action=RUNNING_RIGHT;
+        } else if (left) {
+            player_action=RUNNING_LEFT;
+        }
+        if (!up&&!down&&!left&&!right)
+            player_action=IDLE;
+    }
+
+
 }
