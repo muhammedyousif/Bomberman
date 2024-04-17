@@ -54,7 +54,14 @@ public class Bomberman extends Sprite{
     public void placeBomb(){
         int middlepos_x = this.x + (this.width/2);
         int middlepos_y = this.y + (this.height/2);
-        bombs.add(this.level.placeBomb(middlepos_x,middlepos_y));
+        Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
+        if (bomb == null) {
+            System.out.println("Bomb placement failed - spot already taken.");
+        } else {
+            bombs.add(bomb);
+            System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
+        }
+
     }
 
 
