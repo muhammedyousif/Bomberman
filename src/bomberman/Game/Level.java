@@ -79,7 +79,7 @@ public class Level {
                 } else if (blockType == '3') {
                     Image image = new ImageIcon("src/bomberman/Assets/monster.png").getImage();
                     Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height, image);
-                    grid.add(monster);
+                    monster.setLevel(this);
                     grid.add(monster);
 
                 }
