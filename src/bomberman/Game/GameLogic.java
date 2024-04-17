@@ -41,7 +41,7 @@ public class GameLogic {
 
     public void updateMonsters() {
         for (Monster monster : level.getMonsters()) {
-            monster.move();
+            monster.update();
 
         }
     }
