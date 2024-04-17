@@ -72,7 +72,7 @@ public class Level {
             for (char blockType : line.toCharArray()) {
                 if (blockType == '1') {
                     Image image = new ImageIcon("src/bomberman/Assets/wall.png").getImage();
-                    grid.add(new Wall(x * block_width, y * block_height, block_width, block_height, image));
+                    grid.add(new Wall(x * block_width, y * block_height, block_width, block_height,image));
                 } else if (blockType == '2') {
                     Image image = new ImageIcon("src/bomberman/Assets/box.png").getImage();
                     grid.add(new Box(x * block_width+3, y * block_height+3 , block_width-5, block_height-5, image,this));

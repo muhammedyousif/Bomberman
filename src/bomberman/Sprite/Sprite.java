@@ -1,24 +1,37 @@
 package bomberman.Sprite;
 import java.awt.*;
-import javax.swing.*;
 
 
 public class Sprite {
 
-    public int x;
-    public int y;
+    protected int x;
+    protected int y;
     public int width;
     public int height;
     private Image image;
-
+    protected Rectangle hitbox;
     public Sprite(int x, int y, int width, int height, Image image) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.image = image;
-
     }
+    protected void initHitbox(int x,int y,int width, int height){
+        hitbox=new Rectangle(x,y,width,height);
+    }
+    public void updateHitbox(){
+        hitbox.x=x;
+        hitbox.y=y;
+    }
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+    protected void drawHitbox(Graphics g){
+        g.setColor(Color.red);
+        g.drawRect(hitbox.x,hitbox.y,hitbox.width,hitbox.height);
+    }
+
     public void draw(Graphics g) {
         g.drawImage(image, x, y, width, height, null);
     }
