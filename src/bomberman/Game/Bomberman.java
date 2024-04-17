@@ -9,12 +9,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
 import static bomberman.Game.Constants.*;
 
 
-public class Bomberman extends JPanel{
+public class Bomberman extends Sprite{
     private String playername;
     private int speed = 1;
     private int hp;
@@ -25,8 +24,8 @@ public class Bomberman extends JPanel{
     private float invincible;
     private boolean barricade;
     private float time;
-    public int x;
-    public int y;
+    //private int x=60;
+    //private int y=60;
     private int playerId;
     private Level level;
     private ArrayList<Bomb> bombs;
@@ -40,11 +39,10 @@ public class Bomberman extends JPanel{
     private int aniIndex;
     private boolean moving=false;
     private boolean up,down,left,right;
-
-    //private Binds binds;
-    public Bomberman(int x,int y,int playerId, Image image, Level level){
-        this.x = x;
-        this.y = y;
+    private int xDrawOffset;
+    private int yDrawOffset;
+    public Bomberman(int x,int y,int width,int height,int playerId, Level level,Image image){
+        super(x,y,width,height,image);
         this.playerId = playerId;
         this.level = level;
         this.bombs = new ArrayList<>();
@@ -60,9 +58,13 @@ public class Bomberman extends JPanel{
 
 
     public void update(){
+        updatePOS();
+        updateHitbox();
         updateAnimation();
         setAnimations();
-        updatePOS();
+        System.out.println("Bomberman position: x=" + x + ", y=" + y);
+
+
     }
 
     private void loadAnimations() {
@@ -101,11 +103,10 @@ public class Bomberman extends JPanel{
             }
         }
     }
-    public void draw(Graphics g)
+    public void render(Graphics g)
     {
-        super.paintComponent(g);
-        g.drawImage(animations[player_action][aniIndex], x, y, width, height, this);
-        g.drawRect(this.x,this.y,width,height);
+        g.drawImage(animations[player_action][aniIndex], hitbox.x, hitbox.y, width, height, null);
+        drawHitbox(g);
     }
 
     public void setUp(boolean up) {
@@ -146,12 +147,12 @@ public class Bomberman extends JPanel{
         }
 
 
-        if (canMoveHere(x + xspeed, y, width, height)) {
-            x += xspeed;
+        if (canMoveHere(hitbox.x+ xspeed, hitbox.y, width, height)) {
+            x+=xspeed;
         }
 
-        if (canMoveHere(x, y + yspeed, width, height)) {
-            y += yspeed;
+        if (canMoveHere(hitbox.x, hitbox.y + yspeed, width, height)) {
+            y+=yspeed;
         }
 
         moving = true;
@@ -159,7 +160,7 @@ public class Bomberman extends JPanel{
     private boolean canMoveHere(int x, int y, int width, int height) {
         Rectangle proposedRect = new Rectangle(x, y, width, height);
         for (Sprite sprite : level.grid) {
-            Rectangle spriteRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
+            Rectangle spriteRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.width, sprite.height);
             if (proposedRect.intersects(spriteRect)) {
                 return false;
             }

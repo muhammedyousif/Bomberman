@@ -3,9 +3,7 @@ import bomberman.Sprite.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class GameLogic {
     private Level level;
@@ -18,23 +16,24 @@ public class GameLogic {
             System.out.println(e);
         }
         this.players = new ArrayList<>();
-        players.add(new Bomberman(60,60,1,new ImageIcon("src/Assets/bombermanleft.jpg").getImage(), level));
+        Image player=new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
+        players.add(new Bomberman(70,70,40,50,1,level,player));
     }
 
 
 
     public boolean spritesCollides(Sprite sprite1, Sprite sprite2) {
-        Rectangle rect = new Rectangle(sprite1.x, sprite1.y, sprite1.width, sprite1.height);
-        Rectangle otherRect = new Rectangle(sprite2.x, sprite2.y, sprite2.width, sprite2.height);
+        Rectangle rect = new Rectangle(sprite1.getX(), sprite1.getY(), sprite1.width, sprite1.height);
+        Rectangle otherRect = new Rectangle(sprite2.getX(), sprite2.getY(), sprite2.width, sprite2.height);
         return rect.intersects(otherRect);
     }
 
 
 
-    public void drawEverything(Graphics grphcs){
-        level.draw(grphcs);
+    public void drawEverything(Graphics g){
+        level.draw(g);
         for(Bomberman bomberman : players){
-            bomberman.draw(grphcs);
+            bomberman.render(g);
         }
     }
 
