@@ -75,7 +75,7 @@ public class Level {
                     grid.add(new Wall(x * block_width, y * block_height, block_width, block_height, image));
                 } else if (blockType == '2') {
                     Image image = new ImageIcon("src/bomberman/Assets/box.png").getImage();
-                    grid.add(new Box(x * block_width, y * block_height, block_width, block_height, image,this));
+                    grid.add(new Box(x * block_width+3, y * block_height+3 , block_width-5, block_height-5, image,this));
                 } else if (blockType == '3') {
                     Image image = new ImageIcon("src/bomberman/Assets/monster.png").getImage();
                     Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height, image);

@@ -12,7 +12,7 @@ public class Box extends Sprite{
     }
     public boolean shouldDropPowerUp() {
         int randomNumber = (int) (Math.random() * 100);
-        return randomNumber < 50;
+        return randomNumber < 10;
     }
     public void blowUp(){
         if(shouldDropPowerUp()){
