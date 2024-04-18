@@ -118,19 +118,19 @@ public class Bomberman extends Sprite{
         if (player_action==DEAD) {
             aniSpeed = 30;
             if (aniIndex < 5) {
-                // Continue animation until the last frame
+
                 if (aniTick >= aniSpeed) {
                     aniTick = 0;
                     aniIndex++;
                 }
             } else if (aniIndex == 5) {
-                if (deathFrameDelay < 300) {  // Assuming your game runs at 60 FPS
+                if (deathFrameDelay < 300) {
                     deathFrameDelay++;
-                    aniIndex = 5;  // Ensure the last frame stays active
+                    aniIndex = 5;
                 } else {
-                    // After 2 seconds, do whatever needs to happen next
+
                     died = true;
-                    deathFrameDelay = 0;  // Reset the timer for potential reuse
+                    deathFrameDelay = 0;
                 }
 
             }
