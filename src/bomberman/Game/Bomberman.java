@@ -41,11 +41,15 @@ public class Bomberman extends Sprite{
     private boolean up,down,left,right;
     private final int xDrawOffset=5;
     private final int yDrawOffset=6;
-    public Bomberman(int x,int y,int width,int height,int playerId, Level level,Image image){
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public Bomberman(int x, int y, int width, int height, int playerId, Level level, Image image){
         super(x,y,width,height,image);
         this.playerId = playerId;
         this.level = level;
-        this.bombs = new ArrayList<>();
         this.bombs = new ArrayList<>();
         loadAnimations();
         initHitbox(x,y,25,44);
@@ -70,9 +74,15 @@ public class Bomberman extends Sprite{
         updatePOS();
         updateAnimation();
         setAnimations();
+        checkDeath();
         //System.out.println("Bomberman position: x=" + x + ", y=" + y);
+    }
 
-
+    private void checkDeath() {
+        if (!alive){
+            player_action=DEAD;
+            System.out.println("DEAAD");
+        }
     }
 
     private void loadAnimations() {
@@ -82,7 +92,7 @@ public class Bomberman extends Sprite{
             animations = new BufferedImage[7][6];
             for(int i =0;i<animations.length;i++){
                 for(int j =0;j<animations[i].length;j++) {
-                    animations[i][j] = img.getSubimage(j * 18, i*27, 18, 27);
+                    animations[i][j] = img.getSubimage(j * 20, i*27, 20, 27);
                 }
             }
         } catch (IOException e) {
@@ -178,7 +188,9 @@ public class Bomberman extends Sprite{
         return true;
     }
     public void setAnimations(){
+        if (player_action==DEAD){
 
+        }
         if (up){
             player_action=RUNNING_UP;
         } else if (down) {
@@ -192,6 +204,12 @@ public class Bomberman extends Sprite{
         if (!up&&!down&&!left&&!right)
             player_action=IDLE;
     }
+    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Sprite sprite) {
+        Rectangle rect = new Rectangle(x1, y1, w1, h1);
+        Rectangle otherRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
+        return rect.intersects(otherRect);
+    }
+
 
 
 }

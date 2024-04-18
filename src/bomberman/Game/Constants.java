@@ -6,6 +6,7 @@ public class Constants {
     public static final int RUNNING_RIGHT=3;
     public static final int RUNNING_UP=0;
     public static final int RUNNING_DOWN=2;
+    public static  final int DEAD=5;
 
     public static int getSprite(int player_action){
         switch (player_action){
@@ -19,6 +20,8 @@ public class Constants {
                 return 3;
             case RUNNING_DOWN:
                 return 3;
+            case DEAD:
+                return 6;
             default:
                 return 1;
         }
