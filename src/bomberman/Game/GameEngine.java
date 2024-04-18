@@ -136,6 +136,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     }
 
+    public void restartGame() {
+        for (Bomberman man : gameLogic.getPlayers()){
+            man.reset();
+        }
+    }
+
     class NewFrameListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {

@@ -237,5 +237,13 @@ public class Bomberman extends Sprite{
     }
 
 
-
+    public void reset() {
+        alive=true;
+        player_action=IDLE;
+        died=false;
+        x=65;
+        y=65;
+        hitbox.x=x;
+        hitbox.y=y;
+    }
 }

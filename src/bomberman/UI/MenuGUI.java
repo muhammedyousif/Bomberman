@@ -31,6 +31,13 @@ public class MenuGUI {
             }
         });
         JMenuItem restartMenuItem = new JMenuItem("Restart");
+        restartMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                GE.restartGame();  // Call the restart method on the game engine
+            }
+        });
+
         fileMenu.add(restartMenuItem);
         frame.setPreferredSize(new Dimension(920,843));
         frame.setResizable(false);
