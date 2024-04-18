@@ -41,6 +41,7 @@ public class Bomberman extends Sprite{
     private boolean up,down,left,right;
     private final int xDrawOffset=5;
     private final int yDrawOffset=6;
+    private boolean died=false;
 
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -71,10 +72,12 @@ public class Bomberman extends Sprite{
 
 
     public void update(){
-        updatePOS();
-        updateAnimation();
-        setAnimations();
-        checkDeath();
+        if (!died) {
+            updatePOS();
+            updateAnimation();
+            setAnimations();
+            checkDeath();
+        }
         //System.out.println("Bomberman position: x=" + x + ", y=" + y);
     }
 
@@ -109,6 +112,12 @@ public class Bomberman extends Sprite{
 
     private void updateAnimation() {
         aniTick++;
+        if (player_action==DEAD){
+            aniSpeed= 40;
+            if(aniIndex==5){
+                died=true;
+            }
+        }
         if (player_action == IDLE) {
             aniIndex = 0;
         } else {
@@ -122,9 +131,10 @@ public class Bomberman extends Sprite{
         }
     }
     public void render(Graphics g)
-    {
-        g.drawImage(animations[player_action][aniIndex], hitbox.x-xDrawOffset, hitbox.y-yDrawOffset, width, height, null);
+    {   if (!died) {
+        g.drawImage(animations[player_action][aniIndex], hitbox.x - xDrawOffset, hitbox.y - yDrawOffset, width, height, null);
         //drawHitbox(g);
+    }
     }
 
     public void setUp(boolean up) {
@@ -188,9 +198,6 @@ public class Bomberman extends Sprite{
         return true;
     }
     public void setAnimations(){
-        if (player_action==DEAD){
-
-        }
         if (up){
             player_action=RUNNING_UP;
         } else if (down) {
