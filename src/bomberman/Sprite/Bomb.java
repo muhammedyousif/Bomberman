@@ -77,8 +77,6 @@ public class Bomb extends Sprite {
                     found = true;
                 } else if (hitSprite instanceof Monster) {
                     // Handle monster logic here if necessary
-                } else if (hitSprite instanceof Bomberman) {
-                    System.out.println("man");
                 }
             }
         }
@@ -86,13 +84,8 @@ public class Bomb extends Sprite {
     }
     private void checkPlayerHit(int x, int y) {
         Bomberman player =level.gameEngine.gameLogic.getPlayers().get(0);
-        System.out.println("ENTERED");
-        System.out.println("Explosion rect: " + x + ", " + y + ", " + player.width + ", " + player.height);
-        System.out.println("Player rect: " + player.x + ", " + player.y + ", " + player.width + ", " + player.height);
-
         if (collides_with_player(player) ||player.collides_with_sprite(x, y, player.width, player.height, player)) {
-                System.out.println("HIT");
-                player.setAlive(false);  // Assume `setAlive` is a method to handle player status
+                player.setAlive(false);
                 level.explosions.add(new Explosion(x, y, level));  // Optional: Add explosion effect on player hit
             }
 

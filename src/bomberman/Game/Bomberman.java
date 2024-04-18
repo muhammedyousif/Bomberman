@@ -42,6 +42,7 @@ public class Bomberman extends Sprite{
     private final int xDrawOffset=5;
     private final int yDrawOffset=6;
     private boolean died=false;
+    private int deathFrameDelay = 0;  // Timer to count the delay after the last death frame is shown
 
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -58,22 +59,25 @@ public class Bomberman extends Sprite{
 
 
     public void placeBomb(){
-        int middlepos_x = this.x + (this.width/2);
-        int middlepos_y = this.y + (this.height/2);
-        Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
-        if (bomb == null) {
-            System.out.println("Bomb placement failed - spot already taken.");
-        } else {
-            bombs.add(bomb);
-            System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
+        if (alive) {
+            int middlepos_x = this.x + (this.width / 2);
+            int middlepos_y = this.y + (this.height / 2);
+            Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
+            if (bomb == null) {
+                System.out.println("Bomb placement failed - spot already taken.");
+            } else {
+                bombs.add(bomb);
+                System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
+            }
         }
-
     }
 
 
     public void update(){
         if (!died) {
-            updatePOS();
+            if (alive) {
+                updatePOS();
+            }
             updateAnimation();
             setAnimations();
             checkDeath();
@@ -84,7 +88,6 @@ public class Bomberman extends Sprite{
     private void checkDeath() {
         if (!alive){
             player_action=DEAD;
-            System.out.println("DEAAD");
         }
     }
 
@@ -112,20 +115,36 @@ public class Bomberman extends Sprite{
 
     private void updateAnimation() {
         aniTick++;
-        if (player_action==DEAD){
-            aniSpeed= 40;
-            if(aniIndex==5){
-                died=true;
+        if (player_action==DEAD) {
+            aniSpeed = 30;
+            if (aniIndex < 5) {
+                // Continue animation until the last frame
+                if (aniTick >= aniSpeed) {
+                    aniTick = 0;
+                    aniIndex++;
+                }
+            } else if (aniIndex == 5) {
+                if (deathFrameDelay < 300) {  // Assuming your game runs at 60 FPS
+                    deathFrameDelay++;
+                    aniIndex = 5;  // Ensure the last frame stays active
+                } else {
+                    // After 2 seconds, do whatever needs to happen next
+                    died = true;
+                    deathFrameDelay = 0;  // Reset the timer for potential reuse
+                }
+
             }
         }
         if (player_action == IDLE) {
             aniIndex = 0;
         } else {
-            if (aniTick >= aniSpeed) {
-                aniTick = 0;
-                aniIndex++;
-                if (aniIndex >= animations[player_action].length || aniIndex>=getSprite(player_action)) {
-                    aniIndex = 0;
+            if (player_action!=DEAD) {
+                if (aniTick >= aniSpeed) {
+                    aniTick = 0;
+                    aniIndex++;
+                    if (aniIndex >= animations[player_action].length || aniIndex >= getSprite(player_action)) {
+                        aniIndex = 0;
+                    }
                 }
             }
         }
