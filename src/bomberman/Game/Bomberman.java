@@ -41,11 +41,17 @@ public class Bomberman extends Sprite{
     private boolean up,down,left,right;
     private final int xDrawOffset=5;
     private final int yDrawOffset=6;
-    public Bomberman(int x,int y,int width,int height,int playerId, Level level,Image image){
+    private boolean died=false;
+    private int deathFrameDelay = 0;  // Timer to count the delay after the last death frame is shown
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public Bomberman(int x, int y, int width, int height, int playerId, Level level, Image image){
         super(x,y,width,height,image);
         this.playerId = playerId;
         this.level = level;
-        this.bombs = new ArrayList<>();
         this.bombs = new ArrayList<>();
         loadAnimations();
         initHitbox(x,y,25,44);
@@ -53,26 +59,36 @@ public class Bomberman extends Sprite{
 
 
     public void placeBomb(){
-        int middlepos_x = this.x + (this.width/2);
-        int middlepos_y = this.y + (this.height/2);
-        Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
-        if (bomb == null) {
-            System.out.println("Bomb placement failed - spot already taken.");
-        } else {
-            bombs.add(bomb);
-            System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
+        if (alive) {
+            int middlepos_x = this.x + (this.width / 2);
+            int middlepos_y = this.y + (this.height / 2);
+            Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
+            if (bomb == null) {
+                System.out.println("Bomb placement failed - spot already taken.");
+            } else {
+                bombs.add(bomb);
+                System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
+            }
         }
-
     }
 
 
     public void update(){
-        updatePOS();
-        updateAnimation();
-        setAnimations();
+        if (!died) {
+            if (alive) {
+                updatePOS();
+            }
+            updateAnimation();
+            setAnimations();
+            checkDeath();
+        }
         //System.out.println("Bomberman position: x=" + x + ", y=" + y);
+    }
 
-
+    private void checkDeath() {
+        if (!alive){
+            player_action=DEAD;
+        }
     }
 
     private void loadAnimations() {
@@ -82,7 +98,7 @@ public class Bomberman extends Sprite{
             animations = new BufferedImage[7][6];
             for(int i =0;i<animations.length;i++){
                 for(int j =0;j<animations[i].length;j++) {
-                    animations[i][j] = img.getSubimage(j * 18, i*27, 18, 27);
+                    animations[i][j] = img.getSubimage(j * 20, i*27, 20, 27);
                 }
             }
         } catch (IOException e) {
@@ -99,22 +115,45 @@ public class Bomberman extends Sprite{
 
     private void updateAnimation() {
         aniTick++;
+        if (player_action==DEAD) {
+            aniSpeed = 30;
+            if (aniIndex < 5) {
+                // Continue animation until the last frame
+                if (aniTick >= aniSpeed) {
+                    aniTick = 0;
+                    aniIndex++;
+                }
+            } else if (aniIndex == 5) {
+                if (deathFrameDelay < 300) {  // Assuming your game runs at 60 FPS
+                    deathFrameDelay++;
+                    aniIndex = 5;  // Ensure the last frame stays active
+                } else {
+                    // After 2 seconds, do whatever needs to happen next
+                    died = true;
+                    deathFrameDelay = 0;  // Reset the timer for potential reuse
+                }
+
+            }
+        }
         if (player_action == IDLE) {
             aniIndex = 0;
         } else {
-            if (aniTick >= aniSpeed) {
-                aniTick = 0;
-                aniIndex++;
-                if (aniIndex >= animations[player_action].length || aniIndex>=getSprite(player_action)) {
-                    aniIndex = 0;
+            if (player_action!=DEAD) {
+                if (aniTick >= aniSpeed) {
+                    aniTick = 0;
+                    aniIndex++;
+                    if (aniIndex >= animations[player_action].length || aniIndex >= getSprite(player_action)) {
+                        aniIndex = 0;
+                    }
                 }
             }
         }
     }
     public void render(Graphics g)
-    {
-        g.drawImage(animations[player_action][aniIndex], hitbox.x-xDrawOffset, hitbox.y-yDrawOffset, width, height, null);
+    {   if (!died) {
+        g.drawImage(animations[player_action][aniIndex], hitbox.x - xDrawOffset, hitbox.y - yDrawOffset, width, height, null);
         //drawHitbox(g);
+    }
     }
 
     public void setUp(boolean up) {
@@ -178,7 +217,6 @@ public class Bomberman extends Sprite{
         return true;
     }
     public void setAnimations(){
-
         if (up){
             player_action=RUNNING_UP;
         } else if (down) {
@@ -192,6 +230,12 @@ public class Bomberman extends Sprite{
         if (!up&&!down&&!left&&!right)
             player_action=IDLE;
     }
+    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Sprite sprite) {
+        Rectangle rect = new Rectangle(x1, y1, w1, h1);
+        Rectangle otherRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
+        return rect.intersects(otherRect);
+    }
+
 
 
 }

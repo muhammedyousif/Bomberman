@@ -9,12 +9,14 @@ public class GameLogic {
     private Level level;
     private ArrayList<Bomberman> players;
     private GameMode gamemode;
-    public GameLogic(){
+    public GameEngine gameEngine;
+    public GameLogic(GameEngine gameEngine){
         try{
-            this.level = new Level("src/bomberman/Assets/level1.txt");
+            this.level = new Level("src/bomberman/Assets/level1.txt",gameEngine);
         }catch(Exception e){
             System.out.println(e);
         }
+        this.gameEngine=gameEngine;
         this.players = new ArrayList<>();
         Image player=new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
         players.add(new Bomberman(70,70,40,50,1,level,player));

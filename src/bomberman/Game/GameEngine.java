@@ -22,14 +22,14 @@ import java.awt.*;
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
     private Image background = new ImageIcon("src/bomberman/Assets/mapbackground.png").getImage();
-    private GameLogic gameLogic;
+    public GameLogic gameLogic;
     private int FPS_SET=120;
     private int UPS_SET= 200;
     private Thread gameThread;
 
     public GameEngine(){
         int FPS = 60;
-        gameLogic = new GameLogic();
+        gameLogic = new GameLogic(this);
         addKeyListener(new Keyboard(this));
         setFocusable(true);
         startGameLoop();

@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.awt.Graphics;
 public class Level {
+    public GameEngine gameEngine;
     private BufferedReader br;
     public ArrayList<Sprite> grid;
     public ArrayList<Bomb> bombs;
@@ -19,9 +20,10 @@ public class Level {
     private final int block_width = 60;
     private final int block_height = 60;
 
-    public Level(String levelPath) throws IOException {
+    public Level(String levelPath,GameEngine gameEngine) throws IOException {
         fileToLevel(levelPath);
         getSnapPositions();
+        this.gameEngine=gameEngine;
         explosions = new ArrayList<Explosion>();
         bombs = new ArrayList<Bomb>();
     }
