@@ -5,7 +5,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Dimension;
-
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 
 public class MenuGUI {
@@ -43,5 +44,16 @@ public class MenuGUI {
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
+        frame.addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                //reset dirbool
+            }
+        });
     }
 }

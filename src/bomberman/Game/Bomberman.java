@@ -42,7 +42,7 @@ public class Bomberman extends Sprite{
     private final int xDrawOffset=5;
     private final int yDrawOffset=6;
     private boolean died=false;
-    private int deathFrameDelay = 0;  // Timer to count the delay after the last death frame is shown
+    private int deathFrameDelay = 0;
 
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -153,7 +153,7 @@ public class Bomberman extends Sprite{
     {   if (!died) {
         g.drawImage(animations[player_action][aniIndex], hitbox.x - xDrawOffset, hitbox.y - yDrawOffset, width, height, null);
         //drawHitbox(g);
-    }
+        }
     }
 
     public void setUp(boolean up) {
