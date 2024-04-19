@@ -28,6 +28,7 @@ public class Monster extends Sprite {
     private int aniTick;
     private int aniSpeed=90; //minel kisebb a szam annal gyorsabb az animacio
     private int aniIndex;
+    private static boolean alive=true;
 
 
     public Monster(int x,int y,int width, int height, Image image){
@@ -36,6 +37,10 @@ public class Monster extends Sprite {
         this.random = new Random();
         this.headed = Headed.values()[random.nextInt(Headed.values().length)];
         loadAnimations();
+    }
+
+    public static void die() {
+        alive=false;
     }
 
 
@@ -207,12 +212,16 @@ public class Monster extends Sprite {
     }
     public void draw(Graphics g)
     {
+        if (!alive)
+            return;
         g.drawImage(animations[0][aniIndex], x, y, 60, 50, null);
     }
     public void setLevel(Level level) {
         this.level = level;
     }
     public void update(){
+        if (!alive)
+            return;
         move();
         updateAnimation();
     }
