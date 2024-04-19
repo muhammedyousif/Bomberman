@@ -28,7 +28,7 @@ public class Monster extends Sprite {
     private int aniTick;
     private int aniSpeed=90; //minel kisebb a szam annal gyorsabb az animacio
     private int aniIndex;
-    private static boolean alive=true;
+    private boolean alive=true;
 
 
     public Monster(int x,int y,int width, int height, Image image){
@@ -37,9 +37,10 @@ public class Monster extends Sprite {
         this.random = new Random();
         this.headed = Headed.values()[random.nextInt(Headed.values().length)];
         loadAnimations();
+        initHitbox(x,y,55,50);
     }
 
-    public static void die() {
+    public void die() {
         alive=false;
     }
 
@@ -91,15 +92,15 @@ public class Monster extends Sprite {
         int xspeed = 0;
         //Which direction can the monster move
         ArrayList<Integer> canMove = new ArrayList<>();//UP - 1 ,LEFT - 2 ,DOWN - 3 ,RIGHT - 4
-        if(canMoveTo(this.x, this.y-speed)){
+        if(canMoveTo(hitbox.x, hitbox.y-speed)){
             canMove.add(1);
         }
-        if(canMoveTo(this.x-speed, this.y)){
+        if(canMoveTo(hitbox.x-speed, hitbox.y)){
             canMove.add(2);
         }
-        if(canMoveTo(this.x, this.y+speed)){
+        if(canMoveTo(hitbox.x, hitbox.y+speed)){
             canMove.add(3);
-        }if(canMoveTo(this.x+speed, this.y)){
+        }if(canMoveTo(hitbox.x+speed, hitbox.y)){
             canMove.add(4);
         }
         //If random direction changes are enabled
@@ -150,14 +151,14 @@ public class Monster extends Sprite {
                 xspeed = speed;
                 break;
         }
-        int temp_x = x + xspeed;
-        int temp_y = y + yspeed;
+        int temp_x = hitbox.x + xspeed;
+        int temp_y = hitbox.y + yspeed;
 
 
 
         if(canMoveTo(temp_x,temp_y)){
-            x = x + xspeed;
-            y = y + yspeed;
+            hitbox.x  += xspeed;
+            hitbox.y += yspeed;
         }
         else{
             chooseHeaded(canMove);
@@ -168,15 +169,21 @@ public class Monster extends Sprite {
         moveBuffer = 3;
     }
     private boolean collides(Sprite sprite) {
-        Rectangle rect = new Rectangle(this.x, this.y, this.width, this.height);
+        Rectangle rect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
     private boolean collidesOnPos(Sprite sprite,int x,int y) {
-        Rectangle rect = new Rectangle(x, y, this.width, this.height);
+        Rectangle rect = new Rectangle(x, y, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
+    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Sprite sprite) {
+        Rectangle rect = new Rectangle(x1, y1, w1, h1);
+        Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
+        return rect.intersects(otherRect);
+    }
+
     private boolean checkCollisionWithEnvironment(){
         ArrayList<Sprite> grid = this.level.grid;
         for(Sprite sprite : grid) {
@@ -214,7 +221,8 @@ public class Monster extends Sprite {
     {
         if (!alive)
             return;
-        g.drawImage(animations[0][aniIndex], x, y, 60, 50, null);
+        g.drawImage(animations[0][aniIndex], hitbox.x, hitbox.y, 60, 50, null);
+        drawHitbox(g);
     }
     public void setLevel(Level level) {
         this.level = level;
@@ -258,4 +266,7 @@ public class Monster extends Sprite {
     }
 
 
+    public void reset() {
+
+    }
 }

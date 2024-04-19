@@ -210,7 +210,7 @@ public class Bomberman extends Sprite{
         Rectangle proposedRect = new Rectangle(x, y, width, height);
         for (Sprite sprite : level.grid) {
             Rectangle spriteRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
-            if (proposedRect.intersects(spriteRect)) {
+            if (proposedRect.intersects(spriteRect) && !(sprite instanceof Monster)) {
                 return false;
             }
         }
