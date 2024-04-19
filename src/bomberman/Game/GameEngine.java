@@ -1,5 +1,7 @@
 package bomberman.Game;
 
+import bomberman.Sprite.Monster;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -140,6 +142,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         for (Bomberman man : gameLogic.getPlayers()){
             man.reset();
         }
+        gameLogic = new GameLogic(this);
     }
 
     class NewFrameListener implements ActionListener{

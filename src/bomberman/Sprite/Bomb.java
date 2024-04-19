@@ -2,6 +2,8 @@ package bomberman.Sprite;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import bomberman.Game.*;
 
@@ -66,6 +68,7 @@ public class Bomb extends Sprite {
             if (index == -1) {
                 level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));
                 checkPlayerHit(pos_to_check_x,pos_to_check_y);
+                checkMonsterHit(pos_to_check_x,pos_to_check_y);
 
             } else {
                 Sprite hitSprite = level.grid.get(index);
@@ -75,9 +78,11 @@ public class Bomb extends Sprite {
                     found = true;
                 } else if (hitSprite instanceof Wall) {
                     found = true;
-                } else if (hitSprite instanceof Monster) {
-                    Monster.die();
                 }
+                else if (hitSprite instanceof Monster) {
+
+                }
+
             }
         }
 
@@ -89,6 +94,15 @@ public class Bomb extends Sprite {
                 level.explosions.add(new Explosion(x, y, level));  // Optional: Add explosion effect on player hit
             }
 
+    }
+    private void checkMonsterHit(int x,int y){
+        List<Monster> monsters = level.getMonsters();
+        for (Monster monster : monsters){
+            if (collides_with_player(monster) || monster.collides_with_sprite(x,y,monster.getHitbox().width, monster.getHitbox().height, monster)){
+                monster.die();
+                level.explosions.add(new Explosion(x, y, level));
+            }
+        }
     }
 
 }
