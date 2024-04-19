@@ -76,7 +76,7 @@ public class Bomb extends Sprite {
                 } else if (hitSprite instanceof Wall) {
                     found = true;
                 } else if (hitSprite instanceof Monster) {
-                    // Handle monster logic here if necessary
+                    Monster.die();
                 }
             }
         }
