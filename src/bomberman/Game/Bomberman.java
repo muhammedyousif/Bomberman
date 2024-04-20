@@ -13,7 +13,7 @@ import javax.swing.ImageIcon;
 import static bomberman.Game.Constants.*;
 
 
-public class Bomberman extends Sprite{
+public class Bomberman extends Entity{
     private String playername;
     private int speed = 1;
     private int hp;
@@ -49,7 +49,7 @@ public class Bomberman extends Sprite{
     }
 
     public Bomberman(int x, int y, int width, int height, int playerId, Level level, Image image){
-        super(x,y,width,height,image);
+        super(x,y,width,height);
         this.playerId = playerId;
         this.level = level;
         this.bombs = new ArrayList<>();
@@ -210,7 +210,7 @@ public class Bomberman extends Sprite{
         Rectangle proposedRect = new Rectangle(x, y, width, height);
         for (Sprite sprite : level.grid) {
             Rectangle spriteRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
-            if (proposedRect.intersects(spriteRect) && !(sprite instanceof Monster)) {
+            if (proposedRect.intersects(spriteRect)) {
                 return false;
             }
         }
@@ -230,7 +230,7 @@ public class Bomberman extends Sprite{
         if (!up&&!down&&!left&&!right)
             player_action=IDLE;
     }
-    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Sprite sprite) {
+    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Entity sprite) {
         Rectangle rect = new Rectangle(x1, y1, w1, h1);
         Rectangle otherRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
         return rect.intersects(otherRect);

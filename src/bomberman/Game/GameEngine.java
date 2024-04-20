@@ -115,6 +115,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 break;
             case KeyEvent.VK_E:
                 gameLogic.getPlayers().get(0).placeBomb();
+                break;
+            case  KeyEvent.VK_R:
+                restartGame();
+                break;
         }
 
     }
