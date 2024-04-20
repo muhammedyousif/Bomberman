@@ -43,7 +43,8 @@ public class Bomberman extends Entity{
     private final int yDrawOffset=6;
     private boolean died=false;
     private int deathFrameDelay = 0;
-    private int bombCounter=5;
+    private int defaultBombCount=6;
+    private int bombCounter=defaultBombCount;
 
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -158,6 +159,14 @@ public class Bomberman extends Entity{
         }
     }
 
+    public int getBombCounter() {
+        return bombCounter;
+    }
+
+    public int getDefaultBombCount() {
+        return defaultBombCount;
+    }
+
     public void setUp(boolean up) {
         this.up = up;
     }
@@ -247,6 +256,6 @@ public class Bomberman extends Entity{
         y=65;
         hitbox.x=x;
         hitbox.y=y;
-        bombCounter=5;
+        bombCounter=defaultBombCount;
     }
 }
