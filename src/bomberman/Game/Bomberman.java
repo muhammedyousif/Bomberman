@@ -43,6 +43,7 @@ public class Bomberman extends Entity{
     private final int yDrawOffset=6;
     private boolean died=false;
     private int deathFrameDelay = 0;
+    private int bombCounter=5;
 
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -59,7 +60,7 @@ public class Bomberman extends Entity{
 
 
     public void placeBomb(){
-        if (alive) {
+        if (alive && bombCounter>0) {
             int middlepos_x = this.x + (this.width / 2);
             int middlepos_y = this.y + (this.height / 2);
             Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
@@ -67,6 +68,7 @@ public class Bomberman extends Entity{
                 System.out.println("Bomb placement failed - spot already taken.");
             } else {
                 bombs.add(bomb);
+                bombCounter--;
                 System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
             }
         }
@@ -245,5 +247,6 @@ public class Bomberman extends Entity{
         y=65;
         hitbox.x=x;
         hitbox.y=y;
+        bombCounter=5;
     }
 }
