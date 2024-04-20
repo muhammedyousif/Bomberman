@@ -36,7 +36,7 @@ public class Bomb extends Sprite {
         return -1;
     }
 
-    private boolean collides_with_player(Sprite sprite) {
+    private boolean collides_with_player(Entity sprite) {
         Rectangle rect = new Rectangle(this.x, this.y, this.width, this.height);
         Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
         return rect.intersects(otherRect);
@@ -79,10 +79,6 @@ public class Bomb extends Sprite {
                 } else if (hitSprite instanceof Wall) {
                     found = true;
                 }
-                else if (hitSprite instanceof Monster) {
-
-                }
-
             }
         }
 

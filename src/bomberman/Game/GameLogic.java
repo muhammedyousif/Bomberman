@@ -37,6 +37,9 @@ public class GameLogic {
         for(Bomberman bomberman : players){
             bomberman.render(g);
         }
+        for (Monster monster: getLevel().getMonsters()){
+            monster.draw(g);
+        }
     }
 
 

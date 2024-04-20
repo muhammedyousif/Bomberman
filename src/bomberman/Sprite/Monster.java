@@ -17,7 +17,7 @@ import static bomberman.Game.Constants.IDLE;
 import static bomberman.Game.Constants.getSprite;
 import static java.lang.Integer.valueOf;
 
-public class Monster extends Sprite {
+public class Monster extends Entity {
     private int speed;
     private int moveBuffer = 0;
     private int turn_delay = 0;
@@ -33,7 +33,7 @@ public class Monster extends Sprite {
 
 
     public Monster(int x,int y,int width, int height, Image image){
-        super(x,y,width,height,image);
+        super(x,y,width,height);
         this.speed = 1;
         this.random = new Random();
         this.headed = Headed.values()[random.nextInt(Headed.values().length)];
@@ -174,7 +174,7 @@ public class Monster extends Sprite {
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
-    private boolean collides_player(Sprite sprite) {
+    private boolean collides_player(Bomberman sprite) {
         Rectangle rect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
         return rect.intersects(otherRect);
@@ -185,7 +185,7 @@ public class Monster extends Sprite {
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
-    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Sprite sprite) {
+    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Entity sprite) {
         Rectangle rect = new Rectangle(x1, y1, w1, h1);
         Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
         return rect.intersects(otherRect);

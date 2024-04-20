@@ -15,17 +15,19 @@ public class Level {
     public ArrayList<Sprite> grid;
     public ArrayList<Bomb> bombs;
     public ArrayList<Explosion> explosions;
+    private ArrayList<Monster> monsters;
     private ArrayList<ArrayList<Integer>> snap_positions = new ArrayList<>();
 
     private final int block_width = 60;
     private final int block_height = 60;
 
     public Level(String levelPath,GameEngine gameEngine) throws IOException {
+        explosions = new ArrayList<Explosion>();
+        bombs = new ArrayList<Bomb>();
+        monsters=new ArrayList<Monster>();
         fileToLevel(levelPath);
         getSnapPositions();
         this.gameEngine=gameEngine;
-        explosions = new ArrayList<Explosion>();
-        bombs = new ArrayList<Bomb>();
     }
 
     private void getSnapPositions(){
@@ -89,7 +91,9 @@ public class Level {
                     Image image = new ImageIcon("src/bomberman/Assets/monster.png").getImage();
                     Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height, image);
                     monster.setLevel(this);
-                    grid.add(monster);
+                    //grid.add(monster);
+                    //grid.add(null);
+                    monsters.add(monster);
 
                 }
                 x++;
@@ -102,12 +106,13 @@ public class Level {
         return this.grid;
     }
     public ArrayList<Monster> getMonsters(){
-        ArrayList<Monster> monsters = new ArrayList<>();
+        /*ArrayList<Monster> monsters = new ArrayList<>();
         for(Sprite sprite : grid){
             if(sprite instanceof Monster){
                 monsters.add((Monster) sprite);
             }
         }
+        return monsters;*/
         return monsters;
     }
 
