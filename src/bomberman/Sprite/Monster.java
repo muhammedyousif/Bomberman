@@ -1,4 +1,5 @@
 package bomberman.Sprite;
+import bomberman.Game.Bomberman;
 import bomberman.Game.Level;
 
 import javax.imageio.ImageIO;
@@ -173,6 +174,12 @@ public class Monster extends Sprite {
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
+    private boolean collides_player(Sprite sprite) {
+        Rectangle rect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
+        return rect.intersects(otherRect);
+    }
+
     private boolean collidesOnPos(Sprite sprite,int x,int y) {
         Rectangle rect = new Rectangle(x, y, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
@@ -232,7 +239,16 @@ public class Monster extends Sprite {
             return;
         move();
         updateAnimation();
+        killedPlayer();
     }
+
+    private void killedPlayer() {
+        for (Bomberman bomberman : level.gameEngine.gameLogic.getPlayers()){
+            if(collides_player(bomberman))
+                bomberman.setAlive(false);
+        }
+    }
+
     private void loadAnimations(){
         InputStream is = getClass().getResourceAsStream("/bomberman/Assets/monstersprite.png");
         try {
