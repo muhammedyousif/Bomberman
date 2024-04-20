@@ -1,6 +1,7 @@
 package bomberman.Game;
 
 import bomberman.Sprite.Monster;
+import bomberman.UI.MenuGUI;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,14 +25,15 @@ import java.awt.*;
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
     private Image background = new ImageIcon("src/bomberman/Assets/mapbackground.png").getImage();
+    MenuGUI menuGUI;
     public GameLogic gameLogic;
     private int FPS_SET=120;
     private int UPS_SET= 200;
     private Thread gameThread;
 
-    public GameEngine(){
-        int FPS = 60;
+    public GameEngine(MenuGUI menuGUI){
         gameLogic = new GameLogic(this);
+        this.menuGUI=menuGUI;
         addKeyListener(new Keyboard(this));
         setFocusable(true);
         startGameLoop();
@@ -39,12 +41,22 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     @Override
-    protected void paintComponent(Graphics grphcs) {
-        super.paintComponent(grphcs);
-        grphcs.drawImage(background, 0, 0, 896, 775, null);
-        gameLogic.drawEverything(grphcs);
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(background, 0, 0, 896, 775, null);
+        gameLogic.drawEverything(g);
+        //drawBar(g);
 
     }
+
+    private void drawBar(Graphics g) {
+        int barHeight = 80; // The height of the black bar
+        int screenWidth = getWidth(); // Assuming this is in a JPanel or similar
+        int screenHeight = getHeight();
+        g.setColor(Color.BLACK);
+        g.fillRect(0, screenHeight - barHeight, screenWidth, barHeight);
+    }
+
     @Override
     public void run() {
 
@@ -90,7 +102,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             gameLogic.getLevel().getMonsters().get(i).update();
         }
         gameLogic.getLevel().tickBombs();
-
+        Bomberman player = gameLogic.getPlayers().get(0);
+        if (player.getBombCounter()<player.getDefaultBombCount())
+            menuGUI.updateBombCounter();
     }
 
     private void startGameLoop(){
@@ -147,6 +161,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             man.reset();
         }
         gameLogic = new GameLogic(this);
+        resetStatusbar();
+    }
+
+    private void resetStatusbar() {
+        Bomberman player = gameLogic.getPlayers().get(0);
+        menuGUI.getStatusLabel().setText(": " + player.getBombCounter());
     }
 
     class NewFrameListener implements ActionListener{
