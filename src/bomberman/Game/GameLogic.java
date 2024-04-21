@@ -43,7 +43,9 @@ public class GameLogic {
             monster.draw(g);
         }
         for (PowerUp bomb : bombs){
-            bomb.render(g);
+            if (!bomb.isCollected()) {
+                bomb.render(g);
+            }
         }
     }
 

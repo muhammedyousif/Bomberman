@@ -18,7 +18,7 @@ public class Box extends Sprite{
         if(shouldDropPowerUp()){
             Image image = new ImageIcon("src/bomberman/Assets/powerup.png").getImage();
             //level.grid.add(new PowerUp(this.x+5, this.y+5, 50, 50, image));
-            PowerUp bomb = new PowerUp(this.x,this.y,20,20,image);
+            PowerUp bomb = new PowerUp(this.x,this.y,20,20,image,level);
             level.gameEngine.gameLogic.bombs.add(bomb);
         }
         level.grid.remove(this);
