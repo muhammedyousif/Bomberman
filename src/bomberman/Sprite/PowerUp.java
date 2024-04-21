@@ -13,7 +13,7 @@ public class PowerUp extends Sprite{
     private int yDrawOffset=5;
     private boolean collected=false;
     Level level;
-    Image img = new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
+    Image img = new ImageIcon("src/bomberman/Assets/bombitem.png").getImage();
 
     public boolean isCollected() {
         return collected;
@@ -21,7 +21,7 @@ public class PowerUp extends Sprite{
 
     public PowerUp(int x, int y, int width, int height, Image image, Level level){
         super(x,y,width,height,image);
-        initHitbox(x,y,30,30);
+        initHitbox(x,y,48,50);
         this.level=level;
     }
     public void update(){
@@ -33,14 +33,14 @@ public class PowerUp extends Sprite{
         }
     }
     public void render(Graphics g){
-        g.drawImage(img, (hitbox.x+xDrawOffset)+width-6, (hitbox.y+yDrawOffset)+height-6,width,height,null);
+        g.drawImage(img, (hitbox.x+xDrawOffset)+width-45, (hitbox.y+yDrawOffset)+height-40,width,height,null);
         //renderHitbox(g);
     }
     public void renderHitbox(Graphics g){
-        g.drawRect(hitbox.x+width-6,hitbox.y+height-6, hitbox.width, hitbox.height);
+        g.drawRect(hitbox.x+width-45,hitbox.y+height-40, hitbox.width, hitbox.height);
     }
     private boolean collides_player(Bomberman sprite){
-        Rectangle rect = new Rectangle(hitbox.x+width-6, hitbox.y+height-6, hitbox.width, hitbox.height);
+        Rectangle rect = new Rectangle(hitbox.x+width-45, hitbox.y+height-40, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
         return rect.intersects(otherRect);
     }
