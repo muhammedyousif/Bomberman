@@ -1,6 +1,7 @@
 package bomberman.Game;
 
 import bomberman.Sprite.Monster;
+import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
 
 import java.awt.Color;
@@ -103,8 +104,18 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
         gameLogic.getLevel().tickBombs();
         Bomberman player = gameLogic.getPlayers().get(0);
-        if (player.getBombCounter()<player.getDefaultBombCount())
+        if (player.firstbomb==false)
             menuGUI.updateBombCounter();
+        ArrayList<PowerUp> toRemove = new ArrayList<>();
+        for (PowerUp bombs : gameLogic.bombs) {
+            if (bombs.isCollected()) {
+                toRemove.add(bombs);
+            } else {
+                bombs.update();
+            }
+        }
+        gameLogic.bombs.removeAll(toRemove); // Remove all collected bombs after iteration
+
     }
 
     private void startGameLoop(){

@@ -45,6 +45,7 @@ public class Bomberman extends Entity{
     private int deathFrameDelay = 0;
     private int defaultBombCount=6;
     private int bombCounter=defaultBombCount;
+    public boolean firstbomb=true;
 
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -61,6 +62,7 @@ public class Bomberman extends Entity{
 
 
     public void placeBomb(){
+        firstbomb=false;
         if (alive && bombCounter>0) {
             int middlepos_x = this.x + (this.width / 2);
             int middlepos_y = this.y + (this.height / 2);
@@ -77,7 +79,7 @@ public class Bomberman extends Entity{
 
 
     public void update(){
-        if (!died) {
+        if (!died) {//death animation complete
             if (alive) {
                 updatePOS();
             }
@@ -87,6 +89,7 @@ public class Bomberman extends Entity{
         }
         //System.out.println("Bomberman position: x=" + x + ", y=" + y);
     }
+
 
     private void checkDeath() {
         if (!alive){
@@ -246,7 +249,9 @@ public class Bomberman extends Entity{
         Rectangle otherRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
-
+    public void incBomb(){
+        bombCounter+=1;
+    }
 
     public void reset() {
         alive=true;
@@ -258,4 +263,5 @@ public class Bomberman extends Entity{
         hitbox.y=y;
         bombCounter=defaultBombCount;
     }
+
 }
