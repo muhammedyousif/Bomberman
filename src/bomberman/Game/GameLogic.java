@@ -10,6 +10,7 @@ public class GameLogic {
     private ArrayList<Bomberman> players;
     private GameMode gamemode;
     public GameEngine gameEngine;
+    public ArrayList<PowerUp> bombs;
     public GameLogic(GameEngine gameEngine){
         try{
             this.level = new Level("src/bomberman/Assets/level1.txt",gameEngine);
@@ -18,6 +19,7 @@ public class GameLogic {
         }
         this.gameEngine=gameEngine;
         this.players = new ArrayList<>();
+        bombs=new ArrayList<>();
         Image player=new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
         players.add(new Bomberman(70,70,40,50,1,level,player));
     }
@@ -39,6 +41,9 @@ public class GameLogic {
         }
         for (Monster monster: getLevel().getMonsters()){
             monster.draw(g);
+        }
+        for (PowerUp bomb : bombs){
+            bomb.render(g);
         }
     }
 
