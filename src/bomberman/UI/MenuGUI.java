@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.File;
+import java.io.IOException;
 
 
 public class MenuGUI {
@@ -75,8 +77,25 @@ public class MenuGUI {
         statusLabel.setForeground(Color.WHITE);
         statusBar.add(statusLabel);
         GE.add(statusBar,BorderLayout.SOUTH);
+        getmaniac();
 
     }
+
+    private void getmaniac() {
+        try {
+            // Create a Font object from the font file
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/bomberman/Assets/MonomaniacOne-Regular.ttf")).deriveFont(30f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            // Register the font
+            ge.registerFont(customFont);
+            statusLabel.setFont(customFont);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     public void updateBombCounter() {
         // Assuming there is a method in GameEngine or GameLogic that returns the current bomb count.
         int currentBombCount = GE.gameLogic.getPlayers().get(0).getBombCounter();
