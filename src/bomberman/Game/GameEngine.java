@@ -1,5 +1,7 @@
 package bomberman.Game;
 
+import bomberman.Network.GameClient;
+import bomberman.Network.GameServer;
 import bomberman.Sprite.Monster;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
@@ -16,11 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
+import javax.swing.*;
 import java.awt.*;
 
 
@@ -31,6 +29,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private int FPS_SET=120;
     private int UPS_SET= 200;
     private Thread gameThread;
+    private GameClient socketClient;
+    private GameServer socketServer;
+
 
     public GameEngine(MenuGUI menuGUI){
         gameLogic = new GameLogic(this);
@@ -38,7 +39,17 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         addKeyListener(new Keyboard(this));
         setFocusable(true);
         startGameLoop();
+        startServer();
+        socketClient.sendData("ping".getBytes());
+    }
 
+    private synchronized void startServer() {
+        if (JOptionPane.showConfirmDialog(this,"Do you want to start the server?")==0){
+            socketServer=new GameServer(this);
+            socketServer.start();
+        }
+        socketClient=new GameClient(this,"localhost");
+        socketClient.start();
     }
 
     @Override
@@ -57,7 +68,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         g.setColor(Color.BLACK);
         g.fillRect(0, screenHeight - barHeight, screenWidth, barHeight);
     }
-
     @Override
     public void run() {
 

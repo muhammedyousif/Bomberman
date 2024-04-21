@@ -1,6 +1,9 @@
 package bomberman.UI;
 
 import bomberman.Game.*;
+import bomberman.Network.GameClient;
+import bomberman.Network.GameServer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,8 +18,6 @@ public class MenuGUI {
     private JFrame frame;
     private GameEngine GE;
     private JLabel statusLabel;
-
-
     public MenuGUI(){
         frame = new JFrame("Bomberman");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
