@@ -2,6 +2,8 @@ package bomberman.Game;
 
 import bomberman.Network.GameClient;
 import bomberman.Network.GameServer;
+import bomberman.Packets.Packet;
+import bomberman.Packets.Packet00Login;
 import bomberman.Sprite.Monster;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
@@ -40,7 +42,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         setFocusable(true);
         startGameLoop();
         startServer();
-        socketClient.sendData("ping".getBytes());
+        Packet00Login login= new Packet00Login(JOptionPane.showInputDialog("Username:"));
+        login.writeData(socketClient);
+        //socketClient.sendData("ping".getBytes());
     }
 
     private synchronized void startServer() {
@@ -113,9 +117,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             gameLogic.getLevel().getMonsters().get(i).update();
         }
         gameLogic.getLevel().tickBombs();
-        Bomberman player = gameLogic.getPlayers().get(0);
-        if (player.firstbomb==false)
+        //Bomberman player = gameLogic.getPlayers().get(0);
+        /*if (player.firstbomb==false)
             menuGUI.updateBombCounter();
+
+         */
         ArrayList<PowerUp> toRemove = new ArrayList<>();
         for (PowerUp bombs : gameLogic.bombs) {
             if (bombs.isCollected()) {

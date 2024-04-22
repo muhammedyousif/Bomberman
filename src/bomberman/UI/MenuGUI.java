@@ -23,7 +23,7 @@ public class MenuGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GE = new GameEngine(this);
         GE.setLayout(new BorderLayout());
-        setStatusLabel();
+        //setStatusLabel();
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
         JMenu fileMenu = new JMenu("Game");
