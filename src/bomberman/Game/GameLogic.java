@@ -23,7 +23,7 @@ public class GameLogic {
         this.players = new ArrayList<>();
         bombs=new ArrayList<>();
         Image player=new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
-        //players.add(new Bomberman(70,70,40,50,"Muhammed",level));
+        //players.add(new PlayerMP(70,70,40,50,"Muhammed",level));
     }
 
 
@@ -69,7 +69,7 @@ public class GameLogic {
 
     public Bomberman getLocal() {
         for (Bomberman man : players){
-            if (Objects.equals(man.getUsername(), gameEngine.getUsername())){
+            if (man.getUsername().equalsIgnoreCase(gameEngine.getUsername())){
                 return man;
             }
         }

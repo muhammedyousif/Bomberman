@@ -43,21 +43,48 @@ public class GameServer extends Thread{
     }
 
     private void parsePacket(byte[] data, InetAddress address, int port) {
+        Packet00Login p=null;
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookUpPacket(message.substring(0,2));
         switch (type){
             case INVALID:
                 break;
             case LOGIN:
-                Packet00Login p = new Packet00Login(data);
+                p = new Packet00Login(data);
                 System.out.println("["+address.getHostAddress()+":"+ port+"] "+p.getUsername() + "has connected");
-                PlayerMP player = new PlayerMP(65,65,40,50,p.getUsername(),gameEngine.gameLogic.getLevel(),address,port);
-                connectedPlayers.add(player);
-                gameEngine.gameLogic.getPlayers().add(player);
+                PlayerMP player = new PlayerMP(100,100,40,50,p.getUsername(),gameEngine.gameLogic.getLevel(),address,port);
+                this.addConnection(player,(Packet00Login) p);
+                //connectedPlayers.add(player);
+                //gameEngine.gameLogic.getPlayers().add(player);
                 loginFinished=true;
                 break;
             case DISCONNECT:
                 break;
+        }
+    }
+
+    public void addConnection(PlayerMP player, Packet00Login p) {
+        boolean alreadyConnected=false;
+        for (PlayerMP playerMP: connectedPlayers) {
+            if (playerMP.getUsername().equalsIgnoreCase(player.getUsername())){
+                if(playerMP.ipAddress==null){
+                    playerMP.ipAddress=player.ipAddress;
+                }
+                if (playerMP.port==-1){
+                    playerMP.port=player.port;
+                }
+                alreadyConnected=true;
+            }
+            else {
+                sendData(p.getData(),playerMP.ipAddress,playerMP.port);
+                p = new Packet00Login(p.getUsername());
+                sendData(p.getData(), player.ipAddress, player.port);
+
+            }
+        }
+        if (!alreadyConnected){
+            this.connectedPlayers.add(player);
+            //p.writeData(this);
         }
     }
 
@@ -78,5 +105,9 @@ public class GameServer extends Thread{
 
     public boolean isLoginFinished() {
         return loginFinished;
+    }
+
+    public List<PlayerMP> getConnectedPlayers() {
+        return connectedPlayers;
     }
 }

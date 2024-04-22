@@ -5,6 +5,7 @@ import bomberman.Network.GameServer;
 import bomberman.Packets.Packet;
 import bomberman.Packets.Packet00Login;
 import bomberman.Sprite.Monster;
+import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
 
@@ -34,7 +35,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private GameClient socketClient;
     private GameServer socketServer;
     private String username;
-
+    public boolean server=false;
 
 
     public GameEngine(MenuGUI menuGUI){
@@ -45,7 +46,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         startGameLoop();
         startServer();
         username = JOptionPane.showInputDialog("Username:");
-        Packet00Login login= new Packet00Login(username);
+        PlayerMP playerMP = new PlayerMP(80,80,40,50,username,gameLogic.getLevel(),null,-1);
+        gameLogic.getPlayers().add(playerMP);
+        Packet00Login login= new Packet00Login(playerMP.getUsername());
+        if (socketServer!=null){
+            socketServer.addConnection(playerMP,login);
+        }
         login.writeData(socketClient);
         //socketClient.sendData("ping".getBytes());
     }
@@ -54,6 +60,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         if (JOptionPane.showConfirmDialog(this,"Do you want to start the server?")==0){
             socketServer=new GameServer(this);
             socketServer.start();
+            server=true;
         }
         socketClient=new GameClient(this,"localhost");
         socketClient.start();
@@ -189,9 +196,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     public void restartGame() {
-        for (Bomberman man : gameLogic.getPlayers()){
+        /*for (Bomberman man : gameLogic.getPlayers()){
             man.reset();
-        }
+        }*/
+        gameLogic.getLocal().reset();
         gameLogic = new GameLogic(this);
         //resetStatusbar();
     }
