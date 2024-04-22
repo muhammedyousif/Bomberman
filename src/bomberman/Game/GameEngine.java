@@ -33,6 +33,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private Thread gameThread;
     private GameClient socketClient;
     private GameServer socketServer;
+    private String username;
+
 
 
     public GameEngine(MenuGUI menuGUI){
@@ -42,7 +44,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         setFocusable(true);
         startGameLoop();
         startServer();
-        Packet00Login login= new Packet00Login(JOptionPane.showInputDialog("Username:"));
+        username = JOptionPane.showInputDialog("Username:");
+        Packet00Login login= new Packet00Login(username);
         login.writeData(socketClient);
         //socketClient.sendData("ping".getBytes());
     }
@@ -117,11 +120,13 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             gameLogic.getLevel().getMonsters().get(i).update();
         }
         gameLogic.getLevel().tickBombs();
-        //Bomberman player = gameLogic.getPlayers().get(0);
-        /*if (player.firstbomb==false)
-            menuGUI.updateBombCounter();
+        if (!gameLogic.getPlayers().isEmpty()) {
+            Bomberman player = gameLogic.getPlayers().get(0);
 
-         */
+            if (!player.firstbomb)
+                menuGUI.updateBombCounter();
+        }
+
         ArrayList<PowerUp> toRemove = new ArrayList<>();
         for (PowerUp bombs : gameLogic.bombs) {
             if (bombs.isCollected()) {
@@ -188,7 +193,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             man.reset();
         }
         gameLogic = new GameLogic(this);
-        resetStatusbar();
+        //resetStatusbar();
     }
 
     private void resetStatusbar() {
@@ -204,5 +209,15 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
     }
 
+    public GameClient getSocketClient() {
+        return socketClient;
+    }
 
+    public GameServer getSocketServer() {
+        return socketServer;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 }

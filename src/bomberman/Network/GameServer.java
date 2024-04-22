@@ -15,6 +15,7 @@ public class GameServer extends Thread{
     private DatagramSocket socket;
     private GameEngine gameEngine;
     private List<PlayerMP> connectedPlayers=new ArrayList<>();
+    private boolean loginFinished=false;
     public GameServer(GameEngine gameEngine){
         this.gameEngine=gameEngine;
         try {
@@ -53,6 +54,7 @@ public class GameServer extends Thread{
                 PlayerMP player = new PlayerMP(65,65,40,50,p.getUsername(),gameEngine.gameLogic.getLevel(),address,port);
                 connectedPlayers.add(player);
                 gameEngine.gameLogic.getPlayers().add(player);
+                loginFinished=true;
                 break;
             case DISCONNECT:
                 break;
@@ -72,5 +74,9 @@ public class GameServer extends Thread{
         for (PlayerMP p: connectedPlayers){
             sendData(data,p.ipAddress,p.port);
         }
+    }
+
+    public boolean isLoginFinished() {
+        return loginFinished;
     }
 }

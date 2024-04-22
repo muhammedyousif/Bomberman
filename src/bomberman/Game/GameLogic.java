@@ -4,8 +4,10 @@ import bomberman.Sprite.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GameLogic {
+    private Bomberman Local;
     private Level level;
     private ArrayList<Bomberman> players;
     private GameMode gamemode;
@@ -63,6 +65,16 @@ public class GameLogic {
 
     public Level getLevel() {
         return level;
+    }
+
+    public Bomberman getLocal() {
+        for (Bomberman man : players){
+            if (Objects.equals(man.getUsername(), gameEngine.getUsername())){
+                return man;
+            }
+        }
+        System.out.println("Local player not found, players list size: " + players.size());
+        return null;
     }
 }
 

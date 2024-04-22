@@ -23,7 +23,7 @@ public class MenuGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GE = new GameEngine(this);
         GE.setLayout(new BorderLayout());
-        //setStatusLabel();
+        setStatusLabel();
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
         JMenu fileMenu = new JMenu("Game");
@@ -64,6 +64,9 @@ public class MenuGUI {
         });
     }
     private void setStatusLabel(){
+        while (GE.getSocketServer()==null || GE.gameLogic.getLocal()==null){
+            System.out.println("WAIT");
+        }
         frame.getContentPane().add(GE);
         JPanel statusBar = new JPanel();
         statusBar.setBackground(Color.BLACK);
@@ -72,7 +75,7 @@ public class MenuGUI {
         Image image = bomb.getImage(); // Convert the ImageIcon to an Image
         Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // Scale it to fit your layout, here 20x20 is an example
         bomb = new ImageIcon(newimg);
-        statusLabel = new JLabel(": "+GE.gameLogic.getPlayers().get(0).getBombCounter());
+        statusLabel = new JLabel(": "+GE.gameLogic.getLocal().getBombCounter());
         statusLabel.setIcon(bomb); // Set the icon to the label
         statusLabel.setHorizontalTextPosition(SwingConstants.RIGHT); // Text to the right of the icon
         statusLabel.setForeground(Color.WHITE);

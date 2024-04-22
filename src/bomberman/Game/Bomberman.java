@@ -254,6 +254,10 @@ public class Bomberman extends Entity{
         bombCounter+=1;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void reset() {
         alive=true;
         player_action=IDLE;
