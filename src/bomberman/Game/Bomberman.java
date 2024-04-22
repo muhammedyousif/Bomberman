@@ -46,14 +46,15 @@ public class Bomberman extends Entity{
     private int defaultBombCount=6;
     private int bombCounter=defaultBombCount;
     public boolean firstbomb=true;
+    private String username;
 
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
 
-    public Bomberman(int x, int y, int width, int height, int playerId, Level level, Image image){
+    public Bomberman(int x, int y, int width, int height, String username, Level level){
         super(x,y,width,height);
-        this.playerId = playerId;
+        this.username = username;
         this.level = level;
         this.bombs = new ArrayList<>();
         loadAnimations();
