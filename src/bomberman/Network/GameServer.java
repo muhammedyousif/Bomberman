@@ -77,7 +77,7 @@ public class GameServer extends Thread{
             }
             else {
                 sendData(p.getData(),playerMP.ipAddress,playerMP.port);
-                p = new Packet00Login(p.getUsername());
+                p = new Packet00Login(playerMP.getUsername());
                 sendData(p.getData(), player.ipAddress, player.port);
 
             }
