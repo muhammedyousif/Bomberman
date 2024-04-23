@@ -3,6 +3,7 @@ package bomberman.Network;
 import bomberman.Game.GameEngine;
 import bomberman.Packets.Packet;
 import bomberman.Packets.Packet00Login;
+import bomberman.Packets.Packet01Disconnect;
 import bomberman.Sprite.PlayerMP;
 import bomberman.UI.MenuGUI;
 
@@ -43,7 +44,7 @@ public class GameServer extends Thread{
     }
 
     private void parsePacket(byte[] data, InetAddress address, int port) {
-        Packet00Login p=null;
+        Packet p=null;
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookUpPacket(message.substring(0,2));
         switch (type){
@@ -51,16 +52,24 @@ public class GameServer extends Thread{
                 break;
             case LOGIN:
                 p = new Packet00Login(data);
-                System.out.println("["+address.getHostAddress()+":"+ port+"] "+p.getUsername() + "has connected");
-                PlayerMP player = new PlayerMP(100,100,40,50,p.getUsername(),gameEngine.gameLogic.getLevel(),address,port);
+                System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ((Packet00Login) p).getUsername() + "has connected");
+                PlayerMP player = new PlayerMP(100,100,40,50, ((Packet00Login) p).getUsername(),gameEngine.gameLogic.getLevel(),address,port);
                 this.addConnection(player,(Packet00Login) p);
                 //connectedPlayers.add(player);
                 //gameEngine.gameLogic.getPlayers().add(player);
                 loginFinished=true;
                 break;
             case DISCONNECT:
+                p = new Packet01Disconnect(data);
+                System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ((Packet01Disconnect) p).getUsername() + " has left");
+                this.removeConnection((Packet01Disconnect) p);
                 break;
         }
+    }
+
+    public void removeConnection(Packet01Disconnect p) {
+        connectedPlayers.remove(getPlayerMPIndex(p.getUsername()));
+        p.writeData(this);
     }
 
     public void addConnection(PlayerMP player, Packet00Login p) {
@@ -109,5 +118,21 @@ public class GameServer extends Thread{
 
     public List<PlayerMP> getConnectedPlayers() {
         return connectedPlayers;
+    }
+    public PlayerMP getPlayerMP(String username){
+        for (PlayerMP player:connectedPlayers) {
+            if (player.getUsername().equals(username))
+                return player;
+        }
+        return null;
+    }
+    public int getPlayerMPIndex(String username){
+        int index=0;
+        for (PlayerMP player:connectedPlayers) {
+            if (player.getUsername().equals(username))
+                break;
+            index++;
+        }
+        return index;
     }
 }

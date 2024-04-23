@@ -76,5 +76,16 @@ public class GameLogic {
         System.out.println("Local player not found, players list size: " + players.size());
         return null;
     }
+
+    public void removePlayerMP(String username) {
+        int index=0;
+        for (Entity e: players){
+            if (e instanceof PlayerMP && ((PlayerMP) e).getUsername().equals(username)){
+                break;
+            }
+            index++;
+        }
+        players.remove(index);
+    }
 }
 

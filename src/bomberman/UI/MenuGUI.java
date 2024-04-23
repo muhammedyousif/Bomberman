@@ -14,9 +14,10 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class MenuGUI {
-    private JFrame frame;
-    private GameEngine GE;
+public class MenuGUI{
+    public JFrame frame;
+    public GameEngine GE;
+    public WindowHandler windowHandler;
     private JLabel statusLabel;
     public MenuGUI(){
         frame = new JFrame("Bomberman");
@@ -30,6 +31,7 @@ public class MenuGUI {
         menuBar.add(fileMenu);
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         fileMenu.add(exitMenuItem);
+        windowHandler=new WindowHandler(this);
         exitMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
