@@ -4,6 +4,7 @@ import bomberman.Game.GameEngine;
 import bomberman.Packets.Packet;
 import bomberman.Packets.Packet00Login;
 import bomberman.Packets.Packet01Disconnect;
+import bomberman.Packets.Packet02Move;
 import bomberman.Sprite.PlayerMP;
 import bomberman.UI.MenuGUI;
 
@@ -53,7 +54,7 @@ public class GameServer extends Thread{
             case LOGIN:
                 p = new Packet00Login(data);
                 System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ((Packet00Login) p).getUsername() + "has connected");
-                PlayerMP player = new PlayerMP(100,100,40,50, ((Packet00Login) p).getUsername(),gameEngine.gameLogic.getLevel(),address,port);
+                PlayerMP player = new PlayerMP(70,70,40,50, ((Packet00Login) p).getUsername(),gameEngine.gameLogic.getLevel(),address,port);
                 this.addConnection(player,(Packet00Login) p);
                 //connectedPlayers.add(player);
                 //gameEngine.gameLogic.getPlayers().add(player);
@@ -64,6 +65,22 @@ public class GameServer extends Thread{
                 System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ((Packet01Disconnect) p).getUsername() + " has left");
                 this.removeConnection((Packet01Disconnect) p);
                 break;
+            case MOVE:
+                p=new Packet02Move(data);
+                //System.out.println(((Packet02Move) p).getUsername()+" has moved to "+((Packet02Move) p).getX()+","+((Packet02Move) p).getY());
+                handleMove((Packet02Move)p);
+                break;
+        }
+    }
+
+    private void handleMove(Packet02Move p) {
+        if (getPlayerMP(p.getUsername())!=null){
+            int index = getPlayerMPIndex(p.getUsername());
+            connectedPlayers.get(index).hitbox.x=p.getX();
+            connectedPlayers.get(index).x=p.getX();
+            connectedPlayers.get(index).hitbox.y=p.getY() ;
+            connectedPlayers.get(index).y=p.getY();
+            p.writeData(this);
         }
     }
 

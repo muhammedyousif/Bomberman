@@ -13,6 +13,7 @@ public class GameLogic {
     private GameMode gamemode;
     public GameEngine gameEngine;
     public ArrayList<PowerUp> bombs;
+    private boolean firstmove=false;
     public GameLogic(GameEngine gameEngine){
         try{
             this.level = new Level("src/bomberman/Assets/level1.txt",gameEngine);
@@ -86,6 +87,23 @@ public class GameLogic {
             index++;
         }
         players.remove(index);
+    }
+    public int getPlayerMPIndex(String username){
+        int index=0;
+        for (Bomberman player:players) {
+            if (player instanceof PlayerMP && player.getUsername().equals(username))
+                break;
+            index++;
+        }
+        return index;
+    }
+    public void movePlayer(String username,int x,int y){
+        int index=getPlayerMPIndex(username);
+        System.out.println(players.get(index).hitbox.x);
+        players.get(index).hitbox.x=x;
+        players.get(index).x=x;
+        players.get(index).hitbox.y=y;
+        players.get(index).y=y;
     }
 }
 

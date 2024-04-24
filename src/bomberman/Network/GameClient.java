@@ -4,6 +4,7 @@ import bomberman.Game.GameEngine;
 import bomberman.Packets.Packet;
 import bomberman.Packets.Packet00Login;
 import bomberman.Packets.Packet01Disconnect;
+import bomberman.Packets.Packet02Move;
 import bomberman.Sprite.PlayerMP;
 import bomberman.UI.MenuGUI;
 
@@ -51,7 +52,7 @@ public class GameClient extends Thread{
             case LOGIN:
                 p = new Packet00Login(data);
                 System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ((Packet00Login) p).getUsername() + "  has joined the game");
-                PlayerMP player = new PlayerMP(65,65,40,50, ((Packet00Login) p).getUsername(),gameEngine.gameLogic.getLevel(),address,port);
+                PlayerMP player = new PlayerMP(70,70,40,50, ((Packet00Login) p).getUsername(),gameEngine.gameLogic.getLevel(),address,port);
                 gameEngine.gameLogic.getPlayers().add(player);
                 break;
             case DISCONNECT:
@@ -60,7 +61,16 @@ public class GameClient extends Thread{
                 gameEngine.gameLogic.removePlayerMP(((Packet01Disconnect)p).getUsername());
 
                 break;
+            case MOVE:
+                p=new Packet02Move(data);
+                handlePacket((Packet02Move) p);
+                //System.out.println(((Packet02Move) p).getUsername()+" has moved to "+((Packet02Move) p).getX()+","+((Packet02Move) p).getY());
+                break;
         }
+    }
+
+    private void handlePacket(Packet02Move p) {
+        gameEngine.gameLogic.movePlayer(p.getUsername(),p.getX(),p.getY());
     }
 
     public void sendData(byte[] data){

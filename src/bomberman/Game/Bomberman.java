@@ -1,5 +1,6 @@
 package bomberman.Game;
 
+import bomberman.Packets.Packet02Move;
 import bomberman.Sprite.*;
 
 import java.awt.*;
@@ -159,7 +160,7 @@ public class Bomberman extends Entity{
     public void render(Graphics g)
     {   if (!died) {
         g.drawImage(animations[player_action][aniIndex], hitbox.x - xDrawOffset, hitbox.y - yDrawOffset, width, height, null);
-        //drawHitbox(g);
+        drawHitbox(g);
         }
     }
 
@@ -192,7 +193,6 @@ public class Bomberman extends Entity{
         int xspeed = 0;
         int yspeed = 0;
 
-
         if (left) {
             xspeed -= speed;
         }
@@ -212,12 +212,15 @@ public class Bomberman extends Entity{
         if (canMoveHere(hitbox.x+ xspeed, hitbox.y, hitbox.width, hitbox.height)) {
             x+=xspeed;
             hitbox.x+=xspeed;
+
         }
 
         if (canMoveHere(hitbox.x, hitbox.y + yspeed, hitbox.width, hitbox.height)) {
             y+=yspeed;
             hitbox.y+=yspeed;
         }
+        Packet02Move packet= new Packet02Move(username, hitbox.x, hitbox.y);
+        packet.writeData(GameEngine.gameEngine.getSocketClient());
 
         moving = true;
     }
@@ -268,5 +271,6 @@ public class Bomberman extends Entity{
         hitbox.y=y;
         bombCounter=defaultBombCount;
     }
+
 
 }

@@ -30,6 +30,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     MenuGUI menuGUI;
     public GameLogic gameLogic;
     private int FPS_SET=120;
+    public static GameEngine gameEngine;
     private int UPS_SET= 200;
     private Thread gameThread;
     private GameClient socketClient;
@@ -39,6 +40,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
 
     public GameEngine(MenuGUI menuGUI){
+        gameEngine=this;
         gameLogic = new GameLogic(this);
         this.menuGUI=menuGUI;
         addKeyListener(new Keyboard(this));
