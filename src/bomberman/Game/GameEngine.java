@@ -4,6 +4,7 @@ import bomberman.Network.GameClient;
 import bomberman.Network.GameServer;
 import bomberman.Packets.Packet;
 import bomberman.Packets.Packet00Login;
+import bomberman.Packets.Packet02Move;
 import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
@@ -19,6 +20,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -114,7 +116,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
+                //System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
+                if (username!=null) {
+                    PlayerMP playerMP = (PlayerMP) getPlayers().get(gameLogic.getPlayerMPIndex(username));
+                    System.out.println("left: " + playerMP.isLeft() + " down: " + playerMP.isDown() + " right: " + playerMP.isRight() + " up: " + playerMP.isUp());
+                }
                 frames = 0;
                 updates=0;
             }
@@ -122,8 +128,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void update() {
-        for (int i = 0; i <gameLogic.getPlayers().size() ; i++) {
-            gameLogic.getPlayers().get(i).update();
+        synchronized (getPlayers()) {
+
+            for (int i = 0; i < getPlayers().size(); i++) {
+                getPlayers().get(i).update();
+            }
         }
         for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
             gameLogic.getLevel().getMonsters().get(i).update();
@@ -155,45 +164,51 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        PlayerMP playerMP= (PlayerMP) getPlayers().get(gameLogic.getPlayerMPIndex(username));
         switch (e.getKeyCode()){
             case KeyEvent.VK_A:
-                gameLogic.getPlayers().get(0).setLeft(true);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setLeft(true);
                 break;
             case KeyEvent.VK_D:
-                gameLogic.getPlayers().get(0).setRight(true);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setRight(true);
                 break;
             case KeyEvent.VK_W:
-                gameLogic.getPlayers().get(0).setUp(true);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setUp(true);
                 break;
             case  KeyEvent.VK_S:
-                gameLogic.getPlayers().get(0).setDown(true);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setDown(true);
                 break;
             case KeyEvent.VK_E:
-                gameLogic.getPlayers().get(0).placeBomb();
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).placeBomb();
                 break;
             case  KeyEvent.VK_R:
                 restartGame();
                 break;
         }
-
+        Packet02Move packet= new Packet02Move(playerMP.getUsername(), playerMP.hitbox.x, playerMP.hitbox.y,playerMP.isLeft(),playerMP.isRight(),playerMP.isUp(),playerMP.isDown());
+        GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        PlayerMP playerMP= (PlayerMP) getPlayers().get(gameLogic.getPlayerMPIndex(username));
         switch (e.getKeyCode()){
             case KeyEvent.VK_A:
-                gameLogic.getPlayers().get(0).setLeft(false);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setLeft(false);
                 break;
             case KeyEvent.VK_D:
-                gameLogic.getPlayers().get(0).setRight(false);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setRight(false);
                 break;
             case KeyEvent.VK_W:
-                gameLogic.getPlayers().get(0).setUp(false);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setUp(false);
                 break;
             case  KeyEvent.VK_S:
-                gameLogic.getPlayers().get(0).setDown(false);
+                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setDown(false);
                 break;
+
         }
+        Packet02Move packet= new Packet02Move(playerMP.getUsername(), playerMP.hitbox.x, playerMP.hitbox.y,playerMP.isLeft(),playerMP.isRight(),playerMP.isUp(),playerMP.isDown());
+        GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
 
     }
 
@@ -207,7 +222,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void resetStatusbar() {
-        Bomberman player = gameLogic.getPlayers().get(0);
+        Bomberman player = gameLogic.getPlayers().get(gameLogic.getPlayerMPIndex(username));
         menuGUI.getStatusLabel().setText(": " + player.getBombCounter());
     }
 
@@ -230,4 +245,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     public String getUsername() {
         return username;
     }
+    public synchronized List<Bomberman> getPlayers(){
+        return gameLogic.getPlayers();
+    }
+
 }

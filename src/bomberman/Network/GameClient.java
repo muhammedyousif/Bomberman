@@ -67,7 +67,7 @@ public class GameClient extends Thread{
     }
 
     private void handlePacket(Packet02Move p) {
-        gameEngine.gameLogic.movePlayer(p.getUsername(),p.getX(),p.getY());
+        gameEngine.gameLogic.movePlayer(p.getUsername(),p.getX(),p.getY(),p.isLeft(),p.isRight(),p.isUp(),p.isDown());
     }
     private void handleLogin(Packet00Login p, InetAddress address, int port){
         System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ( p).getUsername() + "  has joined the game");

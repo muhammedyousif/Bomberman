@@ -80,6 +80,10 @@ public class GameServer extends Thread{
             connectedPlayers.get(index).x=p.getX();
             connectedPlayers.get(index).hitbox.y=p.getY() ;
             connectedPlayers.get(index).y=p.getY();
+            connectedPlayers.get(index).setLeft(p.isLeft());
+            connectedPlayers.get(index).setRight(p.isRight());
+            connectedPlayers.get(index).setUp(p.isUp());
+            connectedPlayers.get(index).setDown(p.isDown());
             p.writeData(this);
         }
     }

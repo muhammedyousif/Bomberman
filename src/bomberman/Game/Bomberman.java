@@ -187,6 +187,23 @@ public class Bomberman extends Entity{
     public void setRight(boolean right) {
         this.right = right;
     }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
     private void updatePOS() {
         moving = false;
 
@@ -219,8 +236,6 @@ public class Bomberman extends Entity{
             y+=yspeed;
             hitbox.y+=yspeed;
         }
-        Packet02Move packet= new Packet02Move(username, hitbox.x, hitbox.y);
-        packet.writeData(GameEngine.gameEngine.getSocketClient());
 
         moving = true;
     }
@@ -271,6 +286,7 @@ public class Bomberman extends Entity{
         hitbox.y=y;
         bombCounter=defaultBombCount;
     }
+
 
 
 }

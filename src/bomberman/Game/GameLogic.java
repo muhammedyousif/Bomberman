@@ -97,12 +97,17 @@ public class GameLogic {
         }
         return index;
     }
-    public void movePlayer(String username,int x,int y){
+    public void movePlayer(String username,int x,int y,boolean left,boolean right,boolean up,boolean down){
         int index=getPlayerMPIndex(username);
         players.get(index).hitbox.x=x;
         players.get(index).x=x;
         players.get(index).hitbox.y=y;
         players.get(index).y=y;
+        //System.out.println(left);
+        players.get(index).setDown(down);
+        players.get(index).setUp(up);
+        players.get(index).setLeft(left);
+        players.get(index).setRight(right);
     }
 }
 
