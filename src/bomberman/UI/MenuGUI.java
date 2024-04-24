@@ -1,6 +1,9 @@
 package bomberman.UI;
 
 import bomberman.Game.*;
+import bomberman.Network.GameClient;
+import bomberman.Network.GameServer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,12 +14,11 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class MenuGUI {
-    private JFrame frame;
-    private GameEngine GE;
+public class MenuGUI{
+    public JFrame frame;
+    public GameEngine GE;
+    public WindowHandler windowHandler;
     private JLabel statusLabel;
-
-
     public MenuGUI(){
         frame = new JFrame("Bomberman");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,6 +31,7 @@ public class MenuGUI {
         menuBar.add(fileMenu);
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         fileMenu.add(exitMenuItem);
+        windowHandler=new WindowHandler(this);
         exitMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -63,6 +66,17 @@ public class MenuGUI {
         });
     }
     private void setStatusLabel(){
+        if (GE.multiplayer) {
+            if (!GE.server) {
+                while (GE.gameLogic.getLocal() == null) {
+                    System.out.println(GE.getUsername());
+                }
+            } else {
+                while (GE.getSocketServer() == null || GE.gameLogic.getLocal() == null) {
+                    System.out.println("MAKING");
+                }
+            }
+        }
         frame.getContentPane().add(GE);
         JPanel statusBar = new JPanel();
         statusBar.setBackground(Color.BLACK);
@@ -71,7 +85,7 @@ public class MenuGUI {
         Image image = bomb.getImage(); // Convert the ImageIcon to an Image
         Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // Scale it to fit your layout, here 20x20 is an example
         bomb = new ImageIcon(newimg);
-        statusLabel = new JLabel(": "+GE.gameLogic.getPlayers().get(0).getBombCounter());
+        statusLabel = new JLabel(": "+GE.gameLogic.getLocal().getBombCounter());
         statusLabel.setIcon(bomb); // Set the icon to the label
         statusLabel.setHorizontalTextPosition(SwingConstants.RIGHT); // Text to the right of the icon
         statusLabel.setForeground(Color.WHITE);

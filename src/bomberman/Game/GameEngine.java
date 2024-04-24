@@ -1,6 +1,13 @@
 package bomberman.Game;
 
+import bomberman.Network.GameClient;
+import bomberman.Network.GameServer;
+import bomberman.Packets.Packet;
+import bomberman.Packets.Packet00Login;
+import bomberman.Packets.Packet02Move;
+import bomberman.Sprite.Entity;
 import bomberman.Sprite.Monster;
+import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
 
@@ -14,13 +21,10 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
+import javax.swing.*;
 import java.awt.*;
 
 
@@ -29,16 +33,56 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     MenuGUI menuGUI;
     public GameLogic gameLogic;
     private int FPS_SET=120;
+    public static GameEngine gameEngine;
     private int UPS_SET= 200;
     private Thread gameThread;
+    private GameClient socketClient;
+    private GameServer socketServer;
+    private String username;
+    public boolean server=false;
+    public boolean multiplayer;
 
     public GameEngine(MenuGUI menuGUI){
+        gameEngine=this;
         gameLogic = new GameLogic(this);
         this.menuGUI=menuGUI;
-        addKeyListener(new Keyboard(this));
         setFocusable(true);
         startGameLoop();
+        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to player multiPlayer?");
+        if (multiplayerint==0)
+            multiplayer=true;
+        else {
+            multiplayer=false;
+        }
+        if (multiplayer) {
+            startServer();
 
+            username = JOptionPane.showInputDialog("Username:");
+            PlayerMP playerMP = new PlayerMP(80, 80, 40, 50, username, gameLogic.getLevel(), null, -1);
+            gameLogic.getPlayers().add(playerMP);
+            Packet00Login login = new Packet00Login(playerMP.getUsername(), playerMP.x, playerMP.y);
+            if (socketServer != null) {
+                socketServer.addConnection(playerMP, login);
+            }
+            login.writeData(socketClient);
+        }
+        else {
+            Bomberman man = new Bomberman(75, 75, 40, 50, username, gameLogic.getLevel());
+            gameLogic.getPlayers().add(man);
+        }
+        addKeyListener(new Keyboard(this));
+
+        //socketClient.sendData("ping".getBytes());
+    }
+
+    private synchronized void startServer() {
+        if (JOptionPane.showConfirmDialog(this,"Do you want to start the server?")==0){
+            socketServer=new GameServer(this);
+            socketServer.start();
+            server=true;
+        }
+        socketClient=new GameClient(this,"localhost");
+        socketClient.start();
     }
 
     @Override
@@ -57,7 +101,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         g.setColor(Color.BLACK);
         g.fillRect(0, screenHeight - barHeight, screenWidth, barHeight);
     }
-
     @Override
     public void run() {
 
@@ -88,7 +131,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
+                //System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
+                if (username!=null) {
+                    PlayerMP playerMP = (PlayerMP) getPlayers().get(gameLogic.getPlayerMPIndex(username));
+                    System.out.println("left: " + playerMP.isLeft() + " down: " + playerMP.isDown() + " right: " + playerMP.isRight() + " up: " + playerMP.isUp());
+                }
                 frames = 0;
                 updates=0;
             }
@@ -96,16 +143,23 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void update() {
-        for (int i = 0; i <gameLogic.getPlayers().size() ; i++) {
-            gameLogic.getPlayers().get(i).update();
+        synchronized (getPlayers()) {
+
+            for (int i = 0; i < getPlayers().size(); i++) {
+                getPlayers().get(i).update();
+            }
         }
         for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
             gameLogic.getLevel().getMonsters().get(i).update();
         }
         gameLogic.getLevel().tickBombs();
-        Bomberman player = gameLogic.getPlayers().get(0);
-        if (player.firstbomb==false)
-            menuGUI.updateBombCounter();
+        if (!gameLogic.getPlayers().isEmpty()) {
+            Bomberman player = gameLogic.getPlayers().get(0);
+
+            if (!player.firstbomb)
+                menuGUI.updateBombCounter();
+        }
+
         ArrayList<PowerUp> toRemove = new ArrayList<>();
         for (PowerUp bombs : gameLogic.bombs) {
             if (bombs.isCollected()) {
@@ -125,58 +179,81 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        Entity playerMP=null;
+        if (multiplayer)
+            playerMP= getPlayers().get(gameLogic.getPlayerMPIndex(username));
+        else{
+            if (!getPlayers().isEmpty())
+                playerMP=getPlayers().get(0);
+        }
         switch (e.getKeyCode()){
             case KeyEvent.VK_A:
-                gameLogic.getPlayers().get(0).setLeft(true);
+                ((Bomberman) playerMP).setLeft(true);
                 break;
             case KeyEvent.VK_D:
-                gameLogic.getPlayers().get(0).setRight(true);
+                ((Bomberman) playerMP).setRight(true);
                 break;
             case KeyEvent.VK_W:
-                gameLogic.getPlayers().get(0).setUp(true);
+                ((Bomberman) playerMP).setUp(true);
                 break;
             case  KeyEvent.VK_S:
-                gameLogic.getPlayers().get(0).setDown(true);
+                ((Bomberman) playerMP).setDown(true);
                 break;
             case KeyEvent.VK_E:
-                gameLogic.getPlayers().get(0).placeBomb();
+                ((Bomberman) playerMP).placeBomb();
                 break;
             case  KeyEvent.VK_R:
                 restartGame();
                 break;
         }
-
+        if (multiplayer) {
+            Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), ((PlayerMP) playerMP).hitbox.x, ((PlayerMP) playerMP).hitbox.y, ((PlayerMP) playerMP).isLeft(), ((PlayerMP) playerMP).isRight(), ((PlayerMP) playerMP).isUp(), ((PlayerMP) playerMP).isDown());
+            GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        Entity playerMP=null;
+        if (multiplayer)
+            playerMP= getPlayers().get(gameLogic.getPlayerMPIndex(username));
+        else{
+            if (!getPlayers().isEmpty())
+                playerMP=getPlayers().get(0);
+        }
         switch (e.getKeyCode()){
             case KeyEvent.VK_A:
-                gameLogic.getPlayers().get(0).setLeft(false);
+                ((Bomberman) playerMP).setLeft(false);
                 break;
             case KeyEvent.VK_D:
-                gameLogic.getPlayers().get(0).setRight(false);
+                ((Bomberman) playerMP).setRight(false);
                 break;
             case KeyEvent.VK_W:
-                gameLogic.getPlayers().get(0).setUp(false);
+                ((Bomberman) playerMP).setUp(false);
                 break;
             case  KeyEvent.VK_S:
-                gameLogic.getPlayers().get(0).setDown(false);
+                ((Bomberman) playerMP).setDown(false);
                 break;
+
+        }
+        if (multiplayer) {
+            Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), playerMP.hitbox.x, playerMP.hitbox.y, ((PlayerMP)playerMP).isLeft(), ((PlayerMP)playerMP).isRight(), ((PlayerMP)playerMP).isUp(), ((PlayerMP)playerMP).isDown());
+            GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
         }
 
     }
 
     public void restartGame() {
-        for (Bomberman man : gameLogic.getPlayers()){
+        /*for (Bomberman man : gameLogic.getPlayers()){
             man.reset();
-        }
+        }*/
+        gameLogic.getLocal().reset();
         gameLogic = new GameLogic(this);
-        resetStatusbar();
+        //resetStatusbar();
     }
 
     private void resetStatusbar() {
-        Bomberman player = gameLogic.getPlayers().get(0);
+        Bomberman player = gameLogic.getPlayers().get(gameLogic.getPlayerMPIndex(username));
         menuGUI.getStatusLabel().setText(": " + player.getBombCounter());
     }
 
@@ -188,5 +265,19 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
     }
 
+    public GameClient getSocketClient() {
+        return socketClient;
+    }
+
+    public GameServer getSocketServer() {
+        return socketServer;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    public synchronized List<Bomberman> getPlayers(){
+        return gameLogic.getPlayers();
+    }
 
 }

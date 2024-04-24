@@ -1,5 +1,6 @@
 package bomberman.Game;
 
+import bomberman.Packets.Packet02Move;
 import bomberman.Sprite.*;
 
 import java.awt.*;
@@ -46,14 +47,15 @@ public class Bomberman extends Entity{
     private int defaultBombCount=6;
     private int bombCounter=defaultBombCount;
     public boolean firstbomb=true;
+    private String username;
 
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
 
-    public Bomberman(int x, int y, int width, int height, int playerId, Level level, Image image){
+    public Bomberman(int x, int y, int width, int height, String username, Level level){
         super(x,y,width,height);
-        this.playerId = playerId;
+        this.username = username;
         this.level = level;
         this.bombs = new ArrayList<>();
         loadAnimations();
@@ -185,12 +187,28 @@ public class Bomberman extends Entity{
     public void setRight(boolean right) {
         this.right = right;
     }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
     private void updatePOS() {
         moving = false;
 
         int xspeed = 0;
         int yspeed = 0;
-
 
         if (left) {
             xspeed -= speed;
@@ -211,6 +229,7 @@ public class Bomberman extends Entity{
         if (canMoveHere(hitbox.x+ xspeed, hitbox.y, hitbox.width, hitbox.height)) {
             x+=xspeed;
             hitbox.x+=xspeed;
+
         }
 
         if (canMoveHere(hitbox.x, hitbox.y + yspeed, hitbox.width, hitbox.height)) {
@@ -253,6 +272,10 @@ public class Bomberman extends Entity{
         bombCounter+=1;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void reset() {
         alive=true;
         player_action=IDLE;
@@ -263,5 +286,7 @@ public class Bomberman extends Entity{
         hitbox.y=y;
         bombCounter=defaultBombCount;
     }
+
+
 
 }

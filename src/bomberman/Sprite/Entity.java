@@ -3,11 +3,11 @@ package bomberman.Sprite;
 import java.awt.*;
 
 public class Entity {
-    protected int x;
-    protected int y;
+    public int x;
+    public int y;
     public int width;
     public int height;
-    protected Rectangle hitbox;
+    public Rectangle hitbox;
 
     public Entity(int x, int y, int width, int height) {
         this.x = x;
