@@ -69,10 +69,15 @@ public class GameLogic {
     }
 
     public Bomberman getLocal() {
-        for (Bomberman man : players){
-            if (man.getUsername().equalsIgnoreCase(gameEngine.getUsername())){
-                return man;
+        if (gameEngine.multiplayer) {
+            for (Bomberman man : players) {
+                if (man.getUsername().equalsIgnoreCase(gameEngine.getUsername())) {
+                    return man;
+                }
             }
+        }
+        else {
+            return players.get(0);
         }
         System.out.println("Local player not found, players list size: " + players.size());
         return null;

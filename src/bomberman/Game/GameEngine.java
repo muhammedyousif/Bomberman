@@ -5,6 +5,7 @@ import bomberman.Network.GameServer;
 import bomberman.Packets.Packet;
 import bomberman.Packets.Packet00Login;
 import bomberman.Packets.Packet02Move;
+import bomberman.Sprite.Entity;
 import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
@@ -39,24 +40,38 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private GameServer socketServer;
     private String username;
     public boolean server=false;
-
+    public boolean multiplayer;
 
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
         gameLogic = new GameLogic(this);
         this.menuGUI=menuGUI;
-        addKeyListener(new Keyboard(this));
         setFocusable(true);
         startGameLoop();
-        startServer();
-        username = JOptionPane.showInputDialog("Username:");
-        PlayerMP playerMP = new PlayerMP(80,80,40,50,username,gameLogic.getLevel(),null,-1);
-        gameLogic.getPlayers().add(playerMP);
-        Packet00Login login= new Packet00Login(playerMP.getUsername(), playerMP.x,playerMP.y);
-        if (socketServer!=null){
-            socketServer.addConnection(playerMP,login);
+        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to player multiPlayer?");
+        if (multiplayerint==0)
+            multiplayer=true;
+        else {
+            multiplayer=false;
         }
-        login.writeData(socketClient);
+        if (multiplayer) {
+            startServer();
+
+            username = JOptionPane.showInputDialog("Username:");
+            PlayerMP playerMP = new PlayerMP(80, 80, 40, 50, username, gameLogic.getLevel(), null, -1);
+            gameLogic.getPlayers().add(playerMP);
+            Packet00Login login = new Packet00Login(playerMP.getUsername(), playerMP.x, playerMP.y);
+            if (socketServer != null) {
+                socketServer.addConnection(playerMP, login);
+            }
+            login.writeData(socketClient);
+        }
+        else {
+            Bomberman man = new Bomberman(75, 75, 40, 50, username, gameLogic.getLevel());
+            gameLogic.getPlayers().add(man);
+        }
+        addKeyListener(new Keyboard(this));
+
         //socketClient.sendData("ping".getBytes());
     }
 
@@ -164,51 +179,65 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        PlayerMP playerMP= (PlayerMP) getPlayers().get(gameLogic.getPlayerMPIndex(username));
+        Entity playerMP=null;
+        if (multiplayer)
+            playerMP= getPlayers().get(gameLogic.getPlayerMPIndex(username));
+        else{
+            if (!getPlayers().isEmpty())
+                playerMP=getPlayers().get(0);
+        }
         switch (e.getKeyCode()){
             case KeyEvent.VK_A:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setLeft(true);
+                ((Bomberman) playerMP).setLeft(true);
                 break;
             case KeyEvent.VK_D:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setRight(true);
+                ((Bomberman) playerMP).setRight(true);
                 break;
             case KeyEvent.VK_W:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setUp(true);
+                ((Bomberman) playerMP).setUp(true);
                 break;
             case  KeyEvent.VK_S:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setDown(true);
+                ((Bomberman) playerMP).setDown(true);
                 break;
             case KeyEvent.VK_E:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).placeBomb();
+                ((Bomberman) playerMP).placeBomb();
                 break;
             case  KeyEvent.VK_R:
                 restartGame();
                 break;
         }
-        Packet02Move packet= new Packet02Move(playerMP.getUsername(), playerMP.hitbox.x, playerMP.hitbox.y,playerMP.isLeft(),playerMP.isRight(),playerMP.isUp(),playerMP.isDown());
+        Packet02Move packet= new Packet02Move(((PlayerMP) playerMP).getUsername(), ((PlayerMP)playerMP).hitbox.x, ((PlayerMP)playerMP).hitbox.y,((PlayerMP)playerMP).isLeft(),((PlayerMP)playerMP).isRight(),((PlayerMP)playerMP).isUp(),((PlayerMP)playerMP).isDown());
         GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        PlayerMP playerMP= (PlayerMP) getPlayers().get(gameLogic.getPlayerMPIndex(username));
+        Entity playerMP=null;
+        if (multiplayer)
+            playerMP= getPlayers().get(gameLogic.getPlayerMPIndex(username));
+        else{
+            if (!getPlayers().isEmpty())
+                playerMP=getPlayers().get(0);
+        }
         switch (e.getKeyCode()){
             case KeyEvent.VK_A:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setLeft(false);
+                ((Bomberman) playerMP).setLeft(false);
                 break;
             case KeyEvent.VK_D:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setRight(false);
+                ((Bomberman) playerMP).setRight(false);
                 break;
             case KeyEvent.VK_W:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setUp(false);
+                ((Bomberman) playerMP).setUp(false);
                 break;
             case  KeyEvent.VK_S:
-                getPlayers().get(gameLogic.getPlayerMPIndex(username)).setDown(false);
+                ((Bomberman) playerMP).setDown(false);
                 break;
 
         }
-        Packet02Move packet= new Packet02Move(playerMP.getUsername(), playerMP.hitbox.x, playerMP.hitbox.y,playerMP.isLeft(),playerMP.isRight(),playerMP.isUp(),playerMP.isDown());
-        GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+        if (multiplayer) {
+            Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), playerMP.hitbox.x, playerMP.hitbox.y, ((PlayerMP)playerMP).isLeft(), ((PlayerMP)playerMP).isRight(), ((PlayerMP)playerMP).isUp(), ((PlayerMP)playerMP).isDown());
+            GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+        }
 
     }
 

@@ -66,14 +66,15 @@ public class MenuGUI{
         });
     }
     private void setStatusLabel(){
-        if (!GE.server) {
-            while ( GE.gameLogic.getLocal() == null) {
-                System.out.println(GE.getUsername());
-            }
-        }
-        else {
-            while (GE.getSocketServer() == null || GE.gameLogic.getLocal() == null) {
-                System.out.println("MAKING");
+        if (GE.multiplayer) {
+            if (!GE.server) {
+                while (GE.gameLogic.getLocal() == null) {
+                    System.out.println(GE.getUsername());
+                }
+            } else {
+                while (GE.getSocketServer() == null || GE.gameLogic.getLocal() == null) {
+                    System.out.println("MAKING");
+                }
             }
         }
         frame.getContentPane().add(GE);
