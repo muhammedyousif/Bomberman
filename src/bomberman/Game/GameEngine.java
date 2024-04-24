@@ -50,7 +50,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         username = JOptionPane.showInputDialog("Username:");
         PlayerMP playerMP = new PlayerMP(80,80,40,50,username,gameLogic.getLevel(),null,-1);
         gameLogic.getPlayers().add(playerMP);
-        Packet00Login login= new Packet00Login(playerMP.getUsername());
+        Packet00Login login= new Packet00Login(playerMP.getUsername(), playerMP.x,playerMP.y);
         if (socketServer!=null){
             socketServer.addConnection(playerMP,login);
         }

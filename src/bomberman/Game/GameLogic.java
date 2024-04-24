@@ -99,7 +99,6 @@ public class GameLogic {
     }
     public void movePlayer(String username,int x,int y){
         int index=getPlayerMPIndex(username);
-        System.out.println(players.get(index).hitbox.x);
         players.get(index).hitbox.x=x;
         players.get(index).x=x;
         players.get(index).hitbox.y=y;

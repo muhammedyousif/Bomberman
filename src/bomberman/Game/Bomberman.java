@@ -160,7 +160,7 @@ public class Bomberman extends Entity{
     public void render(Graphics g)
     {   if (!died) {
         g.drawImage(animations[player_action][aniIndex], hitbox.x - xDrawOffset, hitbox.y - yDrawOffset, width, height, null);
-        drawHitbox(g);
+        //drawHitbox(g);
         }
     }
 
