@@ -206,8 +206,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 restartGame();
                 break;
         }
-        Packet02Move packet= new Packet02Move(((PlayerMP) playerMP).getUsername(), ((PlayerMP)playerMP).hitbox.x, ((PlayerMP)playerMP).hitbox.y,((PlayerMP)playerMP).isLeft(),((PlayerMP)playerMP).isRight(),((PlayerMP)playerMP).isUp(),((PlayerMP)playerMP).isDown());
-        GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+        if (multiplayer) {
+            Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), ((PlayerMP) playerMP).hitbox.x, ((PlayerMP) playerMP).hitbox.y, ((PlayerMP) playerMP).isLeft(), ((PlayerMP) playerMP).isRight(), ((PlayerMP) playerMP).isUp(), ((PlayerMP) playerMP).isDown());
+            GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+        }
     }
 
     @Override
