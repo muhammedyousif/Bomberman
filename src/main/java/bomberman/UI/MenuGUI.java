@@ -104,7 +104,9 @@ public class MenuGUI{
         bigBombLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
         bigBombLabel.setForeground(Color.WHITE);
 
+        statusBar.setLayout(new BoxLayout(statusBar, BoxLayout.LINE_AXIS));
         statusBar.add(statusLabel);
+        statusBar.add(Box.createHorizontalStrut(30));
         statusBar.add(bigBombLabel);
 
         GE.add(statusBar,BorderLayout.SOUTH);

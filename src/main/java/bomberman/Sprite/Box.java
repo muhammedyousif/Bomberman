@@ -12,7 +12,7 @@ public class Box extends Sprite{
     }
     public boolean shouldDropPowerUp() {
         int randomNumber = (int) (Math.random() * 100);
-        return randomNumber < 0;
+        return randomNumber < 80;
     }
     public void blowUp(){
         Image image = new ImageIcon("src/bomberman/Assets/powerup.png").getImage();
