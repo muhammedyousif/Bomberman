@@ -203,6 +203,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             case KeyEvent.VK_E:
                 ((Bomberman) playerMP).placeBomb();
                 break;
+            case KeyEvent.VK_F:
+                ((Bomberman) playerMP).placeBigBomb();
+                break;
             case  KeyEvent.VK_R:
                 restartGame();
                 break;

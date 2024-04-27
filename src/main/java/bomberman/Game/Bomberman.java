@@ -30,6 +30,7 @@ public class Bomberman extends Entity{
     private int playerId;
     private Level level;
     private ArrayList<Bomb> bombs;
+    private ArrayList<BigBomb> bigBombs;
     private Image image = new ImageIcon("src/bomberman/Assets/bombermanright.png").getImage();
     public final int width = 40;
     public final int height = 57;
@@ -45,6 +46,7 @@ public class Bomberman extends Entity{
     private boolean died=false;
     private int deathFrameDelay = 0;
     private int defaultBombCount=6;
+    private int bigBombCount=0;
     private int bombCounter=defaultBombCount;
     public boolean firstbomb=true;
     private String username;
@@ -58,6 +60,7 @@ public class Bomberman extends Entity{
         this.username = username;
         this.level = level;
         this.bombs = new ArrayList<>();
+        this.bigBombs=new ArrayList<>();
         loadAnimations();
         initHitbox(x,y,25,44);
     }
@@ -294,5 +297,20 @@ public class Bomberman extends Entity{
     }
 
 
+    public void placeBigBomb() {
+        firstbomb=false;
+        if (alive && bombCounter>0) {
+            int middlepos_x = this.x + (this.width / 2);
+            int middlepos_y = this.y + (this.height / 2);
+            BigBomb bomb = this.level.placeBigBomb(middlepos_x, middlepos_y);
+            if (bomb == null) {
+                System.out.println("Bomb placement failed - spot already taken.");
+            } else {
+                bigBombs.add(bomb);
+                bombCounter--;
+                System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
+            }
+        }
 
+    }
 }
