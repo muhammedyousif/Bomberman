@@ -22,6 +22,7 @@ public class Level {
         explosions = new ArrayList<Explosion>();
         bombs = new ArrayList<Bomb>();
         monsters=new ArrayList<Monster>();
+        grid = new ArrayList<>();
         fileToLevel(levelPath);
         getSnapPositions();
         this.gameEngine=gameEngine;
@@ -76,7 +77,6 @@ public class Level {
         }
 
         BufferedReader br = new BufferedReader(new InputStreamReader(ist));
-        grid = new ArrayList<>();
         bombs = new ArrayList<>();
         int y = 0;
         String line;
@@ -91,7 +91,7 @@ public class Level {
                     grid.add(new Box(x * block_width+3, y * block_height+3 , block_width-5, block_height-5, image,this));
                 } else if (blockType == '3') {
                     Image image = new ImageIcon(getClass().getResource("/Assets/monster.png")).getImage();
-                    Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height, image);
+                    Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height);
                     monster.setLevel(this);
                     //grid.add(monster);
                     //grid.add(null);

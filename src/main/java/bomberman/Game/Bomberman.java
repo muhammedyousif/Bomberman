@@ -206,6 +206,10 @@ public class Bomberman extends Entity{
         return right;
     }
 
+    public boolean isAlive() {
+        return alive;
+    }
+
     private void updatePOS() {
         moving = false;
 

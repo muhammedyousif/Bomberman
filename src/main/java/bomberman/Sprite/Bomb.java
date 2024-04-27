@@ -50,6 +50,10 @@ public class Bomb extends Sprite {
         }
     }
 
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
     public void blowUp() {
         level.explosions.add(new Explosion(x, y, level)); // Center explosion
         explodeInDirection(-1, 0); // explode left

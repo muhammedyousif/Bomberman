@@ -27,7 +27,7 @@ public class Monster extends Entity {
     private boolean alive=true;
 
 
-    public Monster(int x,int y,int width, int height, Image image){
+    public Monster(int x,int y,int width, int height){
         super(x,y,width,height);
         this.speed = 1;
         this.random = new Random();
@@ -169,7 +169,7 @@ public class Monster extends Entity {
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
-    private boolean collides_player(Bomberman sprite) {
+    public boolean collides_player(Bomberman sprite) {
         Rectangle rect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
         return rect.intersects(otherRect);
