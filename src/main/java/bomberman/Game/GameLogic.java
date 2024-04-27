@@ -16,14 +16,14 @@ public class GameLogic {
     private boolean firstmove=false;
     public GameLogic(GameEngine gameEngine){
         try{
-            this.level = new Level("src/bomberman/Assets/level1.txt",gameEngine);
+            this.level = new Level("Assets/level1.txt",gameEngine);
         }catch(Exception e){
             System.out.println(e);
         }
         this.gameEngine=gameEngine;
         this.players = new ArrayList<>();
         bombs=new ArrayList<>();
-        Image player=new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
+        //Image player=new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
         //players.add(new PlayerMP(70,70,40,50,"Muhammed",level));
     }
 
@@ -38,16 +38,18 @@ public class GameLogic {
 
 
     public void drawEverything(Graphics g){
-        level.draw(g);
-        for(Bomberman bomberman : players){
-            bomberman.render(g);
-        }
-        for (Monster monster: getLevel().getMonsters()){
-            monster.draw(g);
-        }
-        for (PowerUp bomb : bombs){
-            if (!bomb.isCollected()) {
-                bomb.render(g);
+        if (level!=null) {
+            level.draw(g);
+            for (Bomberman bomberman : players) {
+                bomberman.render(g);
+            }
+            for (Monster monster : getLevel().getMonsters()) {
+                monster.draw(g);
+            }
+            for (PowerUp bomb : bombs) {
+                if (!bomb.isCollected()) {
+                    bomb.render(g);
+                }
             }
         }
     }

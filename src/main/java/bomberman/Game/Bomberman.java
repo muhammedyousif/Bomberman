@@ -100,9 +100,9 @@ public class Bomberman extends Entity{
     }
 
     private void loadAnimations() {
-        InputStream is = getClass().getResourceAsStream("/bomberman/Assets/pink.png");
+        InputStream isa = getClass().getClassLoader().getResourceAsStream("Assets/pink.png");
         try {
-            BufferedImage img = ImageIO.read(is);
+            BufferedImage img = ImageIO.read(isa);
             animations = new BufferedImage[7][6];
             for(int i =0;i<animations.length;i++){
                 for(int j =0;j<animations[i].length;j++) {
@@ -112,10 +112,12 @@ public class Bomberman extends Entity{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }finally {
-            try {
-                is.close();
-            }catch (IOException e){
-                e.printStackTrace();
+            if (isa != null) {
+                try {
+                    isa.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

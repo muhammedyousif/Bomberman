@@ -37,10 +37,10 @@ public class Explosion {
 
         this.current_image_index++;
         if(current_image_index <7){
-            String str = "src/bomberman/Assets/explosions/expl";
+            String str = "/Assets/explosions/expl";
             str = str.concat(String.valueOf(current_image_index));
             str = str.concat(".png");
-            this.image = new ImageIcon(str).getImage();
+            this.image = new ImageIcon(getClass().getResource(str)).getImage();
         }
         else{
             clean();
