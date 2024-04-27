@@ -1,0 +1,21 @@
+image: maven:3.6.3-jdk-11
+
+stages:
+  - build
+  - test
+
+cache:
+  paths:
+    - .m2/repository 
+build_job:
+  stage: build
+  script:
+    - mvn compile  
+  artifacts:
+    paths:
+      - target/
+
+test_job:
+  stage: test
+  script:
+    - mvn test
