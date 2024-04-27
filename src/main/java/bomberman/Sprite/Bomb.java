@@ -63,7 +63,7 @@ public class Bomb extends Sprite {
         level.bombs.remove(this);
     }
 
-    private void explodeInDirection(int dx, int dy) {
+    public void explodeInDirection(int dx, int dy) {
         boolean found = false;
         for (int idx = 1; idx <= this.strength && !found; idx++) {
             int pos_to_check_x = this.x + (60 * idx * dx);
@@ -87,7 +87,7 @@ public class Bomb extends Sprite {
         }
 
     }
-    private void checkPlayerHit(int x, int y) {
+    void checkPlayerHit(int x, int y) {
         Bomberman player =level.gameEngine.gameLogic.getPlayers().get(0);
         if (collides_with_player(player) ||player.collides_with_sprite(x, y, player.width, player.height, player)) {
                 player.setAlive(false);
@@ -95,7 +95,7 @@ public class Bomb extends Sprite {
             }
 
     }
-    private void checkMonsterHit(int x,int y){
+    void checkMonsterHit(int x, int y){
         List<Monster> monsters = level.getMonsters();
         for (Monster monster : monsters){
             if (collides_with_player(monster) || monster.collides_with_sprite(x,y,monster.getHitbox().width, monster.getHitbox().height, monster)){

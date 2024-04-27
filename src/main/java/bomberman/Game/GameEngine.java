@@ -155,10 +155,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
             gameLogic.getLevel().tickBombs();
             if (!gameLogic.getPlayers().isEmpty()) {
-                Bomberman player = gameLogic.getPlayers().get(0);
-
-                if (!player.firstbomb)
+                Bomberman player = gameLogic.getLocal();
+                if (!player.firstbomb) {
                     menuGUI.updateBombCounter();
+                    menuGUI.updateBigBombCounter();
+
+                }
             }
 
             ArrayList<PowerUp> toRemove = new ArrayList<>();
@@ -169,7 +171,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                     bombs.update();
                 }
             }
-            gameLogic.bombs.removeAll(toRemove); // Remove all collected bombs after iteration
+            gameLogic.bombs.removeAll(toRemove);
         }
     }
 
@@ -202,6 +204,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 break;
             case KeyEvent.VK_E:
                 ((Bomberman) playerMP).placeBomb();
+                break;
+            case KeyEvent.VK_F:
+                ((Bomberman) playerMP).placeBigBomb();
                 break;
             case  KeyEvent.VK_R:
                 restartGame();

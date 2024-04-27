@@ -11,6 +11,7 @@ public class Level {
     private BufferedReader br;
     public ArrayList<Sprite> grid;
     public ArrayList<Bomb> bombs;
+    public ArrayList<BigBomb>bigBombs;
     public ArrayList<Explosion> explosions;
     private ArrayList<Monster> monsters;
     private ArrayList<ArrayList<Integer>> snap_positions = new ArrayList<>();
@@ -23,6 +24,7 @@ public class Level {
         bombs = new ArrayList<Bomb>();
         monsters=new ArrayList<Monster>();
         grid = new ArrayList<>();
+        bigBombs=new ArrayList<>();
         fileToLevel(levelPath);
         getSnapPositions();
         this.gameEngine=gameEngine;
@@ -67,6 +69,31 @@ public class Level {
         int index = bombs.size();
         bombs.add(b);
         return bombs.get(index);
+    }
+    public BigBomb placeBigBomb(int x,int y){
+        int closest_x = 30;
+        int closest_y = 30;
+        float distance = 500;
+        for (ArrayList<Integer> tuple : snap_positions) {
+            float currentDistance = distance(tuple.get(0), tuple.get(1), x, y);
+            if (currentDistance < distance) {
+                distance = currentDistance;
+                closest_y = tuple.get(1);
+                closest_x = tuple.get(0);
+            }
+        }
+        Image image = new ImageIcon(getClass().getResource("/Assets/bigBomb.png")).getImage();
+        BigBomb b = new BigBomb(closest_x,closest_y,50,50,image,this);
+
+        for (Bomb bomb : bombs) {
+            if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
+                return null;
+            }
+        }
+        int index = bombs.size();
+        bombs.add(b);
+        return (BigBomb) bombs.get(index);
+
     }
 
 

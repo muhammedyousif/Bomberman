@@ -19,6 +19,7 @@ public class MenuGUI{
     public GameEngine GE;
     public WindowHandler windowHandler;
     private JLabel statusLabel;
+    private JLabel bigBombLabel;
     public MenuGUI(){
         frame = new JFrame("Bomberman");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,15 +82,33 @@ public class MenuGUI{
         JPanel statusBar = new JPanel();
         statusBar.setBackground(Color.BLACK);
         statusBar.setPreferredSize(new Dimension(920, 40));
+        //bomb
         ImageIcon bomb = new ImageIcon("src/main/resources/Assets/bomb.png");
         Image image = bomb.getImage(); // Convert the ImageIcon to an Image
         Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // Scale it to fit your layout, here 20x20 is an example
         bomb = new ImageIcon(newimg);
+        //big bomb
+        ImageIcon bigBombIcon = new ImageIcon("src/main/resources/Assets/bigbomb.png");
+        Image bigBombImage = bigBombIcon.getImage();
+        Image scaledBigBombImage = bigBombImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        bigBombIcon = new ImageIcon(scaledBigBombImage);
+
+
         statusLabel = new JLabel(": "+GE.gameLogic.getLocal().getBombCounter());
         statusLabel.setIcon(bomb); // Set the icon to the label
         statusLabel.setHorizontalTextPosition(SwingConstants.RIGHT); // Text to the right of the icon
         statusLabel.setForeground(Color.WHITE);
+
+        bigBombLabel = new JLabel(": " + GE.gameLogic.getLocal().getBigBombCount());
+        bigBombLabel.setIcon(bigBombIcon);
+        bigBombLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+        bigBombLabel.setForeground(Color.WHITE);
+
+        statusBar.setLayout(new BoxLayout(statusBar, BoxLayout.LINE_AXIS));
         statusBar.add(statusLabel);
+        statusBar.add(Box.createHorizontalStrut(30));
+        statusBar.add(bigBombLabel);
+
         GE.add(statusBar,BorderLayout.SOUTH);
         getmaniac();
 
@@ -103,6 +122,7 @@ public class MenuGUI{
             // Register the font
             ge.registerFont(customFont);
             statusLabel.setFont(customFont);
+            bigBombLabel.setFont(customFont);
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
@@ -111,10 +131,14 @@ public class MenuGUI{
     }
 
     public void updateBombCounter() {
-        // Assuming there is a method in GameEngine or GameLogic that returns the current bomb count.
-        int currentBombCount = GE.gameLogic.getPlayers().get(0).getBombCounter();
+        int currentBombCount = GE.gameLogic.getLocal().getBombCounter();
         statusLabel.setText(": " + currentBombCount);
     }
+    public void updateBigBombCounter() {
+        int currentBombCount = GE.gameLogic.getLocal().getBigBombCount();
+        bigBombLabel.setText(": " + currentBombCount);
+    }
+
 
     public JLabel getStatusLabel() {
         return statusLabel;
