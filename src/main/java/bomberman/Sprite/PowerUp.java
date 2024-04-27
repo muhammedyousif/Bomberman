@@ -13,7 +13,7 @@ public class PowerUp extends Sprite{
     private int yDrawOffset=5;
     private boolean collected=false;
     Level level;
-    Image img = new ImageIcon("src/bomberman/Assets/bombitem.png").getImage();
+    Image img = new ImageIcon(getClass().getResource("/Assets/bombitem.png")).getImage();
 
     public boolean isCollected() {
         return collected;

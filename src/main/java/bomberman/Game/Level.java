@@ -2,10 +2,7 @@ package bomberman.Game;
 import bomberman.Sprite.*;
 import bomberman.Sprite.Box;
 import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.awt.Graphics;
@@ -25,6 +22,7 @@ public class Level {
         explosions = new ArrayList<Explosion>();
         bombs = new ArrayList<Bomb>();
         monsters=new ArrayList<Monster>();
+        grid = new ArrayList<>();
         fileToLevel(levelPath);
         getSnapPositions();
         this.gameEngine=gameEngine;
@@ -58,7 +56,7 @@ public class Level {
                 closest_x = tuple.get(0);
             }
         }
-        Image image = new ImageIcon("src/bomberman/Assets/bomb.png").getImage();
+        Image image = new ImageIcon(getClass().getResource("/Assets/bomb.png")).getImage();
         Bomb b = new Bomb(closest_x,closest_y,50,50,image,this);
 
         for (Bomb bomb : bombs) {
@@ -72,9 +70,13 @@ public class Level {
     }
 
 
-    private void fileToLevel(String levelPath) throws FileNotFoundException, IOException {
-        br = new BufferedReader(new FileReader(levelPath));
-        grid = new ArrayList<>();
+    private void fileToLevel(String levelPath) throws IOException {
+        InputStream ist = getClass().getClassLoader().getResourceAsStream(levelPath);
+        if (ist == null) {
+            throw new FileNotFoundException("Resource not found: " + levelPath);
+        }
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(ist));
         bombs = new ArrayList<>();
         int y = 0;
         String line;
@@ -82,14 +84,14 @@ public class Level {
             int x = 0;
             for (char blockType : line.toCharArray()) {
                 if (blockType == '1') {
-                    Image image = new ImageIcon("src/bomberman/Assets/wall.png").getImage();
+                    Image image = new ImageIcon(getClass().getResource("/Assets/wall.png")).getImage();
                     grid.add(new Wall(x * block_width, y * block_height, block_width, block_height,image));
                 } else if (blockType == '2') {
-                    Image image = new ImageIcon("src/bomberman/Assets/box.png").getImage();
+                    Image image = new ImageIcon(getClass().getResource("/Assets/box.png")).getImage();
                     grid.add(new Box(x * block_width+3, y * block_height+3 , block_width-5, block_height-5, image,this));
                 } else if (blockType == '3') {
-                    Image image = new ImageIcon("src/bomberman/Assets/monster.png").getImage();
-                    Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height, image);
+                    Image image = new ImageIcon(getClass().getResource("/Assets/monster.png")).getImage();
+                    Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height);
                     monster.setLevel(this);
                     //grid.add(monster);
                     //grid.add(null);

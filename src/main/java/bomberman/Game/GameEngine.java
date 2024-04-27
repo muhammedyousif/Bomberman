@@ -29,7 +29,7 @@ import java.awt.*;
 
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
-    private Image background = new ImageIcon("src/bomberman/Assets/mapbackground.png").getImage();
+    private Image background = new ImageIcon("src/main/resources/Assets/mapbackground.png").getImage();
     MenuGUI menuGUI;
     public GameLogic gameLogic;
     private int FPS_SET=120;
@@ -143,33 +143,34 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void update() {
-        synchronized (getPlayers()) {
+        if (gameLogic.getLevel()!=null) {
+            synchronized (getPlayers()) {
 
-            for (int i = 0; i < getPlayers().size(); i++) {
-                getPlayers().get(i).update();
+                for (int i = 0; i < getPlayers().size(); i++) {
+                    getPlayers().get(i).update();
+                }
             }
-        }
-        for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
-            gameLogic.getLevel().getMonsters().get(i).update();
-        }
-        gameLogic.getLevel().tickBombs();
-        if (!gameLogic.getPlayers().isEmpty()) {
-            Bomberman player = gameLogic.getPlayers().get(0);
-
-            if (!player.firstbomb)
-                menuGUI.updateBombCounter();
-        }
-
-        ArrayList<PowerUp> toRemove = new ArrayList<>();
-        for (PowerUp bombs : gameLogic.bombs) {
-            if (bombs.isCollected()) {
-                toRemove.add(bombs);
-            } else {
-                bombs.update();
+            for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
+                gameLogic.getLevel().getMonsters().get(i).update();
             }
-        }
-        gameLogic.bombs.removeAll(toRemove); // Remove all collected bombs after iteration
+            gameLogic.getLevel().tickBombs();
+            if (!gameLogic.getPlayers().isEmpty()) {
+                Bomberman player = gameLogic.getPlayers().get(0);
 
+                if (!player.firstbomb)
+                    menuGUI.updateBombCounter();
+            }
+
+            ArrayList<PowerUp> toRemove = new ArrayList<>();
+            for (PowerUp bombs : gameLogic.bombs) {
+                if (bombs.isCollected()) {
+                    toRemove.add(bombs);
+                } else {
+                    bombs.update();
+                }
+            }
+            gameLogic.bombs.removeAll(toRemove); // Remove all collected bombs after iteration
+        }
     }
 
     private void startGameLoop(){

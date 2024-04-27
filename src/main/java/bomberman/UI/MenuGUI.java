@@ -81,7 +81,7 @@ public class MenuGUI{
         JPanel statusBar = new JPanel();
         statusBar.setBackground(Color.BLACK);
         statusBar.setPreferredSize(new Dimension(920, 40));
-        ImageIcon bomb = new ImageIcon("src/bomberman/Assets/bomb.png");
+        ImageIcon bomb = new ImageIcon("src/main/resources/Assets/bomb.png");
         Image image = bomb.getImage(); // Convert the ImageIcon to an Image
         Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // Scale it to fit your layout, here 20x20 is an example
         bomb = new ImageIcon(newimg);
@@ -98,7 +98,7 @@ public class MenuGUI{
     private void getmaniac() {
         try {
             // Create a Font object from the font file
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/bomberman/Assets/MonomaniacOne-Regular.ttf")).deriveFont(30f);
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/Assets/MonomaniacOne-Regular.ttf")).deriveFont(30f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             // Register the font
             ge.registerFont(customFont);

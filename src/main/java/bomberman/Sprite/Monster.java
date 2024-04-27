@@ -3,18 +3,13 @@ import bomberman.Game.Bomberman;
 import bomberman.Game.Level;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.xml.stream.FactoryConfigurationError;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static bomberman.Game.Constants.IDLE;
-import static bomberman.Game.Constants.getSprite;
 import static java.lang.Integer.valueOf;
 
 public class Monster extends Entity {
@@ -32,7 +27,7 @@ public class Monster extends Entity {
     private boolean alive=true;
 
 
-    public Monster(int x,int y,int width, int height, Image image){
+    public Monster(int x,int y,int width, int height){
         super(x,y,width,height);
         this.speed = 1;
         this.random = new Random();
@@ -174,7 +169,7 @@ public class Monster extends Entity {
         Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return rect.intersects(otherRect);
     }
-    private boolean collides_player(Bomberman sprite) {
+    public boolean collides_player(Bomberman sprite) {
         Rectangle rect = new Rectangle(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
         return rect.intersects(otherRect);
@@ -250,7 +245,7 @@ public class Monster extends Entity {
     }
 
     private void loadAnimations(){
-        InputStream is = getClass().getResourceAsStream("/bomberman/Assets/monstersprite.png");
+        InputStream is = getClass().getResourceAsStream("/Assets/monstersprite.png");
         try {
             BufferedImage img = ImageIO.read(is);
             animations = new BufferedImage[1][3];
