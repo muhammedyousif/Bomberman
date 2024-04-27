@@ -1,4 +1,4 @@
-image: maven:3.6.3-jdk-11  # Use an image with Maven and JDK installed
+image: maven:3.6.3-jdk-11
 
 stages:
   - build
@@ -6,17 +6,16 @@ stages:
 
 cache:
   paths:
-    - .m2/repository  # Cache Maven repository to speed up builds
-
+    - .m2/repository 
 build_job:
   stage: build
   script:
-    - mvn compile  # Compile the project
+    - mvn compile  
   artifacts:
     paths:
-      - target/  # Store the compiled artifacts for other stages or jobs
+      - target/
 
 test_job:
   stage: test
   script:
-    - mvn test  # Run tests
+    - mvn test
