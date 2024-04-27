@@ -155,10 +155,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
             gameLogic.getLevel().tickBombs();
             if (!gameLogic.getPlayers().isEmpty()) {
-                Bomberman player = gameLogic.getPlayers().get(0);
-
-                if (!player.firstbomb)
+                Bomberman player = gameLogic.getLocal();
+                if (!player.firstbomb) {
                     menuGUI.updateBombCounter();
+                    menuGUI.updateBigBombCounter();
+
+                }
             }
 
             ArrayList<PowerUp> toRemove = new ArrayList<>();
