@@ -11,7 +11,7 @@ public class PowerUp extends Sprite{
     public int time;
     private int xDrawOffset=5;
     private int yDrawOffset=5;
-    private boolean collected=false;
+    protected boolean collected=false;
     Level level;
     Image img = new ImageIcon(getClass().getResource("/Assets/bombitem.png")).getImage();
 
@@ -39,7 +39,7 @@ public class PowerUp extends Sprite{
     public void renderHitbox(Graphics g){
         g.drawRect(hitbox.x+width-45,hitbox.y+height-40, hitbox.width, hitbox.height);
     }
-    private boolean collides_player(Bomberman sprite){
+    protected boolean collides_player(Bomberman sprite){
         Rectangle rect = new Rectangle(hitbox.x+width-45, hitbox.y+height-40, hitbox.width, hitbox.height);
         Rectangle otherRect = new Rectangle(sprite.getHitbox().x, sprite.getHitbox().y, sprite.getHitbox().width, sprite.getHitbox().height);
         return rect.intersects(otherRect);

@@ -299,7 +299,7 @@ public class Bomberman extends Entity{
 
     public void placeBigBomb() {
         firstbomb=false;
-        if (alive && bombCounter>0) {
+        if (alive && bigBombCount>0) {
             int middlepos_x = this.x + (this.width / 2);
             int middlepos_y = this.y + (this.height / 2);
             BigBomb bomb = this.level.placeBigBomb(middlepos_x, middlepos_y);
@@ -307,10 +307,14 @@ public class Bomberman extends Entity{
                 System.out.println("Bomb placement failed - spot already taken.");
             } else {
                 bigBombs.add(bomb);
-                bombCounter--;
+                bigBombCount--;
                 System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
             }
         }
 
+    }
+
+    public void incBigBomb() {
+        bigBombCount++;
     }
 }

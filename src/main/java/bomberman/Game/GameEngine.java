@@ -169,7 +169,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                     bombs.update();
                 }
             }
-            gameLogic.bombs.removeAll(toRemove); // Remove all collected bombs after iteration
+            gameLogic.bombs.removeAll(toRemove);
         }
     }
 
