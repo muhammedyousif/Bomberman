@@ -66,7 +66,15 @@ public class GameClient extends Thread{
                 p=new Packet03Destroy(data);
                 handleDestruction((Packet03Destroy)p);
                 break;
+            case BOMB:
+                p=new Packet04Bomb(data);
+                handleBomb((Packet04Bomb) p);
+                break;
         }
+    }
+
+    private void handleBomb(Packet04Bomb p) {
+        gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
     }
 
     private void handleDestruction(Packet03Destroy p) {

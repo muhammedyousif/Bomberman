@@ -5,6 +5,7 @@ import bomberman.Network.GameServer;
 import bomberman.Packets.Packet;
 import bomberman.Packets.Packet00Login;
 import bomberman.Packets.Packet02Move;
+import bomberman.Packets.Packet04Bomb;
 import bomberman.Sprite.Entity;
 import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;

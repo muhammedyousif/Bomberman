@@ -73,20 +73,19 @@ public class GameServer extends Thread{
                 p=new Packet03Destroy(data);
                 handleDestruction((Packet03Destroy) p);
                 break;
+            case BOMB:
+                p=new Packet04Bomb(data);
+                handleBomb((Packet04Bomb) p);
+                break;
         }
     }
 
-    private void handleDestruction(Packet03Destroy p) {
-        /*for (PlayerMP player:connectedPlayers) {
-            for (Sprite block: gameEngine.gameLogic.getLevel().grid){
-                if (block instanceof Box) {
-                    if (((Box) block).id == p.getId()) {
-                        player.getLevel().grid.remove(block);
-                    }
-                }
-            }
+    private void handleBomb(Packet04Bomb p) {
+        gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+        p.writeData(this);
+    }
 
-        }*/
+    private void handleDestruction(Packet03Destroy p) {
         Iterator<Sprite> iterator = gameEngine.gameLogic.getLevel().grid.iterator();
         while (iterator.hasNext()) {
             Sprite block = iterator.next();
@@ -95,8 +94,6 @@ public class GameServer extends Thread{
                 break;
             }
         }
-
-
 
         p.writeData(this);
     }

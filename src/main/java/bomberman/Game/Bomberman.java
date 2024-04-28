@@ -1,6 +1,7 @@
 package bomberman.Game;
 
 import bomberman.Packets.Packet02Move;
+import bomberman.Packets.Packet04Bomb;
 import bomberman.Sprite.*;
 
 import java.awt.*;
@@ -72,11 +73,16 @@ public class Bomberman extends Entity{
             int middlepos_x = this.x + (this.width / 2);
             int middlepos_y = this.y + (this.height / 2);
             Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
+
             if (bomb == null) {
                 System.out.println("Bomb placement failed - spot already taken.");
             } else {
                 bombs.add(bomb);
                 bombCounter--;
+                if (GameEngine.gameEngine.multiplayer){
+                    Packet04Bomb packet=new Packet04Bomb(username,middlepos_x,middlepos_y);
+                    GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+                }
                 System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
             }
         }
