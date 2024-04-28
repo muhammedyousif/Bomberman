@@ -1,14 +1,14 @@
 package bomberman.Network;
 
 import bomberman.Game.GameEngine;
-import bomberman.Packets.Packet;
-import bomberman.Packets.Packet00Login;
-import bomberman.Packets.Packet01Disconnect;
-import bomberman.Packets.Packet02Move;
+import bomberman.Packets.*;
+import bomberman.Sprite.Box;
 import bomberman.Sprite.PlayerMP;
+import bomberman.Sprite.Sprite;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Iterator;
 
 public class GameClient extends Thread{
     private InetAddress ipAddress;
@@ -63,7 +63,49 @@ public class GameClient extends Thread{
                 handlePacket((Packet02Move) p);
                 //System.out.println(((Packet02Move) p).getUsername()+" has moved to "+((Packet02Move) p).getX()+","+((Packet02Move) p).getY());
                 break;
+            case DESTROY:
+                p=new Packet03Destroy(data);
+                handleDestruction((Packet03Destroy)p);
+                break;
+            case BOMB:
+                p=new Packet04Bomb(data);
+                handleBomb((Packet04Bomb) p);
+                break;
+            case PLAYER_STATUS:
+                p=new Packet05PlayerStatus(data);
+                handleStatus((Packet05PlayerStatus) p);
+                break;
+
         }
+    }
+
+    private void handleStatus(Packet05PlayerStatus p) {
+        int index=gameEngine.gameLogic.getPlayerMPIndex(p.getUsername());
+        gameEngine.gameLogic.getPlayers().get(index).setAlive(p.isAlive());
+        System.out.println(p.getUsername()+" alive: " +p.isAlive());
+    }
+
+    private void handleBomb(Packet04Bomb p) {
+        gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+    }
+
+    private void handleDestruction(Packet03Destroy p) {
+        /*for (Sprite block: gameEngine.gameLogic.getLevel().grid){
+            if (block instanceof Box) {
+                if (((Box) block).id == p.getId()) {
+                    gameEngine.gameLogic.getLevel().grid.remove(block);
+                }
+            }
+        }*/
+        Iterator<Sprite> iterator = gameEngine.gameLogic.getLevel().grid.iterator();
+        while (iterator.hasNext()) {
+            Sprite block = iterator.next();
+            if (block instanceof Box && ((Box) block).id == p.getId()) {
+                iterator.remove();
+                break;
+            }
+        }
+
     }
 
     private void handlePacket(Packet02Move p) {

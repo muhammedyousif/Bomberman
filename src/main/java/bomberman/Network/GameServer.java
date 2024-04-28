@@ -1,17 +1,17 @@
 package bomberman.Network;
 
 import bomberman.Game.GameEngine;
-import bomberman.Packets.Packet;
-import bomberman.Packets.Packet00Login;
-import bomberman.Packets.Packet01Disconnect;
-import bomberman.Packets.Packet02Move;
+import bomberman.Packets.*;
+import bomberman.Sprite.Box;
 import bomberman.Sprite.PlayerMP;
-import bomberman.UI.MenuGUI;
+import bomberman.Sprite.Sprite;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class GameServer extends Thread{
     private DatagramSocket socket;
@@ -70,7 +70,46 @@ public class GameServer extends Thread{
                 //System.out.println(((Packet02Move) p).getUsername()+" has moved to "+((Packet02Move) p).getX()+","+((Packet02Move) p).getY());
                 handleMove((Packet02Move)p);
                 break;
+            case DESTROY:
+                p=new Packet03Destroy(data);
+                handleDestruction((Packet03Destroy) p);
+                break;
+            case BOMB:
+                p=new Packet04Bomb(data);
+                handleBomb((Packet04Bomb) p);
+                break;
+            case PLAYER_STATUS:
+                p=new Packet05PlayerStatus(data);
+                handleStatus((Packet05PlayerStatus) p);
+                break;
         }
+    }
+
+    private void handleStatus(Packet05PlayerStatus p) {
+        if (getPlayerMP(p.getUsername())!=null) {
+            int index = getPlayerMPIndex(p.getUsername());
+            connectedPlayers.get(index).setAlive(p.isAlive());
+        }
+        p.writeData(this);
+    }
+
+    private void handleBomb(Packet04Bomb p) {
+        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername()))
+            gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+        p.writeData(this);
+    }
+
+    private void handleDestruction(Packet03Destroy p) {
+        Iterator<Sprite> iterator = gameEngine.gameLogic.getLevel().grid.iterator();
+        while (iterator.hasNext()) {
+            Sprite block = iterator.next();
+            if (block instanceof Box && ((Box) block).id == p.getId()) {
+                iterator.remove();
+                break;
+            }
+        }
+
+        p.writeData(this);
     }
 
     private void handleMove(Packet02Move p) {

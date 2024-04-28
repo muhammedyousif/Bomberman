@@ -1,6 +1,8 @@
 package bomberman.Game;
 
 import bomberman.Packets.Packet02Move;
+import bomberman.Packets.Packet04Bomb;
+import bomberman.Packets.Packet05PlayerStatus;
 import bomberman.Sprite.*;
 
 import java.awt.*;
@@ -72,11 +74,16 @@ public class Bomberman extends Entity{
             int middlepos_x = this.x + (this.width / 2);
             int middlepos_y = this.y + (this.height / 2);
             Bomb bomb = this.level.placeBomb(middlepos_x, middlepos_y);
+
             if (bomb == null) {
                 System.out.println("Bomb placement failed - spot already taken.");
             } else {
                 bombs.add(bomb);
                 bombCounter--;
+                if (GameEngine.gameEngine.multiplayer){
+                    Packet04Bomb packet=new Packet04Bomb(username,middlepos_x,middlepos_y);
+                    GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+                }
                 System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
             }
         }
@@ -99,6 +106,10 @@ public class Bomberman extends Entity{
     private void checkDeath() {
         if (!alive){
             player_action=DEAD;
+            if (GameEngine.gameEngine.multiplayer) {
+                Packet05PlayerStatus packet = new Packet05PlayerStatus(username, alive);
+                GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+            }
         }
     }
 
@@ -216,6 +227,10 @@ public class Bomberman extends Entity{
         return bigBombCount;
     }
 
+    public Level getLevel() {
+        return level;
+    }
+
 
     private void updatePOS() {
         moving = false;
@@ -298,6 +313,7 @@ public class Bomberman extends Entity{
         hitbox.x=x;
         hitbox.y=y;
         bombCounter=defaultBombCount;
+        bigBombCount=0;
     }
 
 
