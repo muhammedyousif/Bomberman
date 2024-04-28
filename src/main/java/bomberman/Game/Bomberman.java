@@ -231,6 +231,9 @@ public class Bomberman extends Entity{
         return level;
     }
 
+    public void setLevel(Level level) {
+        this.level = level;
+    }
 
     private void updatePOS() {
         moving = false;
@@ -308,8 +311,8 @@ public class Bomberman extends Entity{
         alive=true;
         player_action=IDLE;
         died=false;
-        x=65;
-        y=65;
+        x=75;
+        y=75;
         hitbox.x=x;
         hitbox.y=y;
         bombCounter=defaultBombCount;

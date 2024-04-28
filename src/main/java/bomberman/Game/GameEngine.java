@@ -253,7 +253,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             man.reset();
         }*/
         gameLogic.getLocal().reset();
-        gameLogic = new GameLogic(this);
+        gameLogic.reset();
+        //gameLogic = new GameLogic(this);
+
         //resetStatusbar();
     }
 
