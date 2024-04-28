@@ -11,6 +11,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class GameServer extends Thread{
     private DatagramSocket socket;
@@ -93,7 +94,8 @@ public class GameServer extends Thread{
     }
 
     private void handleBomb(Packet04Bomb p) {
-        gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername()))
+            gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
         p.writeData(this);
     }
 

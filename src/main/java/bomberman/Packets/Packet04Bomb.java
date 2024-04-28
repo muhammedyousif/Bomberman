@@ -42,4 +42,8 @@ public class Packet04Bomb extends Packet{
     public int getY() {
         return y;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }

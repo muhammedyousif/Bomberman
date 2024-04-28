@@ -8,6 +8,7 @@ import bomberman.Sprite.Sprite;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Iterator;
 
 public class GameClient extends Thread{
     private InetAddress ipAddress;
@@ -89,13 +90,22 @@ public class GameClient extends Thread{
     }
 
     private void handleDestruction(Packet03Destroy p) {
-        for (Sprite block: gameEngine.gameLogic.getLevel().grid){
+        /*for (Sprite block: gameEngine.gameLogic.getLevel().grid){
             if (block instanceof Box) {
                 if (((Box) block).id == p.getId()) {
                     gameEngine.gameLogic.getLevel().grid.remove(block);
                 }
             }
+        }*/
+        Iterator<Sprite> iterator = gameEngine.gameLogic.getLevel().grid.iterator();
+        while (iterator.hasNext()) {
+            Sprite block = iterator.next();
+            if (block instanceof Box && ((Box) block).id == p.getId()) {
+                iterator.remove();
+                break;
+            }
         }
+
     }
 
     private void handlePacket(Packet02Move p) {
