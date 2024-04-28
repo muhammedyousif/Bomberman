@@ -130,9 +130,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
                 //System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
-                for (Bomberman man:getPlayers()) {
-                    System.out.println(man.isAlive());
-                }
                 frames = 0;
                 updates=0;
             }
