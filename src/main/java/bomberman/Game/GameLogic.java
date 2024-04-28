@@ -127,6 +127,11 @@ public class GameLogic {
         if (!gameEngine.multiplayer){
             getPlayers().get(0).setLevel(level);
         }
+        else {
+            for (Bomberman player:getPlayers()) {
+                player.setLevel(level);
+            }
+        }
 
     }
 }

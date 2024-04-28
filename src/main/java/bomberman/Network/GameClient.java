@@ -1,5 +1,6 @@
 package bomberman.Network;
 
+import bomberman.Game.Bomberman;
 import bomberman.Game.GameEngine;
 import bomberman.Packets.*;
 import bomberman.Sprite.Box;
@@ -9,6 +10,7 @@ import bomberman.Sprite.Sprite;
 import java.io.IOException;
 import java.net.*;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class GameClient extends Thread{
     private InetAddress ipAddress;
@@ -75,9 +77,20 @@ public class GameClient extends Thread{
                 p=new Packet05PlayerStatus(data);
                 handleStatus((Packet05PlayerStatus) p);
                 break;
+            case RESET:
+                p=new Packet06Restart(data);
+                handleRestart((Packet06Restart) p);
+                break;
 
         }
     }
+    private void handleRestart(Packet06Restart p) {
+        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())){
+            Bomberman player= gameEngine.gameLogic.getLocal();
+            player.getLevel().gameEngine.restartGame();
+        }
+    }
+
 
     private void handleStatus(Packet05PlayerStatus p) {
         int index=gameEngine.gameLogic.getPlayerMPIndex(p.getUsername());
