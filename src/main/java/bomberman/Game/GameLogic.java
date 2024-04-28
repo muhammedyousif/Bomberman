@@ -116,5 +116,23 @@ public class GameLogic {
         players.get(index).setLeft(left);
         players.get(index).setRight(right);
     }
+
+    public void reset() {
+        try{
+            this.level = new Level("Assets/level1.txt",gameEngine);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        bombs=new ArrayList<>();
+        if (!gameEngine.multiplayer){
+            getPlayers().get(0).setLevel(level);
+        }
+        else {
+            for (Bomberman player:getPlayers()) {
+                player.setLevel(level);
+            }
+        }
+
+    }
 }
 

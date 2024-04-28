@@ -2,10 +2,7 @@ package bomberman.Game;
 
 import bomberman.Network.GameClient;
 import bomberman.Network.GameServer;
-import bomberman.Packets.Packet;
-import bomberman.Packets.Packet00Login;
-import bomberman.Packets.Packet02Move;
-import bomberman.Packets.Packet04Bomb;
+import bomberman.Packets.*;
 import bomberman.Sprite.Entity;
 import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
@@ -209,6 +206,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 break;
             case  KeyEvent.VK_R:
                 restartGame();
+                if (multiplayer){
+                    Packet06Restart packet06Restart=new Packet06Restart(username);
+                    GameEngine.gameEngine.getSocketClient().sendData(packet06Restart.getData());
+
+                }
                 break;
         }
         if (multiplayer) {
@@ -253,7 +255,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             man.reset();
         }*/
         gameLogic.getLocal().reset();
-        gameLogic = new GameLogic(this);
+        gameLogic.reset();
+        //gameLogic = new GameLogic(this);
+
         //resetStatusbar();
     }
 

@@ -82,7 +82,20 @@ public class GameServer extends Thread{
                 p=new Packet05PlayerStatus(data);
                 handleStatus((Packet05PlayerStatus) p);
                 break;
+            case RESET:
+                p=new Packet06Restart(data);
+                handleRestart((Packet06Restart)p);
+                break;
         }
+    }
+
+    private void handleRestart(Packet06Restart p) {
+        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())){
+            for (PlayerMP player: connectedPlayers){
+                player.getLevel().gameEngine.restartGame();
+            }
+        }
+        p.writeData(this);
     }
 
     private void handleStatus(Packet05PlayerStatus p) {
