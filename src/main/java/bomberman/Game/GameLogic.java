@@ -130,6 +130,7 @@ public class GameLogic {
         else {
             for (Bomberman player:getPlayers()) {
                 player.setLevel(level);
+                player.reset();
             }
         }
 

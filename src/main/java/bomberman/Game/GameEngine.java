@@ -130,9 +130,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
                 //System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
-                if (username!=null) {
-                    PlayerMP playerMP = (PlayerMP) getPlayers().get(gameLogic.getPlayerMPIndex(username));
-                    System.out.println("left: " + playerMP.isLeft() + " down: " + playerMP.isDown() + " right: " + playerMP.isRight() + " up: " + playerMP.isUp());
+                for (Bomberman man:getPlayers()) {
+                    System.out.println(man.isAlive());
                 }
                 frames = 0;
                 updates=0;
@@ -205,11 +204,13 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 ((Bomberman) playerMP).placeBigBomb();
                 break;
             case  KeyEvent.VK_R:
-                restartGame();
                 if (multiplayer){
                     Packet06Restart packet06Restart=new Packet06Restart(username);
                     GameEngine.gameEngine.getSocketClient().sendData(packet06Restart.getData());
-
+                    restartGame();
+                }
+                else {
+                    restartGame();
                 }
                 break;
         }
@@ -254,7 +255,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         /*for (Bomberman man : gameLogic.getPlayers()){
             man.reset();
         }*/
-        gameLogic.getLocal().reset();
+        //gameLogic.getLocal().reset();
         gameLogic.reset();
         //gameLogic = new GameLogic(this);
 

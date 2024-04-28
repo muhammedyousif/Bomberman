@@ -88,6 +88,8 @@ public class GameClient extends Thread{
         if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())){
             Bomberman player= gameEngine.gameLogic.getLocal();
             player.getLevel().gameEngine.restartGame();
+            player.reset();
+            gameEngine.gameLogic.reset();
         }
     }
 
@@ -95,7 +97,6 @@ public class GameClient extends Thread{
     private void handleStatus(Packet05PlayerStatus p) {
         int index=gameEngine.gameLogic.getPlayerMPIndex(p.getUsername());
         gameEngine.gameLogic.getPlayers().get(index).setAlive(p.isAlive());
-        System.out.println(p.getUsername()+" alive: " +p.isAlive());
     }
 
     private void handleBomb(Packet04Bomb p) {
