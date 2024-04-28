@@ -77,7 +77,19 @@ public class GameServer extends Thread{
                 p=new Packet04Bomb(data);
                 handleBomb((Packet04Bomb) p);
                 break;
+            case PLAYER_STATUS:
+                p=new Packet05PlayerStatus(data);
+                handleStatus((Packet05PlayerStatus) p);
+                break;
         }
+    }
+
+    private void handleStatus(Packet05PlayerStatus p) {
+        if (getPlayerMP(p.getUsername())!=null) {
+            int index = getPlayerMPIndex(p.getUsername());
+            connectedPlayers.get(index).setAlive(p.isAlive());
+        }
+        p.writeData(this);
     }
 
     private void handleBomb(Packet04Bomb p) {

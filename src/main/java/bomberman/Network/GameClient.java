@@ -70,7 +70,18 @@ public class GameClient extends Thread{
                 p=new Packet04Bomb(data);
                 handleBomb((Packet04Bomb) p);
                 break;
+            case PLAYER_STATUS:
+                p=new Packet05PlayerStatus(data);
+                handleStatus((Packet05PlayerStatus) p);
+                break;
+
         }
+    }
+
+    private void handleStatus(Packet05PlayerStatus p) {
+        int index=gameEngine.gameLogic.getPlayerMPIndex(p.getUsername());
+        gameEngine.gameLogic.getPlayers().get(index).setAlive(p.isAlive());
+        System.out.println(p.getUsername()+" alive: " +p.isAlive());
     }
 
     private void handleBomb(Packet04Bomb p) {
