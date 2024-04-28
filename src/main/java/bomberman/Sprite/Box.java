@@ -6,8 +6,10 @@ import javax.swing.*;
 
 public class Box extends Sprite{
     private Level level;
-    public Box(int x,int y,int width, int height, Image image,Level level){
+    public int id;
+    public Box(int x,int y,int width, int height, Image image,Level level,int id){
         super(x,y,width,height,image);
+        this.id=id;
         this.level = level;
     }
     public boolean shouldDropPowerUp() {

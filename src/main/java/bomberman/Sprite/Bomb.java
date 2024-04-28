@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bomberman.Game.*;
+import bomberman.Packets.Packet03Destroy;
 
 import javax.swing.*;
 
@@ -79,6 +80,12 @@ public class Bomb extends Sprite {
                 if (hitSprite instanceof Box) {
                     ((Box) hitSprite).blowUp();
                     level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));
+                    //send packet
+                    if (GameEngine.gameEngine.multiplayer){
+                        PlayerMP local = (PlayerMP) level.gameEngine.gameLogic.getLocal();
+                        Packet03Destroy packet= new Packet03Destroy(local.getUsername(),((Box) hitSprite).id);
+                        GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+                    }
                     found = true;
                 } else if (hitSprite instanceof Wall) {
                     found = true;

@@ -216,6 +216,9 @@ public class Bomberman extends Entity{
         return bigBombCount;
     }
 
+    public Level getLevel() {
+        return level;
+    }
 
     private void updatePOS() {
         moving = false;
@@ -298,6 +301,7 @@ public class Bomberman extends Entity{
         hitbox.x=x;
         hitbox.y=y;
         bombCounter=defaultBombCount;
+        bigBombCount=0;
     }
 
 

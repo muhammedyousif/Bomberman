@@ -145,21 +145,19 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private void update() {
         if (gameLogic.getLevel()!=null) {
             synchronized (getPlayers()) {
-
                 for (int i = 0; i < getPlayers().size(); i++) {
                     getPlayers().get(i).update();
                 }
             }
-            for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
+            /*for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
                 gameLogic.getLevel().getMonsters().get(i).update();
-            }
+            }*/
             gameLogic.getLevel().tickBombs();
             if (!gameLogic.getPlayers().isEmpty()) {
                 Bomberman player = gameLogic.getLocal();
                 if (!player.firstbomb) {
                     menuGUI.updateBombCounter();
                     menuGUI.updateBigBombCounter();
-
                 }
             }
 

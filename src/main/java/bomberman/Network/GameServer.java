@@ -1,16 +1,15 @@
 package bomberman.Network;
 
 import bomberman.Game.GameEngine;
-import bomberman.Packets.Packet;
-import bomberman.Packets.Packet00Login;
-import bomberman.Packets.Packet01Disconnect;
-import bomberman.Packets.Packet02Move;
+import bomberman.Packets.*;
+import bomberman.Sprite.Box;
 import bomberman.Sprite.PlayerMP;
-import bomberman.UI.MenuGUI;
+import bomberman.Sprite.Sprite;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameServer extends Thread{
@@ -70,7 +69,36 @@ public class GameServer extends Thread{
                 //System.out.println(((Packet02Move) p).getUsername()+" has moved to "+((Packet02Move) p).getX()+","+((Packet02Move) p).getY());
                 handleMove((Packet02Move)p);
                 break;
+            case DESTROY:
+                p=new Packet03Destroy(data);
+                handleDestruction((Packet03Destroy) p);
+                break;
         }
+    }
+
+    private void handleDestruction(Packet03Destroy p) {
+        /*for (PlayerMP player:connectedPlayers) {
+            for (Sprite block: gameEngine.gameLogic.getLevel().grid){
+                if (block instanceof Box) {
+                    if (((Box) block).id == p.getId()) {
+                        player.getLevel().grid.remove(block);
+                    }
+                }
+            }
+
+        }*/
+        Iterator<Sprite> iterator = gameEngine.gameLogic.getLevel().grid.iterator();
+        while (iterator.hasNext()) {
+            Sprite block = iterator.next();
+            if (block instanceof Box && ((Box) block).id == p.getId()) {
+                iterator.remove();
+                break;
+            }
+        }
+
+
+
+        p.writeData(this);
     }
 
     private void handleMove(Packet02Move p) {

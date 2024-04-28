@@ -1,11 +1,10 @@
 package bomberman.Network;
 
 import bomberman.Game.GameEngine;
-import bomberman.Packets.Packet;
-import bomberman.Packets.Packet00Login;
-import bomberman.Packets.Packet01Disconnect;
-import bomberman.Packets.Packet02Move;
+import bomberman.Packets.*;
+import bomberman.Sprite.Box;
 import bomberman.Sprite.PlayerMP;
+import bomberman.Sprite.Sprite;
 
 import java.io.IOException;
 import java.net.*;
@@ -63,6 +62,20 @@ public class GameClient extends Thread{
                 handlePacket((Packet02Move) p);
                 //System.out.println(((Packet02Move) p).getUsername()+" has moved to "+((Packet02Move) p).getX()+","+((Packet02Move) p).getY());
                 break;
+            case DESTROY:
+                p=new Packet03Destroy(data);
+                handleDestruction((Packet03Destroy)p);
+                break;
+        }
+    }
+
+    private void handleDestruction(Packet03Destroy p) {
+        for (Sprite block: gameEngine.gameLogic.getLevel().grid){
+            if (block instanceof Box) {
+                if (((Box) block).id == p.getId()) {
+                    gameEngine.gameLogic.getLevel().grid.remove(block);
+                }
+            }
         }
     }
 
