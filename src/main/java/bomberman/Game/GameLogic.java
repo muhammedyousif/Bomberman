@@ -126,6 +126,7 @@ public class GameLogic {
         bombs=new ArrayList<>();
         if (!gameEngine.multiplayer){
             getPlayers().get(0).setLevel(level);
+            getPlayers().get(0).reset();
         }
         else {
             for (Bomberman player:getPlayers()) {
