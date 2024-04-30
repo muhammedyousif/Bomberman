@@ -9,6 +9,8 @@ public class MainMenu extends JFrame {
     private JPanel panel1;
     private JLabel labelmain;
     private JButton PLAYButton;
+    private JButton SETTINGSButton;
+    private JButton QUITButton;
 
     public MainMenu() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,6 +24,8 @@ public class MainMenu extends JFrame {
         panel1.setFocusable(true);
         labelmain = new JLabel();
         PLAYButton = new JButton();
+        QUITButton = new JButton();
+        SETTINGSButton = new JButton();
         getmaniac();
     }
 
@@ -33,8 +37,12 @@ public class MainMenu extends JFrame {
 
             // Register the font
             ge.registerFont(customFont);
-            PLAYButton.setFont(customFont.deriveFont(30f));
+            PLAYButton.setFont(customFont.deriveFont(45f));
+            SETTINGSButton.setFont(customFont.deriveFont(45f));
+            QUITButton.setFont(customFont.deriveFont(45f));
+
             labelmain.setFont(customFont);
+
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
@@ -65,9 +73,9 @@ public class MainMenu extends JFrame {
         labelmain.setText("BOMBERMAN");
         panel2.add(labelmain, BorderLayout.CENTER);
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel3.setBackground(new Color(-16777216));
-        panel3.setPreferredSize(new Dimension(24, 200));
+        panel3.setPreferredSize(new Dimension(24, 300));
         panel1.add(panel3, BorderLayout.SOUTH);
         PLAYButton.setBackground(new Color(-63737));
         PLAYButton.setBorderPainted(false);
@@ -76,11 +84,23 @@ public class MainMenu extends JFrame {
         PLAYButton.setText("PLAY");
         panel3.add(PLAYButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        panel3.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
         panel3.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer3 = new com.intellij.uiDesigner.core.Spacer();
         panel3.add(spacer3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        SETTINGSButton.setBackground(new Color(-63737));
+        SETTINGSButton.setBorderPainted(false);
+        SETTINGSButton.setContentAreaFilled(false);
+        SETTINGSButton.setForeground(new Color(-63737));
+        SETTINGSButton.setText("SETTINGS");
+        panel3.add(SETTINGSButton, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        QUITButton.setBackground(new Color(-63737));
+        QUITButton.setBorderPainted(false);
+        QUITButton.setContentAreaFilled(false);
+        QUITButton.setForeground(new Color(-63737));
+        QUITButton.setText("QUIT");
+        panel3.add(QUITButton, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

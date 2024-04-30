@@ -25,8 +25,8 @@ public class MenuGUI{
         EventQueue.invokeLater(() -> {
             mainMenu.setSize(800, 600); // Set the size of the frame.
             mainMenu.setVisible(true); // Make sure the frame is visible.
-        });
 
+        });
         frame = new JFrame("Bomberman");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*GE = new GameEngine(this);
