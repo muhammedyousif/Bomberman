@@ -81,7 +81,7 @@ public class Bomberman extends Entity{
                 bombs.add(bomb);
                 bombCounter--;
                 if (GameEngine.gameEngine.multiplayer){
-                    Packet04Bomb packet=new Packet04Bomb(username,middlepos_x,middlepos_y);
+                    Packet04Bomb packet=new Packet04Bomb(username,middlepos_x,middlepos_y,BOMB);
                     GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
                 }
                 System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
@@ -331,6 +331,10 @@ public class Bomberman extends Entity{
             } else {
                 bigBombs.add(bomb);
                 bigBombCount--;
+                if (GameEngine.gameEngine.multiplayer){
+                    Packet04Bomb packet=new Packet04Bomb(username,middlepos_x,middlepos_y,BIGBOMB);
+                    GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+                }
                 System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
             }
         }

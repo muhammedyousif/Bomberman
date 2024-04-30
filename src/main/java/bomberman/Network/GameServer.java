@@ -112,6 +112,7 @@ public class GameServer extends Thread{
     }
 
     private void handleDestruction(Packet03Destroy p) {
+/*
         Iterator<Sprite> iterator = gameEngine.gameLogic.getLevel().grid.iterator();
         while (iterator.hasNext()) {
             Sprite block = iterator.next();
@@ -122,6 +123,7 @@ public class GameServer extends Thread{
         }
 
         p.writeData(this);
+*/
     }
 
     private void handleMove(Packet02Move p) {
