@@ -12,6 +12,9 @@ import java.net.*;
 import java.util.Iterator;
 import java.util.Objects;
 
+import static bomberman.Game.Constants.BIGBOMB;
+import static bomberman.Game.Constants.BOMB;
+
 public class GameClient extends Thread{
     private InetAddress ipAddress;
     private DatagramSocket socket;
@@ -100,7 +103,11 @@ public class GameClient extends Thread{
     }
 
     private void handleBomb(Packet04Bomb p) {
-        gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+        if (p.getType()==BOMB)
+            gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+        else if (p.getType()==BIGBOMB) {
+            gameEngine.gameLogic.getLevel().placeBigBomb(p.getX(),p.getY());
+        }
     }
 
     private void handleDestruction(Packet03Destroy p) {

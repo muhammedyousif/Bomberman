@@ -46,7 +46,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         this.menuGUI=menuGUI;
         setFocusable(true);
         startGameLoop();
-        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to player multiPlayer?");
+        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
         if (multiplayerint==0)
             multiplayer=true;
         else {
