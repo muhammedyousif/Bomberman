@@ -21,9 +21,15 @@ public class MenuGUI{
     private JLabel statusLabel;
     private JLabel bigBombLabel;
     public MenuGUI(){
+        MainMenu mainMenu=new MainMenu();
+        EventQueue.invokeLater(() -> {
+            mainMenu.setSize(800, 600); // Set the size of the frame.
+            mainMenu.setVisible(true); // Make sure the frame is visible.
+        });
+
         frame = new JFrame("Bomberman");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GE = new GameEngine(this);
+        /*GE = new GameEngine(this);
         GE.setLayout(new BorderLayout());
         setStatusLabel();
         JMenuBar menuBar = new JMenuBar();
@@ -64,7 +70,7 @@ public class MenuGUI{
             public void windowLostFocus(WindowEvent e) {
                 //reset dirbool
             }
-        });
+        });*/
     }
     private void setStatusLabel(){
         if (GE.multiplayer) {
