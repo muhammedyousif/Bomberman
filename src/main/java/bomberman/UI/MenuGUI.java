@@ -20,57 +20,16 @@ public class MenuGUI{
     public WindowHandler windowHandler;
     private JLabel statusLabel;
     private JLabel bigBombLabel;
+    private MainMenu mainMenu;
     public MenuGUI(){
-        MainMenu mainMenu=new MainMenu();
-        EventQueue.invokeLater(() -> {
-            mainMenu.setSize(800, 600); // Set the size of the frame.
-            mainMenu.setVisible(true); // Make sure the frame is visible.
+        mainMenu=new MainMenu();
+            EventQueue.invokeLater(() -> {
+                mainMenu.setSize(900, 800);
+                mainMenu.setVisible(true);
 
-        });
+            });
         frame = new JFrame("Bomberman");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*GE = new GameEngine(this);
-        GE.setLayout(new BorderLayout());
-        setStatusLabel();
-        JMenuBar menuBar = new JMenuBar();
-        frame.setJMenuBar(menuBar);
-        JMenu fileMenu = new JMenu("Game");
-        menuBar.add(fileMenu);
-        JMenuItem exitMenuItem = new JMenuItem("Exit");
-        fileMenu.add(exitMenuItem);
-        windowHandler=new WindowHandler(this);
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                System.exit(0);
-            }
-        });
-        JMenuItem restartMenuItem = new JMenuItem("Restart");
-        restartMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                GE.restartGame();  // Call the restart method on the game engine
-            }
-        });
-        fileMenu.add(restartMenuItem);
-        //frame.setPreferredSize(new Dimension(920,843));
-        frame.setPreferredSize(new Dimension(920,800));
-
-        frame.setResizable(false);
-        frame.pack();
-        frame.setVisible(true);
-
-        frame.addWindowFocusListener(new WindowFocusListener() {
-            @Override
-            public void windowGainedFocus(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowLostFocus(WindowEvent e) {
-                //reset dirbool
-            }
-        });*/
+        addMainMenuListeners();
     }
     private void setStatusLabel(){
         if (GE.multiplayer) {
@@ -119,6 +78,61 @@ public class MenuGUI{
         getmaniac();
 
     }
+    private void addMainMenuListeners() {
+        mainMenu.getPLAYButton().addActionListener(e -> switchToGameEngine());
+    }
+    private void switchToGameEngine() {
+        mainMenu.setVisible(false);
+        GE = new GameEngine(this);
+        frame.add(GE);
+        GE.setVisible(true);
+        frame.revalidate();
+        frame.repaint();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GE.setLayout(new BorderLayout());
+        setStatusLabel();
+        JMenuBar menuBar = new JMenuBar();
+        frame.setJMenuBar(menuBar);
+        JMenu fileMenu = new JMenu("Game");
+        menuBar.add(fileMenu);
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+        fileMenu.add(exitMenuItem);
+        windowHandler = new WindowHandler(this);
+        exitMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                System.exit(0);
+            }
+        });
+        JMenuItem restartMenuItem = new JMenuItem("Restart");
+        restartMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                GE.restartGame();  // Call the restart method on the game engine
+            }
+        });
+        fileMenu.add(restartMenuItem);
+        //frame.setPreferredSize(new Dimension(920,843));
+        frame.setPreferredSize(new Dimension(920, 800));
+
+        frame.setResizable(false);
+        frame.pack();
+        frame.setVisible(true);
+
+        frame.addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                //reset dirbool
+            }
+        });
+
+    }
+
 
     private void getmaniac() {
         try {

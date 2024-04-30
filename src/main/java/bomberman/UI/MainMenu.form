@@ -24,6 +24,7 @@
               <foreground color="-63737"/>
               <horizontalAlignment value="0"/>
               <text value="BOMBERMAN"/>
+              <verticalAlignment value="3"/>
             </properties>
           </component>
         </children>
@@ -45,7 +46,8 @@
               <background color="-63737"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="false"/>
-              <foreground color="-63737"/>
+              <foreground color="-1"/>
+              <hideActionText value="false"/>
               <text value="PLAY"/>
             </properties>
           </component>
@@ -69,10 +71,10 @@
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-63737"/>
+              <background color="-1"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="false"/>
-              <foreground color="-63737"/>
+              <foreground color="-1"/>
               <text value="SETTINGS"/>
             </properties>
           </component>
@@ -84,7 +86,7 @@
               <background color="-63737"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="false"/>
-              <foreground color="-63737"/>
+              <foreground color="-1"/>
               <text value="QUIT"/>
             </properties>
           </component>
