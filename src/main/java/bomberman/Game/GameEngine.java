@@ -8,14 +8,12 @@ import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
+import bomberman.UI.PauseOverlay;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,6 +37,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private String username;
     public boolean server=false;
     public boolean multiplayer;
+    private boolean paused=false;
+    private PauseOverlay pauseOverlay;
 
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
@@ -68,6 +68,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Bomberman man = new Bomberman(75, 75, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
+        pauseOverlay=new PauseOverlay();
         addKeyListener(new Keyboard(this));
 
         //socketClient.sendData("ping".getBytes());
@@ -88,6 +89,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
+        pauseOverlay.draw(g);
         //drawBar(g);
 
     }
@@ -210,6 +212,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                     restartGame();
                 }
                 break;
+            case KeyEvent.VK_ESCAPE:
+                paused=true;
+                break;
         }
         if (multiplayer) {
             Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), ((PlayerMP) playerMP).hitbox.x, ((PlayerMP) playerMP).hitbox.y, ((PlayerMP) playerMP).isLeft(), ((PlayerMP) playerMP).isRight(), ((PlayerMP) playerMP).isUp(), ((PlayerMP) playerMP).isDown());
@@ -245,6 +250,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), playerMP.hitbox.x, playerMP.hitbox.y, ((PlayerMP)playerMP).isLeft(), ((PlayerMP)playerMP).isRight(), ((PlayerMP)playerMP).isUp(), ((PlayerMP)playerMP).isDown());
             GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
         }
+
+    }
+
+    @Override
+    public void MousePressed(MouseEvent e) {
 
     }
 
