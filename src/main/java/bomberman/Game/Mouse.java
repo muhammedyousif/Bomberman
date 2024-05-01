@@ -7,12 +7,8 @@ import java.awt.event.MouseListener;
 
 public class Mouse implements MouseListener {
     GameEngine gameEngine;
-    PauseOverlay pauseOverlay;
     public Mouse(GameEngine gameEngine){
         this.gameEngine=gameEngine;
-    }
-    public Mouse(PauseOverlay pauseOverlay){
-        this.pauseOverlay=pauseOverlay;
     }
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -21,8 +17,12 @@ public class Mouse implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        gameEngine.MousePressed(e);
-
+        if (gameEngine.isPaused()){
+            gameEngine.getPauseOverlay().MousePressed(e);
+        }
+        else {
+            gameEngine.MousePressed(e);
+        }
     }
 
     @Override

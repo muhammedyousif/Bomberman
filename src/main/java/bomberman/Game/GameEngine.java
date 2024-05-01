@@ -69,6 +69,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             gameLogic.getPlayers().add(man);
         }
         addKeyListener(new Keyboard(this));
+        addMouseListener(new Mouse(this));
         pauseOverlay=new PauseOverlay(this);
         //socketClient.sendData("ping".getBytes());
     }

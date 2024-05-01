@@ -25,7 +25,7 @@ public class PauseOverlay {
     private boolean pause;
     GameEngine gameEngine;
     private ActionButtons resume,menu,restart,quit;
-    private static final int actionW=50;
+    private static final int actionW=80;
     private static final int actionH=20;
 
     public PauseOverlay(GameEngine gameEngine){
@@ -40,15 +40,15 @@ public class PauseOverlay {
     }
 
     private void createActionButtons() {
-        int x=GAME_WIDTH/2-bgW/2;
-        int resumeY=80;
+        int x=GAME_WIDTH/2-actionW/2;
+        int resumeY=270;
         int restartY=100;
         int menuY=120;
         int quitY=140;
-        resume=new ActionButtons(x,resumeY,actionW,actionH);
-        restart=new ActionButtons(x,restartY,actionW,actionH);
-        menu=new ActionButtons(x,menuY,actionW,actionH);
-        quit=new ActionButtons(x,quitY,actionW,actionH);
+        resume=new ActionButtons(0,resumeY,0,0,"Assets/resume.png",0.3f);
+        //restart=new ActionButtons(x,restartY,actionW,actionH);
+        //menu=new ActionButtons(x,menuY,actionW,actionH);
+        //quit=new ActionButtons(x,quitY,actionW,actionH);
     }
 
     private void LoadImg(){
@@ -66,6 +66,7 @@ public class PauseOverlay {
     }
     public void draw(Graphics g){
         g.drawImage(overlay,bgX,bgY,bgW,bgH,null);
+        resume.draw(g);
     }
     public void keyPressed(KeyEvent e){
         switch (e.getKeyCode()){
@@ -75,7 +76,14 @@ public class PauseOverlay {
         }
     }
     public void MousePressed(MouseEvent e){
+        if (isIn(e,resume)){
+            pause=false;
+        }
+        System.out.println("CLIIICK");
+    }
 
+    private boolean isIn(MouseEvent e, ActionButtons b) {
+        return b.getBounds().contains(e.getX(), e.getY());
     }
 
     public boolean isPause() {
