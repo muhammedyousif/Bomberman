@@ -37,7 +37,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private String username;
     public boolean server=false;
     public boolean multiplayer;
-    private boolean paused=false;
+    private boolean paused;
     private PauseOverlay pauseOverlay;
 
     public GameEngine(MenuGUI menuGUI){
@@ -68,9 +68,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Bomberman man = new Bomberman(75, 75, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
-        pauseOverlay=new PauseOverlay();
         addKeyListener(new Keyboard(this));
-
+        pauseOverlay=new PauseOverlay(this);
         //socketClient.sendData("ping".getBytes());
     }
 
@@ -89,7 +88,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
-        pauseOverlay.draw(g);
+        if (paused)
+            pauseOverlay.draw(g);
         //drawBar(g);
 
     }
@@ -131,7 +131,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                //System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
+                //System.out.println("FPS: " +frames+"| UPS: "+updates);
+                //System.out.println(paused);
                 frames = 0;
                 updates=0;
             }
@@ -139,6 +140,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void update() {
+        if (!paused){
         if (gameLogic.getLevel()!=null) {
             synchronized (getPlayers()) {
                 for (int i = 0; i < getPlayers().size(); i++) {
@@ -166,6 +168,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 }
             }
             gameLogic.bombs.removeAll(toRemove);
+        }
+        }
+        else {
+            pauseOverlay.update();
         }
     }
 
@@ -202,6 +208,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             case KeyEvent.VK_F:
                 ((Bomberman) playerMP).placeBigBomb();
                 break;
+            case KeyEvent.VK_ESCAPE:
+                paused=true;
+                pauseOverlay.setPause(true);
+                break;
             case  KeyEvent.VK_R:
                 if (multiplayer){
                     Packet06Restart packet06Restart=new Packet06Restart(username);
@@ -211,9 +221,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 else {
                     restartGame();
                 }
-                break;
-            case KeyEvent.VK_ESCAPE:
-                paused=true;
                 break;
         }
         if (multiplayer) {
@@ -297,4 +304,15 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         return gameLogic.getPlayers();
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public PauseOverlay getPauseOverlay() {
+        return pauseOverlay;
+    }
 }

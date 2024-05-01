@@ -2,6 +2,7 @@ package bomberman.UI;
 
 import bomberman.Game.Bomberman;
 import bomberman.Game.GameEngine;
+import bomberman.Game.Keyboard;
 import bomberman.Packets.Packet02Move;
 import bomberman.Packets.Packet06Restart;
 import bomberman.Sprite.Entity;
@@ -21,13 +22,35 @@ import static bomberman.Game.Constants.GAME_WIDTH;
 public class PauseOverlay {
     BufferedImage overlay;
     private int bgX,bgY,bgW,bgH;
-    public PauseOverlay(){
+    private boolean pause;
+    GameEngine gameEngine;
+    private ActionButtons resume,menu,restart,quit;
+    private static final int actionW=50;
+    private static final int actionH=20;
+
+    public PauseOverlay(GameEngine gameEngine){
+        pause=true;
+        this.gameEngine=gameEngine;
         LoadImg();
         bgW=overlay.getWidth()/2;
         bgH= overlay.getHeight()/2;
         bgX=GAME_WIDTH/2-bgW/2;
         bgY=60;
+        createActionButtons();
     }
+
+    private void createActionButtons() {
+        int x=GAME_WIDTH/2-bgW/2;
+        int resumeY=80;
+        int restartY=100;
+        int menuY=120;
+        int quitY=140;
+        resume=new ActionButtons(x,resumeY,actionW,actionH);
+        restart=new ActionButtons(x,restartY,actionW,actionH);
+        menu=new ActionButtons(x,menuY,actionW,actionH);
+        quit=new ActionButtons(x,quitY,actionW,actionH);
+    }
+
     private void LoadImg(){
         InputStream isa = getClass().getClassLoader().getResourceAsStream("Assets/pause.png");
         try {
@@ -37,16 +60,29 @@ public class PauseOverlay {
         }
     }
     public void update(){
-
+        if (!pause){
+            gameEngine.setPaused(false);
+        }
     }
     public void draw(Graphics g){
         g.drawImage(overlay,bgX,bgY,bgW,bgH,null);
     }
     public void keyPressed(KeyEvent e){
-
+        switch (e.getKeyCode()){
+            case KeyEvent.VK_ESCAPE:
+                pause=false;
+                break;
+        }
     }
     public void MousePressed(MouseEvent e){
 
     }
 
+    public boolean isPause() {
+        return pause;
+    }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
+    }
 }
