@@ -96,7 +96,7 @@ public class Bomb extends Sprite {
     }
     void checkPlayerHit(int x, int y) {
         Bomberman player =level.gameEngine.gameLogic.getPlayers().get(0);
-        if (collides_with_player(player) ||player.collides_with_sprite(x, y, player.width, player.height, player)) {
+        if (collides_with_player(player) ||player.collides_with_sprite(x, y, width, height, player)) {
                 player.setAlive(false);
                 level.explosions.add(new Explosion(x, y, level));  // Optional: Add explosion effect on player hit
             }
