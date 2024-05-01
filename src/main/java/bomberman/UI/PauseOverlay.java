@@ -40,13 +40,13 @@ public class PauseOverlay {
     }
 
     private void createActionButtons() {
-        int x=GAME_WIDTH/2-actionW/2;
+        int space = 80;
         int resumeY=270;
-        int restartY=100;
-        int menuY=120;
-        int quitY=140;
+        int restartY=resumeY+space;
+        int menuY=restartY+space;
+        int quitY=menuY+space;
         resume=new ActionButtons(0,resumeY,0,0,"Assets/resume.png",0.3f);
-        //restart=new ActionButtons(x,restartY,actionW,actionH);
+        restart=new ActionButtons(0,restartY,0,0,"Assets/restart.png",0.29f);
         //menu=new ActionButtons(x,menuY,actionW,actionH);
         //quit=new ActionButtons(x,quitY,actionW,actionH);
     }
@@ -67,6 +67,7 @@ public class PauseOverlay {
     public void draw(Graphics g){
         g.drawImage(overlay,bgX,bgY,bgW,bgH,null);
         resume.draw(g);
+        restart.draw(g);
     }
     public void keyPressed(KeyEvent e){
         switch (e.getKeyCode()){
@@ -78,8 +79,9 @@ public class PauseOverlay {
     public void MousePressed(MouseEvent e){
         if (isIn(e,resume)){
             pause=false;
+        } else if (isIn(e,restart)) {
+            gameEngine.restartGame();
         }
-        System.out.println("CLIIICK");
     }
 
     private boolean isIn(MouseEvent e, ActionButtons b) {
