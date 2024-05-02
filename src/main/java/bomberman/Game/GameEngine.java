@@ -89,8 +89,14 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
-        if (paused)
+        if (paused) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            Color overlayColor = new Color(0, 0, 0, 90);
+            g2d.setColor(overlayColor);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            g2d.dispose();
             pauseOverlay.draw(g);
+        }
         //drawBar(g);
 
     }
