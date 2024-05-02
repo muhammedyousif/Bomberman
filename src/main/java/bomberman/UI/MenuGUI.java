@@ -91,27 +91,6 @@ public class MenuGUI{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GE.setLayout(new BorderLayout());
         setStatusLabel();
-        JMenuBar menuBar = new JMenuBar();
-        frame.setJMenuBar(menuBar);
-        JMenu fileMenu = new JMenu("Game");
-        menuBar.add(fileMenu);
-        JMenuItem exitMenuItem = new JMenuItem("Exit");
-        fileMenu.add(exitMenuItem);
-        windowHandler = new WindowHandler(this);
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                System.exit(0);
-            }
-        });
-        JMenuItem restartMenuItem = new JMenuItem("Restart");
-        restartMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                GE.restartGame();  // Call the restart method on the game engine
-            }
-        });
-        fileMenu.add(restartMenuItem);
         //frame.setPreferredSize(new Dimension(920,843));
         frame.setPreferredSize(new Dimension(920, 800));
 
