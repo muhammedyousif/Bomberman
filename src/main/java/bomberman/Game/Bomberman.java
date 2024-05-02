@@ -274,6 +274,9 @@ public class Bomberman extends Entity{
         Rectangle proposedRect = new Rectangle(x, y, width, height);
         for (Sprite sprite : level.grid) {
             Rectangle spriteRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
+            if (sprite instanceof Box){
+                spriteRect=new Rectangle(sprite.getHitbox().x,sprite.getHitbox().y,sprite.getHitbox().width,sprite.getHitbox().height);
+            }
             if (proposedRect.intersects(spriteRect)) {
                 return false;
             }

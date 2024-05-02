@@ -7,10 +7,15 @@ import javax.swing.*;
 public class Box extends Sprite{
     private Level level;
     public int id;
+    private Image image;
+    private float offset=5/4;
+    private float offset2=5/4+2.5f;
     public Box(int x,int y,int width, int height, Image image,Level level,int id){
         super(x,y,width,height,image);
+        this.image=image;
         this.id=id;
         this.level = level;
+        initHitbox((int) (x-offset*2),(int)(y-offset*2),level.getBlock_width(),level.getBlock_width());
     }
     public boolean shouldDropPowerUp() {
         int randomNumber = (int) (Math.random() * 100);
@@ -28,5 +33,11 @@ public class Box extends Sprite{
             level.gameEngine.gameLogic.bombs.add(bigBombItem);
         }
         level.grid.remove(this);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.drawImage(image, (int)(hitbox.x+offset2), (int)(hitbox.y+offset2), width, height, null);
+        //drawHitbox(g);
     }
 }
