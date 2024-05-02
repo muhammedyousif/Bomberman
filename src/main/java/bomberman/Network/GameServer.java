@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import static bomberman.Game.Constants.*;
+
 public class GameServer extends Thread{
     private DatagramSocket socket;
     private GameEngine gameEngine;
@@ -106,8 +108,16 @@ public class GameServer extends Thread{
     }
 
     private void handleBomb(Packet04Bomb p) {
-        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername()))
-            gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())) {
+            if (p.getType()==BOMB)
+                gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
+            else if (p.getType()==BIGBOMB) {
+                gameEngine.gameLogic.getLevel().placeBigBomb(p.getX(),p.getY());
+            }
+            else if(p.getType()==BARRICADE){
+                gameEngine.gameLogic.getLevel().placeBarricade(p.getX(),p.getY());
+            }
+        }
         p.writeData(this);
     }
 

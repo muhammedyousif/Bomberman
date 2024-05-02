@@ -12,8 +12,7 @@ import java.net.*;
 import java.util.Iterator;
 import java.util.Objects;
 
-import static bomberman.Game.Constants.BIGBOMB;
-import static bomberman.Game.Constants.BOMB;
+import static bomberman.Game.Constants.*;
 
 public class GameClient extends Thread{
     private InetAddress ipAddress;
@@ -107,6 +106,9 @@ public class GameClient extends Thread{
             gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
         else if (p.getType()==BIGBOMB) {
             gameEngine.gameLogic.getLevel().placeBigBomb(p.getX(),p.getY());
+        }
+        else if(p.getType()==BARRICADE){
+            gameEngine.gameLogic.getLevel().placeBarricade(p.getX(),p.getY());
         }
     }
 

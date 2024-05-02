@@ -94,9 +94,11 @@ public class Bomb extends Sprite {
                     level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));
                     //send packet FIX
                     if (GameEngine.gameEngine.multiplayer){
+/*
                         PlayerMP local = (PlayerMP) level.gameEngine.gameLogic.getLocal();
                         Packet03Destroy packet= new Packet03Destroy(local.getUsername(),((Box) hitSprite).id);
                         GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+*/
                     }
                     found=true;
                 }
