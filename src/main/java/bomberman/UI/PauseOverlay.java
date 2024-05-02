@@ -83,7 +83,7 @@ public class PauseOverlay {
         } else if (isIn(e,restart)) {
             gameEngine.restartGame();
         } else if (isIn(e,quit)) {
-            
+            System.exit(0);
         }
     }
 
