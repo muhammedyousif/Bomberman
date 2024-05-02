@@ -112,7 +112,7 @@ public class Level {
         }
         Image image = new ImageIcon(getClass().getResource("/Assets/barricade.png")).getImage();
 
-        Barricade b = new Barricade(closest_x,closest_y,block_width,block_height,image);
+        Barricade b = new Barricade(closest_x,closest_y,block_width,block_height,image,this);
         for (Bomb bomb : bombs) {
             if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
                 return null;

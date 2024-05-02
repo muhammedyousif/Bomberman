@@ -77,7 +77,7 @@ public class Bomb extends Sprite {
 
             } else {
                 Sprite hitSprite = level.grid.get(index);
-                if (hitSprite instanceof Box) {
+                if (hitSprite instanceof Box ) {
                     ((Box) hitSprite).blowUp();
                     level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));
                     //send packet
@@ -89,6 +89,16 @@ public class Bomb extends Sprite {
                     found = true;
                 } else if (hitSprite instanceof Wall) {
                     found = true;
+                } else if (hitSprite instanceof Barricade) {
+                    ((Barricade) hitSprite).blowUp();
+                    level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));
+                    //send packet FIX
+                    if (GameEngine.gameEngine.multiplayer){
+                        PlayerMP local = (PlayerMP) level.gameEngine.gameLogic.getLocal();
+                        Packet03Destroy packet= new Packet03Destroy(local.getUsername(),((Box) hitSprite).id);
+                        GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+                    }
+                    found=true;
                 }
             }
         }
