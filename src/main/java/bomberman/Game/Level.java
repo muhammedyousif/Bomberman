@@ -18,6 +18,9 @@ public class Level {
 
     private final int block_width = 60;
     private final int block_height = 60;
+    private int gameWidth=900;
+    private int gameHeight=800;
+
 
     public Level(String levelPath,GameEngine gameEngine) throws IOException {
         explosions = new ArrayList<Explosion>();
@@ -167,5 +170,13 @@ public class Level {
         for(int i = 0; i < explosions.size();i++){
             explosions.get(i).draw(g);
         }
+    }
+
+    public int getGameWidth() {
+        return gameWidth;
+    }
+
+    public int getGameHeight() {
+        return gameHeight;
     }
 }

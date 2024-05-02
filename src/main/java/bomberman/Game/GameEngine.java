@@ -8,14 +8,12 @@ import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
+import bomberman.UI.PauseOverlay;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,6 +37,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private String username;
     public boolean server=false;
     public boolean multiplayer;
+    private boolean paused;
+    private PauseOverlay pauseOverlay;
 
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
@@ -69,7 +69,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             gameLogic.getPlayers().add(man);
         }
         addKeyListener(new Keyboard(this));
-
+        addMouseListener(new Mouse(this));
+        pauseOverlay=new PauseOverlay(this);
         //socketClient.sendData("ping".getBytes());
     }
 
@@ -88,6 +89,14 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
+        if (paused) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            Color overlayColor = new Color(0, 0, 0, 90);
+            g2d.setColor(overlayColor);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            g2d.dispose();
+            pauseOverlay.draw(g);
+        }
         //drawBar(g);
 
     }
@@ -129,7 +138,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                //System.out.println("FPS: " +frames+"| UPS: "+updates+"|x: ");
+                //System.out.println("FPS: " +frames+"| UPS: "+updates);
+                //System.out.println(paused);
                 frames = 0;
                 updates=0;
             }
@@ -137,6 +147,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void update() {
+        if (!paused){
         if (gameLogic.getLevel()!=null) {
             synchronized (getPlayers()) {
                 for (int i = 0; i < getPlayers().size(); i++) {
@@ -164,6 +175,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 }
             }
             gameLogic.bombs.removeAll(toRemove);
+        }
+        }
+        else {
+            pauseOverlay.update();
         }
     }
 
@@ -199,6 +214,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 break;
             case KeyEvent.VK_F:
                 ((Bomberman) playerMP).placeBigBomb();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                paused=true;
+                pauseOverlay.setPause(true);
                 break;
             case  KeyEvent.VK_R:
                 if (multiplayer){
@@ -248,6 +267,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     }
 
+    @Override
+    public void MousePressed(MouseEvent e) {
+
+    }
+
     public void restartGame() {
         /*for (Bomberman man : gameLogic.getPlayers()){
             man.reset();
@@ -287,4 +311,15 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         return gameLogic.getPlayers();
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public PauseOverlay getPauseOverlay() {
+        return pauseOverlay;
+    }
 }

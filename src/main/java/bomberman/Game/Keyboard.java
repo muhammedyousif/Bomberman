@@ -14,7 +14,12 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        gameEngine.keyPressed(e);
+        if (gameEngine.isPaused()) {
+            gameEngine.getPauseOverlay().keyPressed(e);
+        }
+        else {
+            gameEngine.keyPressed(e);
+        }
     }
 
     @Override
