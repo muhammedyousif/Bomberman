@@ -147,7 +147,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void update() {
-        if (!paused){
+        if (!paused || multiplayer){
         if (gameLogic.getLevel()!=null) {
             synchronized (getPlayers()) {
                 for (int i = 0; i < getPlayers().size(); i++) {
@@ -177,9 +177,13 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             gameLogic.bombs.removeAll(toRemove);
         }
         }
-        else {
-            pauseOverlay.update();
+
+        if (paused||multiplayer) {
+            if (pauseOverlay!=null)
+                pauseOverlay.update();
         }
+
+
     }
 
     private void startGameLoop(){

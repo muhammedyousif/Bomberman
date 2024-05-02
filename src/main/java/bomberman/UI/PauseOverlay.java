@@ -81,7 +81,14 @@ public class PauseOverlay {
         if (isIn(e,resume)){
             pause=false;
         } else if (isIn(e,restart)) {
-            gameEngine.restartGame();
+            if (gameEngine.multiplayer){
+                Packet06Restart packet06Restart=new Packet06Restart(gameEngine.getUsername());
+                GameEngine.gameEngine.getSocketClient().sendData(packet06Restart.getData());
+                gameEngine.restartGame();
+            }
+            else {
+                gameEngine.restartGame();
+            }
         } else if (isIn(e,quit)) {
             System.exit(0);
         }
