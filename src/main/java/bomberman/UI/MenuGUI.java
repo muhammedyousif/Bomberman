@@ -80,7 +80,9 @@ public class MenuGUI{
     }
     private void addMainMenuListeners() {
         mainMenu.getPLAYButton().addActionListener(e -> switchToGameEngine());
+        mainMenu.getQUITButton().addActionListener(e -> System.exit(0));
     }
+
     private void switchToGameEngine() {
         mainMenu.setVisible(false);
         GE = new GameEngine(this);
