@@ -44,11 +44,11 @@ public class PauseOverlay {
         int resumeY=270;
         int restartY=resumeY+space;
         int menuY=restartY+space;
-        int quitY=menuY+space;
+        int quitY=menuY;
         resume=new ActionButtons(0,resumeY,0,0,"Assets/resume.png",0.3f);
         restart=new ActionButtons(0,restartY,0,0,"Assets/restart.png",0.29f);
         //menu=new ActionButtons(x,menuY,actionW,actionH);
-        //quit=new ActionButtons(x,quitY,actionW,actionH);
+        quit=new ActionButtons(0,quitY,0,0,"Assets/quitdesktop.png",0.3f);
     }
 
     private void LoadImg(){
@@ -68,6 +68,7 @@ public class PauseOverlay {
         g.drawImage(overlay,bgX,bgY,bgW,bgH,null);
         resume.draw(g);
         restart.draw(g);
+        quit.draw(g);
     }
     public void keyPressed(KeyEvent e){
         switch (e.getKeyCode()){
@@ -81,6 +82,8 @@ public class PauseOverlay {
             pause=false;
         } else if (isIn(e,restart)) {
             gameEngine.restartGame();
+        } else if (isIn(e,quit)) {
+            
         }
     }
 
