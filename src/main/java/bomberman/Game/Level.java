@@ -15,12 +15,12 @@ public class Level {
     public ArrayList<Explosion> explosions;
     private ArrayList<Monster> monsters;
     private ArrayList<ArrayList<Integer>> snap_positions = new ArrayList<>();
-
+    private ArrayList<Barricade> barricades;
     private final int block_width = 60;
     private final int block_height = 60;
     private int gameWidth=900;
     private int gameHeight=800;
-
+    private int id=0;
 
     public Level(String levelPath,GameEngine gameEngine) throws IOException {
         explosions = new ArrayList<Explosion>();
@@ -28,6 +28,7 @@ public class Level {
         monsters=new ArrayList<Monster>();
         grid = new ArrayList<>();
         bigBombs=new ArrayList<>();
+        barricades=new ArrayList<>();
         fileToLevel(levelPath);
         getSnapPositions();
         this.gameEngine=gameEngine;
@@ -96,8 +97,32 @@ public class Level {
         int index = bombs.size();
         bombs.add(b);
         return (BigBomb) bombs.get(index);
-
     }
+    public Barricade placeBarricade(int x, int y){
+        int closest_x = 30;
+        int closest_y = 30;
+        float distance = 500;
+        for (ArrayList<Integer> tuple : snap_positions) {
+            float currentDistance = distance(tuple.get(0), tuple.get(1), x, y);
+            if (currentDistance < distance) {
+                distance = currentDistance;
+                closest_y = tuple.get(1);
+                closest_x = tuple.get(0);
+            }
+        }
+        Image image = new ImageIcon(getClass().getResource("/Assets/barricade.png")).getImage();
+
+        Barricade b = new Barricade(closest_x,closest_y,block_width,block_height,image);
+        for (Bomb bomb : bombs) {
+            if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
+                return null;
+            }
+        }
+        barricades.add(b);
+        grid.add(b);
+        return b;
+    }
+
 
 
     private void fileToLevel(String levelPath) throws IOException {
@@ -110,7 +135,7 @@ public class Level {
         bombs = new ArrayList<>();
         int y = 0;
         String line;
-        int id=0;
+        id=0;
         while ((line = br.readLine()) != null) {
             int x = 0;
             for (char blockType : line.toCharArray()) {
@@ -182,5 +207,9 @@ public class Level {
 
     public int getBlock_width() {
         return block_width;
+    }
+
+    public ArrayList<Barricade> getBarricades() {
+        return barricades;
     }
 }

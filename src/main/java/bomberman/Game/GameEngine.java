@@ -3,8 +3,8 @@ package bomberman.Game;
 import bomberman.Network.GameClient;
 import bomberman.Network.GameServer;
 import bomberman.Packets.*;
+import bomberman.Sprite.Barricade;
 import bomberman.Sprite.Entity;
-import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
@@ -14,12 +14,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 
@@ -165,7 +161,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                     menuGUI.updateBigBombCounter();
                 }
             }
-
             ArrayList<PowerUp> toRemove = new ArrayList<>();
             for (PowerUp bombs : gameLogic.bombs) {
                 if (bombs.isCollected()) {
@@ -218,6 +213,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 break;
             case KeyEvent.VK_F:
                 ((Bomberman) playerMP).placeBigBomb();
+                break;
+            case KeyEvent.VK_Q:
+                ((Bomberman) playerMP).placeBarricade();
                 break;
             case KeyEvent.VK_ESCAPE:
                 paused=true;

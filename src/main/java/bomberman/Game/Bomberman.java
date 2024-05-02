@@ -1,6 +1,5 @@
 package bomberman.Game;
 
-import bomberman.Packets.Packet02Move;
 import bomberman.Packets.Packet04Bomb;
 import bomberman.Packets.Packet05PlayerStatus;
 import bomberman.Sprite.*;
@@ -276,6 +275,13 @@ public class Bomberman extends Entity{
             Rectangle spriteRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
             if (sprite instanceof Box){
                 spriteRect=new Rectangle(sprite.getHitbox().x,sprite.getHitbox().y,sprite.getHitbox().width,sprite.getHitbox().height);
+            } else if (sprite instanceof Barricade) {
+                if (((Barricade) sprite).isIgnoreCollisionWithPlayer()){
+                    if (!sprite.collides_with_sprite(hitbox.x,hitbox.y,hitbox.width,hitbox.height,sprite)){
+                        ((Barricade) sprite).setIgnoreCollisionWithPlayer(false);
+                    }
+                    return true;
+                }
             }
             if (proposedRect.intersects(spriteRect)) {
                 return false;
@@ -339,6 +345,24 @@ public class Bomberman extends Entity{
                     GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
                 }
                 System.out.println("Bomb placed at (" + bomb.getX() + ", " + bomb.getY() + ")");
+            }
+        }
+
+    }
+    public void placeBarricade(){
+        if (alive) {
+            int middlepos_x = this.x + (this.width / 2);
+            int middlepos_y = this.y + (this.height / 2);
+            Barricade box = this.level.placeBarricade(middlepos_x, middlepos_y);
+            if (box == null) {
+                System.out.println("box placement failed - spot already taken.");
+            } else {
+                box.setIgnoreCollisionWithPlayer(true);
+                if (GameEngine.gameEngine.multiplayer){
+                    Packet04Bomb packet=new Packet04Bomb(username,middlepos_x,middlepos_y,BIGBOMB);
+                    GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+                }
+                System.out.println("Box placed at (" + box.getX() + ", " + box.getY() + ")");
             }
         }
 

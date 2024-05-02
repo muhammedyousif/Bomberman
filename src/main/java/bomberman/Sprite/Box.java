@@ -40,4 +40,5 @@ public class Box extends Sprite{
         g.drawImage(image, (int)(hitbox.x+offset2), (int)(hitbox.y+offset2), width, height, null);
         //drawHitbox(g);
     }
+
 }

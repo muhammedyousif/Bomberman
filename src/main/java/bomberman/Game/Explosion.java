@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.Graphics;
 
 public class Explosion {
-    private int timeBuffer = 20;
+    private int timeBuffer = 13;
     private int current_image_index;
     public int x ;
     public int y;
@@ -29,7 +29,7 @@ public class Explosion {
         timeBuffer = timeBuffer-1;
         if(timeBuffer == 0){
             nextImg();
-            timeBuffer = 20;
+            timeBuffer = 13;
         }
     }
 
