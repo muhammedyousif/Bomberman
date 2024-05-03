@@ -114,9 +114,6 @@ public class GameServer extends Thread{
             else if (p.getType()==BIGBOMB) {
                 gameEngine.gameLogic.getLevel().placeBigBomb(p.getX(),p.getY());
             }
-            else if(p.getType()==BARRICADE){
-                gameEngine.gameLogic.getLevel().placeBarricade(p.getX(),p.getY());
-            }
         }
         p.writeData(this);
     }

@@ -361,24 +361,6 @@ public class Bomberman extends Entity{
         }
 
     }
-    public void placeBarricade(){
-        if (alive) {
-            int middlepos_x = this.x + (this.width / 2);
-            int middlepos_y = this.y + (this.height / 2);
-            Barricade box = this.level.placeBarricade(middlepos_x, middlepos_y);
-            if (box == null) {
-                System.out.println("Barricade placement failed - spot already taken.");
-            } else {
-                box.setIgnoreCollisionWithPlayer(true);
-                if (GameEngine.gameEngine.multiplayer){
-                    Packet04Bomb packet=new Packet04Bomb(username,middlepos_x,middlepos_y,BARRICADE);
-                    GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
-                }
-                System.out.println("Barricade placed at (" + box.getX() + ", " + box.getY() + ")");
-            }
-        }
-
-    }
 
     public void incBigBomb() {
         bigBombCount++;

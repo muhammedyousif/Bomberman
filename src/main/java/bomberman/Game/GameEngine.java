@@ -98,8 +98,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void drawBar(Graphics g) {
-        int barHeight = 80; // The height of the black bar
-        int screenWidth = getWidth(); // Assuming this is in a JPanel or similar
+        int barHeight = 80;
+        int screenWidth = getWidth();
         int screenHeight = getHeight();
         g.setColor(Color.BLACK);
         g.fillRect(0, screenHeight - barHeight, screenWidth, barHeight);
@@ -215,9 +215,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 break;
             case KeyEvent.VK_F:
                 ((Bomberman) playerMP).placeBigBomb();
-                break;
-            case KeyEvent.VK_Q:
-                ((Bomberman) playerMP).placeBarricade();
                 break;
             case KeyEvent.VK_ESCAPE:
                 paused=true;
