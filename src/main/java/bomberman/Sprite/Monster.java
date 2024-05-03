@@ -224,7 +224,7 @@ public class Monster extends Entity {
         if (!alive)
             return;
         g.drawImage(animations[0][aniIndex], hitbox.x, hitbox.y, 60, 50, null);
-        drawHitbox(g);
+        //drawHitbox(g);
     }
     public void setLevel(Level level) {
         this.level = level;

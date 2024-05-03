@@ -14,6 +14,7 @@ public class Bomb extends Sprite {
     private int timeLeft = 300;
     private int strength = 2;
     private Level level;
+    private boolean ignoreCollisionWithPlayer=true;
 
     public Bomb(int x, int y, int height, int width, Image image, Level level) {
         super(x - 42 / 2, y - 42 / 2, 42, 42, image);
@@ -62,6 +63,7 @@ public class Bomb extends Sprite {
         explodeInDirection(0, -1); // explode up
         explodeInDirection(0, 1);  // explode down
         level.bombs.remove(this);
+        level.grid.remove(this);
     }
 
     public void explodeInDirection(int dx, int dy) {
@@ -123,5 +125,13 @@ public class Bomb extends Sprite {
             }
         }
     }
+    public void setIgnoreCollisionWithPlayer(boolean ignore) {
+        this.ignoreCollisionWithPlayer = ignore;
+    }
+
+    public boolean isIgnoreCollisionWithPlayer() {
+        return ignoreCollisionWithPlayer;
+    }
+
 
 }

@@ -64,13 +64,15 @@ public class Level {
         }
         Image image = new ImageIcon(getClass().getResource("/Assets/bomb.png")).getImage();
         Bomb b = new Bomb(closest_x,closest_y,50,50,image,this);
-
+        b.setIgnoreCollisionWithPlayer(true);
         for (Bomb bomb : bombs) {
             if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
                 return null;
             }
         }
         int index = bombs.size();
+        if (!gameEngine.multiplayer)
+            grid.add(b);
         bombs.add(b);
         return bombs.get(index);
     }
@@ -88,7 +90,7 @@ public class Level {
         }
         Image image = new ImageIcon(getClass().getResource("/Assets/bigBomb.png")).getImage();
         BigBomb b = new BigBomb(closest_x,closest_y,50,50,image,this);
-
+        b.setIgnoreCollisionWithPlayer(true);
         for (Bomb bomb : bombs) {
             if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
                 return null;
@@ -113,6 +115,7 @@ public class Level {
         Image image = new ImageIcon(getClass().getResource("/Assets/barricade.png")).getImage();
 
         Barricade b = new Barricade(closest_x,closest_y,block_width,block_height,image,this);
+        b.setIgnoreCollisionWithPlayer(true);
         for (Bomb bomb : bombs) {
             if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
                 return null;

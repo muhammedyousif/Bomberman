@@ -276,11 +276,23 @@ public class Bomberman extends Entity{
             if (sprite instanceof Box){
                 spriteRect=new Rectangle(sprite.getHitbox().x,sprite.getHitbox().y,sprite.getHitbox().width,sprite.getHitbox().height);
             } else if (sprite instanceof Barricade) {
-                if (((Barricade) sprite).isIgnoreCollisionWithPlayer()){
-                    if (!sprite.collides_with_sprite(hitbox.x,hitbox.y,hitbox.width,hitbox.height,sprite)){
+                if (((Barricade) sprite).isIgnoreCollisionWithPlayer()) {
+                    if (proposedRect.intersects(spriteRect)) {
+                        System.out.println("lalala");
+                        continue;
+                    } else {
                         ((Barricade) sprite).setIgnoreCollisionWithPlayer(false);
                     }
-                    return true;
+                }
+
+            } else if (sprite instanceof Bomb && !GameEngine.gameEngine.multiplayer) {
+                if (((Bomb) sprite).isIgnoreCollisionWithPlayer()) {
+                    if (proposedRect.intersects(spriteRect)) {
+                        //System.out.println("lalala");
+                        continue;
+                    } else {
+                        ((Bomb) sprite).setIgnoreCollisionWithPlayer(false);
+                    }
                 }
             }
             if (proposedRect.intersects(spriteRect)) {

@@ -4,7 +4,7 @@ import bomberman.Game.Level;
 import javax.swing.*;
 import java.awt.Image;
 public class Barricade extends Sprite{
-    private boolean ignoreCollisionWithPlayer = false;
+    private boolean ignoreCollisionWithPlayer = true;
     private Level level;
     private int lifeTime;
     public Barricade(int x, int y, int width, int height, Image image, Level level){

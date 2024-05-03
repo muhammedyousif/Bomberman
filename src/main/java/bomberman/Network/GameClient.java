@@ -102,6 +102,9 @@ public class GameClient extends Thread{
     }
 
     private void handleBomb(Packet04Bomb p) {
+        if (Objects.equals(p.getUsername(), gameEngine.getUsername())){
+            return;
+        }
         if (p.getType()==BOMB)
             gameEngine.gameLogic.getLevel().placeBomb(p.getX(),p.getY());
         else if (p.getType()==BIGBOMB) {
