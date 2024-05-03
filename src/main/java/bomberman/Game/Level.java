@@ -15,12 +15,12 @@ public class Level {
     public ArrayList<Explosion> explosions;
     private ArrayList<Monster> monsters;
     private ArrayList<ArrayList<Integer>> snap_positions = new ArrayList<>();
-
+    private ArrayList<Barricade> barricades;
     private final int block_width = 60;
     private final int block_height = 60;
     private int gameWidth=900;
     private int gameHeight=800;
-
+    private int id=0;
 
     public Level(String levelPath,GameEngine gameEngine) throws IOException {
         explosions = new ArrayList<Explosion>();
@@ -28,6 +28,7 @@ public class Level {
         monsters=new ArrayList<Monster>();
         grid = new ArrayList<>();
         bigBombs=new ArrayList<>();
+        barricades=new ArrayList<>();
         fileToLevel(levelPath);
         getSnapPositions();
         this.gameEngine=gameEngine;
@@ -63,13 +64,15 @@ public class Level {
         }
         Image image = new ImageIcon(getClass().getResource("/Assets/bomb.png")).getImage();
         Bomb b = new Bomb(closest_x,closest_y,50,50,image,this);
-
+        b.setIgnoreCollisionWithPlayer(true);
         for (Bomb bomb : bombs) {
             if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
                 return null;
             }
         }
         int index = bombs.size();
+        if (!gameEngine.multiplayer)
+            grid.add(b);
         bombs.add(b);
         return bombs.get(index);
     }
@@ -87,7 +90,7 @@ public class Level {
         }
         Image image = new ImageIcon(getClass().getResource("/Assets/bigBomb.png")).getImage();
         BigBomb b = new BigBomb(closest_x,closest_y,50,50,image,this);
-
+        b.setIgnoreCollisionWithPlayer(true);
         for (Bomb bomb : bombs) {
             if (bomb.collides_with_sprite(bomb.getX(),bomb.getY(),bomb.width,bomb.height,b)) {
                 return null;
@@ -96,8 +99,8 @@ public class Level {
         int index = bombs.size();
         bombs.add(b);
         return (BigBomb) bombs.get(index);
-
     }
+
 
 
     private void fileToLevel(String levelPath) throws IOException {
@@ -110,7 +113,7 @@ public class Level {
         bombs = new ArrayList<>();
         int y = 0;
         String line;
-        int id=0;
+        id=0;
         while ((line = br.readLine()) != null) {
             int x = 0;
             for (char blockType : line.toCharArray()) {
@@ -120,7 +123,7 @@ public class Level {
                     grid.add(new Wall(x * block_width, y * block_height, block_width, block_height,image));
                 } else if (blockType == '2') {
                     Image image = new ImageIcon(getClass().getResource("/Assets/box.png")).getImage();
-                    grid.add(new Box(x * block_width+3, y * block_height+3 , block_width-5, block_height-5, image,this,id));
+                    grid.add(new Box((int) (x * block_width+2.5), (int) (y * block_height+2.5), block_width-5, block_height-5, image,this,id));
                     id++;
                 } else if (blockType == '3') {
                     Image image = new ImageIcon(getClass().getResource("/Assets/monster.png")).getImage();
@@ -178,5 +181,13 @@ public class Level {
 
     public int getGameHeight() {
         return gameHeight;
+    }
+
+    public int getBlock_width() {
+        return block_width;
+    }
+
+    public ArrayList<Barricade> getBarricades() {
+        return barricades;
     }
 }

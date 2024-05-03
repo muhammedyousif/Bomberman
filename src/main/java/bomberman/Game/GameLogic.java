@@ -43,8 +43,10 @@ public class GameLogic {
             for (Bomberman bomberman : players) {
                 bomberman.render(g);
             }
-            for (Monster monster : getLevel().getMonsters()) {
-                monster.draw(g);
+            if (!gameEngine.multiplayer) {
+                for (Monster monster : getLevel().getMonsters()) {
+                    monster.draw(g);
+                }
             }
             for (PowerUp bomb : bombs) {
                 if (!bomb.isCollected()) {

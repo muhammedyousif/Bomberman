@@ -49,5 +49,11 @@ public class Sprite {
     public Image getImage() {
         return image;
     }
+    public boolean collides_with_sprite(int x1, int y1, int w1, int h1, Sprite sprite) {
+        Rectangle rect = new Rectangle(x1, y1, w1, h1);
+        Rectangle otherRect = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
+        return rect.intersects(otherRect);
+    }
+
 
 }

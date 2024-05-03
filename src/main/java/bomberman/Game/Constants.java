@@ -7,6 +7,7 @@ public class Constants {
     public static final int RUNNING_UP=0;
     public static final int RUNNING_DOWN=2;
     public static  final int DEAD=5;
+    public static final int BARRICADE=3;
     public static final int BIGBOMB=1;
     public static final int BOMB=0;
     public static final int  GAME_WIDTH=900;

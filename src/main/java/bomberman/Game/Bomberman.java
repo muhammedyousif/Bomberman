@@ -1,6 +1,5 @@
 package bomberman.Game;
 
-import bomberman.Packets.Packet02Move;
 import bomberman.Packets.Packet04Bomb;
 import bomberman.Packets.Packet05PlayerStatus;
 import bomberman.Sprite.*;
@@ -274,6 +273,28 @@ public class Bomberman extends Entity{
         Rectangle proposedRect = new Rectangle(x, y, width, height);
         for (Sprite sprite : level.grid) {
             Rectangle spriteRect = new Rectangle(sprite.getX(), sprite.getY(), sprite.width, sprite.height);
+            if (sprite instanceof Box){
+                spriteRect=new Rectangle(sprite.getHitbox().x,sprite.getHitbox().y,sprite.getHitbox().width,sprite.getHitbox().height);
+            } else if (sprite instanceof Barricade) {
+                if (((Barricade) sprite).isIgnoreCollisionWithPlayer()) {
+                    if (proposedRect.intersects(spriteRect)) {
+                        System.out.println("lalala");
+                        continue;
+                    } else {
+                        ((Barricade) sprite).setIgnoreCollisionWithPlayer(false);
+                    }
+                }
+
+            } else if (sprite instanceof Bomb && !GameEngine.gameEngine.multiplayer) {
+                if (((Bomb) sprite).isIgnoreCollisionWithPlayer()) {
+                    if (proposedRect.intersects(spriteRect)) {
+                        //System.out.println("lalala");
+                        continue;
+                    } else {
+                        ((Bomb) sprite).setIgnoreCollisionWithPlayer(false);
+                    }
+                }
+            }
             if (proposedRect.intersects(spriteRect)) {
                 return false;
             }

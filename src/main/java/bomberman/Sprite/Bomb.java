@@ -14,6 +14,7 @@ public class Bomb extends Sprite {
     private int timeLeft = 300;
     private int strength = 2;
     private Level level;
+    private boolean ignoreCollisionWithPlayer=true;
 
     public Bomb(int x, int y, int height, int width, Image image, Level level) {
         super(x - 42 / 2, y - 42 / 2, 42, 42, image);
@@ -62,6 +63,7 @@ public class Bomb extends Sprite {
         explodeInDirection(0, -1); // explode up
         explodeInDirection(0, 1);  // explode down
         level.bombs.remove(this);
+        level.grid.remove(this);
     }
 
     public void explodeInDirection(int dx, int dy) {
@@ -77,7 +79,7 @@ public class Bomb extends Sprite {
 
             } else {
                 Sprite hitSprite = level.grid.get(index);
-                if (hitSprite instanceof Box) {
+                if (hitSprite instanceof Box ) {
                     ((Box) hitSprite).blowUp();
                     level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));
                     //send packet
@@ -89,6 +91,18 @@ public class Bomb extends Sprite {
                     found = true;
                 } else if (hitSprite instanceof Wall) {
                     found = true;
+                } else if (hitSprite instanceof Barricade) {
+                    ((Barricade) hitSprite).blowUp();
+                    level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));
+                    //send packet FIX
+                    if (GameEngine.gameEngine.multiplayer){
+/*
+                        PlayerMP local = (PlayerMP) level.gameEngine.gameLogic.getLocal();
+                        Packet03Destroy packet= new Packet03Destroy(local.getUsername(),((Box) hitSprite).id);
+                        GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+*/
+                    }
+                    found=true;
                 }
             }
         }
@@ -111,5 +125,13 @@ public class Bomb extends Sprite {
             }
         }
     }
+    public void setIgnoreCollisionWithPlayer(boolean ignore) {
+        this.ignoreCollisionWithPlayer = ignore;
+    }
+
+    public boolean isIgnoreCollisionWithPlayer() {
+        return ignoreCollisionWithPlayer;
+    }
+
 
 }

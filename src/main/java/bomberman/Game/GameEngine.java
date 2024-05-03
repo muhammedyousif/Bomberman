@@ -3,8 +3,8 @@ package bomberman.Game;
 import bomberman.Network.GameClient;
 import bomberman.Network.GameServer;
 import bomberman.Packets.*;
+import bomberman.Sprite.Barricade;
 import bomberman.Sprite.Entity;
-import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
 import bomberman.UI.MenuGUI;
@@ -14,12 +14,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 
@@ -102,8 +98,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void drawBar(Graphics g) {
-        int barHeight = 80; // The height of the black bar
-        int screenWidth = getWidth(); // Assuming this is in a JPanel or similar
+        int barHeight = 80;
+        int screenWidth = getWidth();
         int screenHeight = getHeight();
         g.setColor(Color.BLACK);
         g.fillRect(0, screenHeight - barHeight, screenWidth, barHeight);
@@ -154,9 +150,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                     getPlayers().get(i).update();
                 }
             }
-            /*for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
-                gameLogic.getLevel().getMonsters().get(i).update();
-            }*/
+            if (!multiplayer) {
+                for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
+                    gameLogic.getLevel().getMonsters().get(i).update();
+                }
+            }
             gameLogic.getLevel().tickBombs();
             if (!gameLogic.getPlayers().isEmpty()) {
                 Bomberman player = gameLogic.getLocal();
@@ -165,7 +163,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                     menuGUI.updateBigBombCounter();
                 }
             }
-
             ArrayList<PowerUp> toRemove = new ArrayList<>();
             for (PowerUp bombs : gameLogic.bombs) {
                 if (bombs.isCollected()) {
