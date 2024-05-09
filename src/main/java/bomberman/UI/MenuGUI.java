@@ -127,7 +127,7 @@ public class MenuGUI implements StateMethods{
     public JLabel getStatusLabel() {
         return statusLabel;
     }
-
+    @Override
     public void update() {
     }
 
@@ -148,7 +148,7 @@ public class MenuGUI implements StateMethods{
     public void MousePressed(MouseEvent e) {
 
     }
-
+    @Override
     public void render(Graphics g) {
         g.drawString("MENU",920/2,200);
     }

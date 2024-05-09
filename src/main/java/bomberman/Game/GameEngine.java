@@ -95,8 +95,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
 
     }
-
+    @Override
     public void render(Graphics g) {
+        setFocusable(true);
+        requestFocus();
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
@@ -154,7 +156,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
         }
     }
-
+    @Override
     public void update() {
         switch (GameStates.state){
             case MENU:
@@ -170,7 +172,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void updateGame() {
-
         if (!paused || multiplayer){
             if (gameLogic.getLevel()!=null) {
                 synchronized (getPlayers()) {
@@ -291,7 +292,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), playerMP.hitbox.x, playerMP.hitbox.y, ((PlayerMP)playerMP).isLeft(), ((PlayerMP)playerMP).isRight(), ((PlayerMP)playerMP).isUp(), ((PlayerMP)playerMP).isDown());
             GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
         }
-
     }
 
     @Override

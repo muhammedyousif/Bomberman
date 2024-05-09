@@ -19,7 +19,6 @@ public class Keyboard implements KeyListener {
                 gameEngine.menuGUI.keyPressed(e);
                 break;
             case GAME:
-                System.out.println("jsja");
                 if (gameEngine.isPaused()) {
                     gameEngine.getPauseOverlay().keyPressed(e);
                 }
@@ -41,6 +40,8 @@ public class Keyboard implements KeyListener {
                 break;
             case GAME:
                 gameEngine.keyReleased(e);
+                break;
+            default:
                 break;
         }
     }
