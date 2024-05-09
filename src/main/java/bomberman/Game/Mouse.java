@@ -17,11 +17,20 @@ public class Mouse implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (gameEngine.isPaused()){
-            gameEngine.getPauseOverlay().MousePressed(e);
-        }
-        else {
-            gameEngine.MousePressed(e);
+        switch (GameState.state){
+            case MENU:
+                gameEngine.menuGUI.MousePressed(e);
+                break;
+            case GAME:
+                if (gameEngine.isPaused()){
+                    gameEngine.getPauseOverlay().MousePressed(e);
+                }
+                else {
+                    gameEngine.MousePressed(e);
+                }
+                break;
+            default:
+                break;
         }
     }
 

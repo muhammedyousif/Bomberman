@@ -20,7 +20,7 @@ public class MenuGUI implements StateMethods{
     private JLabel bigBombLabel;
     MainMenu mainMenu;
     public MenuGUI(){
-        mainMenu=new MainMenu();
+        mainMenu=new MainMenu(this);
         frame = new JFrame();
         switchToGameEngine();
     }
@@ -39,7 +39,7 @@ public class MenuGUI implements StateMethods{
         frame.getContentPane().add(GE);
         JPanel statusBar = new JPanel();
         statusBar.setBackground(Color.BLACK);
-        statusBar.setPreferredSize(new Dimension(920, 40));
+        statusBar.setPreferredSize(new Dimension(GAME_WIDTH, 45));
         //bomb
         ImageIcon bomb = new ImageIcon("src/main/resources/Assets/bomb.png");
         Image image = bomb.getImage(); // Convert the ImageIcon to an Image
@@ -80,7 +80,7 @@ public class MenuGUI implements StateMethods{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GE.setLayout(new BorderLayout());
         //frame.setPreferredSize(new Dimension(920,843));
-        frame.setPreferredSize(new Dimension(920, 800));
+        frame.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
 
         frame.setResizable(false);
         frame.pack();
@@ -137,8 +137,7 @@ public class MenuGUI implements StateMethods{
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode()==KeyEvent.VK_ENTER){
-            setStatusLabel();
-            GameState.state= GameState.GAME;
+            startGame();
         }
     }
 
@@ -149,6 +148,11 @@ public class MenuGUI implements StateMethods{
 
     @Override
     public void MousePressed(MouseEvent e) {
+        switch (Page.page){
+            case MAINMENU:
+                mainMenu.MousePressed(e);
+                break;
+        }
 
     }
     @Override
@@ -161,5 +165,9 @@ public class MenuGUI implements StateMethods{
                 mainMenu.render(g);
                 break;
         }
+    }
+    public void startGame(){
+        setStatusLabel();
+        GameState.state=GameState.GAME;
     }
 }

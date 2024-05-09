@@ -8,18 +8,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class MainMenu implements StateMethods {
+    MenuGUI menuGUI;
     MenuButton play,settings,quit,logo;
-    public MainMenu(){
+    public MainMenu(MenuGUI menuGUI){
+        this.menuGUI=menuGUI;
         initButtons();
     }
 
     private void initButtons() {
         logo=new MenuButton(10,0.3f, GameState.state,"Assets/logo.png");
+        play=new MenuButton(400,0.3f,GameState.state,"Assets/play.png");
     }
 
     @Override
     public void render(Graphics g) {
         logo.render(g);
+        play.render(g);
     }
 
     @Override
@@ -29,7 +33,6 @@ public class MainMenu implements StateMethods {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
     }
 
     @Override
@@ -39,6 +42,11 @@ public class MainMenu implements StateMethods {
 
     @Override
     public void MousePressed(MouseEvent e) {
-
+        if (isIn(e,play)){
+            menuGUI.startGame();
+        }
+    }
+    private boolean isIn(MouseEvent e, MenuButton b) {
+        return b.getBounds().contains(e.getX(), e.getY());
     }
 }
