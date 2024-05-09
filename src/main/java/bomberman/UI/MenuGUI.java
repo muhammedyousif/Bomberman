@@ -20,16 +20,9 @@ public class MenuGUI{
     public WindowHandler windowHandler;
     private JLabel statusLabel;
     private JLabel bigBombLabel;
-    private MainMenu mainMenu;
     public MenuGUI(){
-        mainMenu=new MainMenu();
-            EventQueue.invokeLater(() -> {
-                mainMenu.setSize(900, 800);
-                mainMenu.setVisible(true);
-
-            });
-        frame = new JFrame("Bomberman");
-        addMainMenuListeners();
+        frame = new JFrame();
+        switchToGameEngine();
     }
     private void setStatusLabel(){
         if (GE.multiplayer) {
@@ -78,13 +71,7 @@ public class MenuGUI{
         getmaniac();
 
     }
-    private void addMainMenuListeners() {
-        mainMenu.getPLAYButton().addActionListener(e -> switchToGameEngine());
-        mainMenu.getQUITButton().addActionListener(e -> System.exit(0));
-    }
-
     private void switchToGameEngine() {
-        mainMenu.setVisible(false);
         GE = new GameEngine(this);
         frame.add(GE);
         GE.setVisible(true);
@@ -143,5 +130,11 @@ public class MenuGUI{
 
     public JLabel getStatusLabel() {
         return statusLabel;
+    }
+
+    public void update() {
+    }
+
+    public void render(Graphics g) {
     }
 }

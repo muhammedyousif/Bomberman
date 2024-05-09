@@ -42,12 +42,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         this.menuGUI=menuGUI;
         setFocusable(true);
         startGameLoop();
-        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
+        /*int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
         if (multiplayerint==0)
             multiplayer=true;
         else {
             multiplayer=false;
-        }
+        }*/
         if (multiplayer) {
             startServer();
 
@@ -82,6 +82,19 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     @Override
     protected void paintComponent(Graphics g) {
+        switch (GameStates.state){
+            case MENU:
+                menuGUI.render(g);
+                break;
+            case GAME:
+                renderGame(g);
+                break;
+        }
+
+
+    }
+
+    private void renderGame(Graphics g) {
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
@@ -93,8 +106,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             g2d.dispose();
             pauseOverlay.draw(g);
         }
-        //drawBar(g);
-
     }
 
     private void drawBar(Graphics g) {
@@ -143,44 +154,55 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     private void update() {
-        if (!paused || multiplayer){
-        if (gameLogic.getLevel()!=null) {
-            synchronized (getPlayers()) {
-                for (int i = 0; i < getPlayers().size(); i++) {
-                    getPlayers().get(i).update();
-                }
-            }
-            if (!multiplayer) {
-                for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
-                    gameLogic.getLevel().getMonsters().get(i).update();
-                }
-            }
-            gameLogic.getLevel().tickBombs();
-            if (!gameLogic.getPlayers().isEmpty()) {
-                Bomberman player = gameLogic.getLocal();
-                if (!player.firstbomb) {
-                    menuGUI.updateBombCounter();
-                    menuGUI.updateBigBombCounter();
-                }
-            }
-            ArrayList<PowerUp> toRemove = new ArrayList<>();
-            for (PowerUp bombs : gameLogic.bombs) {
-                if (bombs.isCollected()) {
-                    toRemove.add(bombs);
-                } else {
-                    bombs.update();
-                }
-            }
-            gameLogic.bombs.removeAll(toRemove);
+        switch (GameStates.state){
+            case MENU:
+                menuGUI.update();
+                break;
+            case GAME:
+                updateGame();
+                break;
         }
+
+    }
+
+    private void updateGame() {
+
+        if (!paused || multiplayer){
+            if (gameLogic.getLevel()!=null) {
+                synchronized (getPlayers()) {
+                    for (int i = 0; i < getPlayers().size(); i++) {
+                        getPlayers().get(i).update();
+                    }
+                }
+                if (!multiplayer) {
+                    for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
+                        gameLogic.getLevel().getMonsters().get(i).update();
+                    }
+                }
+                gameLogic.getLevel().tickBombs();
+                if (!gameLogic.getPlayers().isEmpty()) {
+                    Bomberman player = gameLogic.getLocal();
+                    if (!player.firstbomb) {
+                        menuGUI.updateBombCounter();
+                        menuGUI.updateBigBombCounter();
+                    }
+                }
+                ArrayList<PowerUp> toRemove = new ArrayList<>();
+                for (PowerUp bombs : gameLogic.bombs) {
+                    if (bombs.isCollected()) {
+                        toRemove.add(bombs);
+                    } else {
+                        bombs.update();
+                    }
+                }
+                gameLogic.bombs.removeAll(toRemove);
+            }
         }
 
         if (paused||multiplayer) {
             if (pauseOverlay!=null)
                 pauseOverlay.update();
         }
-
-
     }
 
     private void startGameLoop(){
