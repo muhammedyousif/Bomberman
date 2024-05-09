@@ -8,6 +8,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+import static bomberman.Game.Constants.GAME_HEIGHT;
+import static bomberman.Game.Constants.GAME_WIDTH;
+
 
 public class MenuGUI implements StateMethods{
     public JFrame frame;
@@ -15,7 +18,9 @@ public class MenuGUI implements StateMethods{
     public WindowHandler windowHandler;
     private JLabel statusLabel;
     private JLabel bigBombLabel;
+    MainMenu mainMenu;
     public MenuGUI(){
+        mainMenu=new MainMenu();
         frame = new JFrame();
         switchToGameEngine();
     }
@@ -148,8 +153,12 @@ public class MenuGUI implements StateMethods{
     }
     @Override
     public void render(Graphics g) {
+        g.fillRect(0,0,GAME_WIDTH,GAME_HEIGHT);
+        g.setColor(Color.BLACK);
+
         switch (Page.page){
             case MAINMENU:
+                mainMenu.render(g);
                 break;
         }
     }

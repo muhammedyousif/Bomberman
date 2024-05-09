@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static bomberman.Game.Constants.GAME_HEIGHT;
+import static bomberman.Game.Constants.GAME_WIDTH;
+
 public class MenuButton {
     private int x,y;
     private GameState state;
@@ -15,17 +18,17 @@ public class MenuButton {
     private BufferedImage image;
     private float scale;
     public Rectangle bounds;
-    public MenuButton(int x, int y,float scale, GameState state,String location){
-        this.x=x;
-        this.y=y;
+    public MenuButton(int y,float scale, GameState state,String location){
         this.location=location;
+        this.y=y;
         this.scale=scale;
         loadImage();
+        x = GAME_WIDTH / 2 - (int)(image.getWidth() * scale / 2);
         initBounds();
     }
 
     private void initBounds() {
-        bounds = new Rectangle(x,y,((int)scale* image.getWidth()),(int)scale* image.getHeight());
+        bounds = new Rectangle(x, y, (int)(image.getWidth() * scale), (int)(image.getHeight() * scale));
     }
 
     private void loadImage(){
@@ -40,7 +43,7 @@ public class MenuButton {
 
     }
     public void render(Graphics g){
-        g.drawImage(image,x,y,((int)scale* image.getWidth()),(int)scale* image.getHeight(),null);
+        g.drawImage(image, x, y, (int)(image.getWidth() * scale), (int)(image.getHeight() * scale), null);
     }
 
 }
