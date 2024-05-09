@@ -14,7 +14,7 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (GameStates.state){
+        switch (GameState.state){
             case MENU:
                 gameEngine.menuGUI.keyPressed(e);
                 break;
@@ -34,7 +34,7 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        switch (GameStates.state){
+        switch (GameState.state){
             case MENU:
                 gameEngine.menuGUI.keyReleased(e);
                 break;

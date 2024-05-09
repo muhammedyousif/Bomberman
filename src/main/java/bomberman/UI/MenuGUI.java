@@ -1,8 +1,6 @@
 package bomberman.UI;
 
 import bomberman.Game.*;
-import bomberman.Network.GameClient;
-import bomberman.Network.GameServer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -135,7 +133,7 @@ public class MenuGUI implements StateMethods{
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode()==KeyEvent.VK_ENTER){
             setStatusLabel();
-            GameStates.state=GameStates.GAME;
+            GameState.state= GameState.GAME;
         }
     }
 
@@ -150,6 +148,9 @@ public class MenuGUI implements StateMethods{
     }
     @Override
     public void render(Graphics g) {
-        g.drawString("MENU",920/2,200);
+        switch (Page.page){
+            case MAINMENU:
+                break;
+        }
     }
 }

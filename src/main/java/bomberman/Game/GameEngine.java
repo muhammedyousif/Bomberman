@@ -3,7 +3,6 @@ package bomberman.Game;
 import bomberman.Network.GameClient;
 import bomberman.Network.GameServer;
 import bomberman.Packets.*;
-import bomberman.Sprite.Barricade;
 import bomberman.Sprite.Entity;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
@@ -82,7 +81,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     @Override
     protected void paintComponent(Graphics g) {
-        switch (GameStates.state){
+        switch (GameState.state){
             case MENU:
                 menuGUI.render(g);
                 break;
@@ -158,7 +157,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
     @Override
     public void update() {
-        switch (GameStates.state){
+        switch (GameState.state){
             case MENU:
                 menuGUI.update();
                 break;
