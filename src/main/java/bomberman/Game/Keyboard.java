@@ -14,16 +14,34 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (gameEngine.isPaused()) {
-            gameEngine.getPauseOverlay().keyPressed(e);
+        switch (GameStates.state){
+            case MENU:
+                gameEngine.menuGUI.keyPressed(e);
+                break;
+            case GAME:
+                System.out.println("jsja");
+                if (gameEngine.isPaused()) {
+                    gameEngine.getPauseOverlay().keyPressed(e);
+                }
+                else {
+                    gameEngine.keyPressed(e);
+                }
+                break;
+            default:
+                break;
         }
-        else {
-            gameEngine.keyPressed(e);
-        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        gameEngine.keyReleased(e);
+        switch (GameStates.state){
+            case MENU:
+                gameEngine.menuGUI.keyReleased(e);
+                break;
+            case GAME:
+                gameEngine.keyReleased(e);
+                break;
+        }
     }
 }

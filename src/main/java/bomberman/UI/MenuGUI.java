@@ -6,15 +6,12 @@ import bomberman.Network.GameServer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
 
-public class MenuGUI{
+public class MenuGUI implements StateMethods{
     public JFrame frame;
     public GameEngine GE;
     public WindowHandler windowHandler;
@@ -24,7 +21,7 @@ public class MenuGUI{
         frame = new JFrame();
         switchToGameEngine();
     }
-    private void setStatusLabel(){
+    public void setStatusLabel(){
         if (GE.multiplayer) {
             if (!GE.server) {
                 while (GE.gameLogic.getLocal() == null) {
@@ -71,7 +68,7 @@ public class MenuGUI{
         getmaniac();
 
     }
-    private void switchToGameEngine() {
+    public void switchToGameEngine() {
         GE = new GameEngine(this);
         frame.add(GE);
         GE.setVisible(true);
@@ -79,7 +76,6 @@ public class MenuGUI{
         frame.repaint();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GE.setLayout(new BorderLayout());
-        setStatusLabel();
         //frame.setPreferredSize(new Dimension(920,843));
         frame.setPreferredSize(new Dimension(920, 800));
 
@@ -135,6 +131,25 @@ public class MenuGUI{
     public void update() {
     }
 
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode()==KeyEvent.VK_ENTER){
+            setStatusLabel();
+            GameStates.state=GameStates.GAME;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void MousePressed(MouseEvent e) {
+
+    }
+
     public void render(Graphics g) {
+        g.drawString("MENU",920/2,200);
     }
 }

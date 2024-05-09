@@ -87,14 +87,16 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                 menuGUI.render(g);
                 break;
             case GAME:
-                renderGame(g);
+                render(g);
+                break;
+            default:
                 break;
         }
 
 
     }
 
-    private void renderGame(Graphics g) {
+    public void render(Graphics g) {
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
@@ -153,13 +155,15 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
     }
 
-    private void update() {
+    public void update() {
         switch (GameStates.state){
             case MENU:
                 menuGUI.update();
                 break;
             case GAME:
                 updateGame();
+                break;
+            default:
                 break;
         }
 
