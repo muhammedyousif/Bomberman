@@ -22,6 +22,8 @@ public class GameModeMenu implements StateMethods {
         gamemode=new MenuButton(0,50, 0.2f,GameState.state,"Assets/gamemodes.png");
         singleplayer=new MenuButton(70,400,0.17f,GameState.state,"Assets/singleplayer.png","Assets/singleplayerline.png");
         back=new MenuButton(GAME_WIDTH-150,70,0.15f,GameState.state,"Assets/back.png");
+        multiplayer=new MenuButton(GAME_WIDTH-70-300,400,0.17f,GameState.state,"Assets/multiplayer.png","Assets/multiplayerline.png");
+
     }
 
     @Override
@@ -29,11 +31,13 @@ public class GameModeMenu implements StateMethods {
         gamemode.render(g);
         singleplayer.render(g);
         back.render(g);
+        multiplayer.render(g);
     }
 
     @Override
     public void update() {
         singleplayer.update();
+        multiplayer.update();
     }
 
     @Override
@@ -61,10 +65,15 @@ public class GameModeMenu implements StateMethods {
         System.out.println("haha");
         if (isIn(e,singleplayer)){
             singleplayer.setMouseEntered(true);
-        }
-        else {
+        } else if (!isIn(e,singleplayer)) {
             singleplayer.setMouseEntered(false);
         }
+        if (isIn(e,multiplayer)){
+            multiplayer.setMouseEntered(true);
+        } else if (!isIn(e,multiplayer)) {
+            multiplayer.setMouseEntered(false);
+        }
+
     }
 
     @Override
