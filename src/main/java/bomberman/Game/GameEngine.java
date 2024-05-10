@@ -3,7 +3,6 @@ package bomberman.Game;
 import bomberman.Network.GameClient;
 import bomberman.Network.GameServer;
 import bomberman.Packets.*;
-import bomberman.Sprite.Barricade;
 import bomberman.Sprite.Entity;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.PowerUp;
@@ -35,6 +34,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     public boolean multiplayer;
     private boolean paused;
     private PauseOverlay pauseOverlay;
+    private Mouse mouse;
 
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
@@ -42,12 +42,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         this.menuGUI=menuGUI;
         setFocusable(true);
         startGameLoop();
-        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
+        /*int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
         if (multiplayerint==0)
             multiplayer=true;
         else {
             multiplayer=false;
-        }
+        }*/
         if (multiplayer) {
             startServer();
 
@@ -64,8 +64,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Bomberman man = new Bomberman(75, 75, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
+        mouse=new Mouse(this);
         addKeyListener(new Keyboard(this));
-        addMouseListener(new Mouse(this));
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
         pauseOverlay=new PauseOverlay(this);
         //socketClient.sendData("ping".getBytes());
     }
@@ -82,6 +84,23 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     @Override
     protected void paintComponent(Graphics g) {
+        switch (GameState.state){
+            case MENU:
+                menuGUI.render(g);
+                break;
+            case GAME:
+                render(g);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+    @Override
+    public void render(Graphics g) {
+        setFocusable(true);
+        requestFocus();
         super.paintComponent(g);
         g.drawImage(background, 0, 0, 896, 775, null);
         gameLogic.drawEverything(g);
@@ -93,8 +112,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             g2d.dispose();
             pauseOverlay.draw(g);
         }
-        //drawBar(g);
-
     }
 
     private void drawBar(Graphics g) {
@@ -141,46 +158,58 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             }
         }
     }
-
-    private void update() {
-        if (!paused || multiplayer){
-        if (gameLogic.getLevel()!=null) {
-            synchronized (getPlayers()) {
-                for (int i = 0; i < getPlayers().size(); i++) {
-                    getPlayers().get(i).update();
-                }
-            }
-            if (!multiplayer) {
-                for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
-                    gameLogic.getLevel().getMonsters().get(i).update();
-                }
-            }
-            gameLogic.getLevel().tickBombs();
-            if (!gameLogic.getPlayers().isEmpty()) {
-                Bomberman player = gameLogic.getLocal();
-                if (!player.firstbomb) {
-                    menuGUI.updateBombCounter();
-                    menuGUI.updateBigBombCounter();
-                }
-            }
-            ArrayList<PowerUp> toRemove = new ArrayList<>();
-            for (PowerUp bombs : gameLogic.bombs) {
-                if (bombs.isCollected()) {
-                    toRemove.add(bombs);
-                } else {
-                    bombs.update();
-                }
-            }
-            gameLogic.bombs.removeAll(toRemove);
+    @Override
+    public void update() {
+        switch (GameState.state){
+            case MENU:
+                menuGUI.update();
+                break;
+            case GAME:
+                updateGame();
+                break;
+            default:
+                break;
         }
+
+    }
+
+    private void updateGame() {
+        if (!paused || multiplayer){
+            if (gameLogic.getLevel()!=null) {
+                synchronized (getPlayers()) {
+                    for (int i = 0; i < getPlayers().size(); i++) {
+                        getPlayers().get(i).update();
+                    }
+                }
+                if (!multiplayer) {
+                    for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
+                        gameLogic.getLevel().getMonsters().get(i).update();
+                    }
+                }
+                gameLogic.getLevel().tickBombs();
+                if (!gameLogic.getPlayers().isEmpty()) {
+                    Bomberman player = gameLogic.getLocal();
+                    if (!player.firstbomb) {
+                        menuGUI.updateBombCounter();
+                        menuGUI.updateBigBombCounter();
+                    }
+                }
+                ArrayList<PowerUp> toRemove = new ArrayList<>();
+                for (PowerUp bombs : gameLogic.bombs) {
+                    if (bombs.isCollected()) {
+                        toRemove.add(bombs);
+                    } else {
+                        bombs.update();
+                    }
+                }
+                gameLogic.bombs.removeAll(toRemove);
+            }
         }
 
         if (paused||multiplayer) {
             if (pauseOverlay!=null)
                 pauseOverlay.update();
         }
-
-
     }
 
     private void startGameLoop(){
@@ -265,11 +294,20 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Packet02Move packet = new Packet02Move(((PlayerMP) playerMP).getUsername(), playerMP.hitbox.x, playerMP.hitbox.y, ((PlayerMP)playerMP).isLeft(), ((PlayerMP)playerMP).isRight(), ((PlayerMP)playerMP).isUp(), ((PlayerMP)playerMP).isDown());
             GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
         }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
 
     }
 
     @Override
-    public void MousePressed(MouseEvent e) {
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 

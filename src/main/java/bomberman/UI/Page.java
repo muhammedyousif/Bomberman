@@ -1,7 +1,10 @@
 package bomberman.UI;
 
-public enum Page {
-    MAINMENU,
-    CONNECT,
-    LOBBY
+import bomberman.Main;
+
+public  enum Page {
+    MAINMENU,GAMEMODE;
+    public static Page page= MAINMENU;
+
+
 }

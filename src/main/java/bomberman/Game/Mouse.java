@@ -1,11 +1,10 @@
 package bomberman.Game;
 
-import bomberman.UI.PauseOverlay;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class Mouse implements MouseListener {
+public class Mouse implements MouseListener, MouseMotionListener {
     GameEngine gameEngine;
     public Mouse(GameEngine gameEngine){
         this.gameEngine=gameEngine;
@@ -17,11 +16,20 @@ public class Mouse implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (gameEngine.isPaused()){
-            gameEngine.getPauseOverlay().MousePressed(e);
-        }
-        else {
-            gameEngine.MousePressed(e);
+        switch (GameState.state){
+            case MENU:
+                gameEngine.menuGUI.mousePressed(e);
+                break;
+            case GAME:
+                if (gameEngine.isPaused()){
+                    gameEngine.getPauseOverlay().MousePressed(e);
+                }
+                else {
+                    gameEngine.mousePressed(e);
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -32,11 +40,40 @@ public class Mouse implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        switch (GameState.state){
+            case MENU:
+                gameEngine.menuGUI.mouseExited(e);
+                break;
+            case GAME:
+                gameEngine.mouseExited(e);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        switch (GameState.state){
+            case MENU:
+                gameEngine.menuGUI.mouseMoved(e);
+                break;
+            case GAME:
+                gameEngine.mouseMoved(e);
+                break;
+            default:
+                break;
+        }
 
     }
 }

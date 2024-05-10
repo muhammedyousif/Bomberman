@@ -1,37 +1,33 @@
 package bomberman.UI;
 
 import bomberman.Game.*;
-import bomberman.Network.GameClient;
-import bomberman.Network.GameServer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+import static bomberman.Game.Constants.GAME_HEIGHT;
+import static bomberman.Game.Constants.GAME_WIDTH;
+import static bomberman.UI.Page.page;
 
-public class MenuGUI{
+
+public class MenuGUI implements StateMethods{
     public JFrame frame;
     public GameEngine GE;
     public WindowHandler windowHandler;
     private JLabel statusLabel;
     private JLabel bigBombLabel;
-    private MainMenu mainMenu;
+    MainMenu mainMenu;
+    GameModeMenu gameModeMenu;
     public MenuGUI(){
-        mainMenu=new MainMenu();
-            EventQueue.invokeLater(() -> {
-                mainMenu.setSize(900, 800);
-                mainMenu.setVisible(true);
-
-            });
-        frame = new JFrame("Bomberman");
-        addMainMenuListeners();
+        mainMenu=new MainMenu(this);
+        gameModeMenu=new GameModeMenu(this);
+        frame = new JFrame();
+        switchToGameEngine();
     }
-    private void setStatusLabel(){
+    public void setStatusLabel(){
         if (GE.multiplayer) {
             if (!GE.server) {
                 while (GE.gameLogic.getLocal() == null) {
@@ -46,7 +42,7 @@ public class MenuGUI{
         frame.getContentPane().add(GE);
         JPanel statusBar = new JPanel();
         statusBar.setBackground(Color.BLACK);
-        statusBar.setPreferredSize(new Dimension(920, 40));
+        statusBar.setPreferredSize(new Dimension(GAME_WIDTH, 45));
         //bomb
         ImageIcon bomb = new ImageIcon("src/main/resources/Assets/bomb.png");
         Image image = bomb.getImage(); // Convert the ImageIcon to an Image
@@ -78,13 +74,7 @@ public class MenuGUI{
         getmaniac();
 
     }
-    private void addMainMenuListeners() {
-        mainMenu.getPLAYButton().addActionListener(e -> switchToGameEngine());
-        mainMenu.getQUITButton().addActionListener(e -> System.exit(0));
-    }
-
-    private void switchToGameEngine() {
-        mainMenu.setVisible(false);
+    public void switchToGameEngine() {
         GE = new GameEngine(this);
         frame.add(GE);
         GE.setVisible(true);
@@ -92,9 +82,8 @@ public class MenuGUI{
         frame.repaint();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GE.setLayout(new BorderLayout());
-        setStatusLabel();
         //frame.setPreferredSize(new Dimension(920,843));
-        frame.setPreferredSize(new Dimension(920, 800));
+        frame.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
 
         frame.setResizable(false);
         frame.pack();
@@ -143,5 +132,97 @@ public class MenuGUI{
 
     public JLabel getStatusLabel() {
         return statusLabel;
+    }
+    @Override
+    public void update() {
+        switch (page){
+            case MAINMENU:
+                mainMenu.update();
+                break;
+            case GAMEMODE:
+                gameModeMenu.update();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode()==KeyEvent.VK_ENTER){
+            startGame();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        switch (page){
+            case MAINMENU:
+                mainMenu.mousePressed(e);
+                break;
+            case GAMEMODE:
+                gameModeMenu.mousePressed(e);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        switch (page){
+            case MAINMENU:
+                mainMenu.mouseMoved(e);
+                break;
+            case GAMEMODE:
+                gameModeMenu.mouseMoved(e);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        switch (page){
+            case MAINMENU:
+                break;
+            case GAMEMODE:
+                //gameModeMenu.mouseExited(e);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
+    @Override
+    public void render(Graphics g) {
+        g.fillRect(0,0,GAME_WIDTH,GAME_HEIGHT);
+        g.setColor(Color.BLACK);
+
+        switch (page){
+            case MAINMENU:
+                mainMenu.render(g);
+                break;
+            case GAMEMODE:
+                gameModeMenu.render(g);
+                break;
+            default:
+                break;
+
+        }
+    }
+    public void startGame(){
+        setStatusLabel();
+        GameState.state=GameState.GAME;
     }
 }

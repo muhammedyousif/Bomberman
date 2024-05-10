@@ -68,4 +68,5 @@ class BombermanTest {
         assertTrue(monster.collides_player(bomberman), "Monster should collide with Bomberman");
     }
 
+
 }

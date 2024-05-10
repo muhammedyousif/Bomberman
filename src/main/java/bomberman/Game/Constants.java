@@ -11,7 +11,7 @@ public class Constants {
     public static final int BIGBOMB=1;
     public static final int BOMB=0;
     public static final int  GAME_WIDTH=900;
-    public static final int GAME_HEIGHT=800;
+    public static final int GAME_HEIGHT=790;
 
 
     public static int getSprite(int player_action){
