@@ -22,8 +22,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
-import static bomberman.Game.Constants.GAME_HEIGHT;
-import static bomberman.Game.Constants.GAME_WIDTH;
+import static bomberman.Game.Constants.*;
 
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
@@ -74,7 +73,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             login.writeData(socketClient);
         }
         else {
-            Bomberman man = new Bomberman(75, 75, 40, 50, username, gameLogic.getLevel());
+            Bomberman man = new Bomberman(SPAWN1, SPAWN1, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
         mouse=new Mouse(this);
@@ -115,7 +114,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         setFocusable(true);
         requestFocus();
         super.paintComponent(g);
-        g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+        g.drawImage(background, 0, -64, GAME_WIDTH, GAME_HEIGHT, null);
         gameLogic.drawEverything(g);
         if (paused) {
             Graphics2D g2d = (Graphics2D) g.create();

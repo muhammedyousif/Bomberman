@@ -113,8 +113,8 @@ public class Level {
         bombs = new ArrayList<>();
         int y = 0;
         int diff=0;
-        int xoffset=60;
-        int yoffset=120;
+        int xoffset=58;
+        int yoffset=120-60-block_height*2;
         String line;
         id=0;
         while ((line = br.readLine()) != null) {
@@ -171,6 +171,8 @@ public class Level {
             if (!(grid.get(i)instanceof Wall)) {
                 grid.get(i).draw(g);
             }
+            //grid.get(i).draw(g);
+
 
         }
         for(int i = 0; i < bombs.size(); i++){
