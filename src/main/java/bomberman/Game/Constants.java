@@ -10,7 +10,7 @@ public class Constants {
     public static final int BARRICADE=3;
     public static final int BIGBOMB=1;
     public static final int BOMB=0;
-    public static final int  GAME_WIDTH=900;
+    public static final int  GAME_WIDTH=1033;
     public static final int GAME_HEIGHT=790;
 
 

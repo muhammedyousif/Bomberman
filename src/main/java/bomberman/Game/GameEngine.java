@@ -13,14 +13,22 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
+import static bomberman.Game.Constants.GAME_HEIGHT;
+import static bomberman.Game.Constants.GAME_WIDTH;
+
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
-    private Image background = new ImageIcon("src/main/resources/Assets/mapbackground.png").getImage();
+    private InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream("Assets/backgroundgreen.png");
+    private BufferedImage background;
     MenuGUI menuGUI;
     public GameLogic gameLogic;
     private int FPS_SET=120;
@@ -38,6 +46,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
+        try {
+            background= ImageIO.read(backgroundlink);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         gameLogic = new GameLogic(this);
         this.menuGUI=menuGUI;
         setFocusable(true);
@@ -102,7 +115,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         setFocusable(true);
         requestFocus();
         super.paintComponent(g);
-        g.drawImage(background, 0, 0, 896, 775, null);
+        g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
         gameLogic.drawEverything(g);
         if (paused) {
             Graphics2D g2d = (Graphics2D) g.create();
