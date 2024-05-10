@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import static bomberman.Game.Constants.GAME_HEIGHT;
 import static bomberman.Game.Constants.GAME_WIDTH;
+import static bomberman.UI.Page.page;
 
 
 public class MenuGUI implements StateMethods{
@@ -19,8 +20,10 @@ public class MenuGUI implements StateMethods{
     private JLabel statusLabel;
     private JLabel bigBombLabel;
     MainMenu mainMenu;
+    GameModeMenu gameModeMenu;
     public MenuGUI(){
         mainMenu=new MainMenu(this);
+        gameModeMenu=new GameModeMenu(this);
         frame = new JFrame();
         switchToGameEngine();
     }
@@ -132,6 +135,17 @@ public class MenuGUI implements StateMethods{
     }
     @Override
     public void update() {
+        switch (page){
+            case MAINMENU:
+                mainMenu.update();
+                break;
+            case GAMEMODE:
+                gameModeMenu.update();
+                break;
+            default:
+                break;
+        }
+
     }
 
     @Override
@@ -147,23 +161,64 @@ public class MenuGUI implements StateMethods{
     }
 
     @Override
-    public void MousePressed(MouseEvent e) {
-        switch (Page.page){
+    public void mousePressed(MouseEvent e) {
+        switch (page){
             case MAINMENU:
-                mainMenu.MousePressed(e);
+                mainMenu.mousePressed(e);
+                break;
+            case GAMEMODE:
+                gameModeMenu.mousePressed(e);
+                break;
+            default:
                 break;
         }
 
     }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        switch (page){
+            case MAINMENU:
+                mainMenu.mouseMoved(e);
+                break;
+            case GAMEMODE:
+                gameModeMenu.mouseMoved(e);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        switch (page){
+            case MAINMENU:
+                break;
+            case GAMEMODE:
+                //gameModeMenu.mouseExited(e);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
     @Override
     public void render(Graphics g) {
         g.fillRect(0,0,GAME_WIDTH,GAME_HEIGHT);
         g.setColor(Color.BLACK);
 
-        switch (Page.page){
+        switch (page){
             case MAINMENU:
                 mainMenu.render(g);
                 break;
+            case GAMEMODE:
+                gameModeMenu.render(g);
+                break;
+            default:
+                break;
+
         }
     }
     public void startGame(){

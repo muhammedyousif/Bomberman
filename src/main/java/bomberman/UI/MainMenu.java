@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import static bomberman.UI.Page.GAMEMODE;
+import static bomberman.UI.Page.page;
+
 public class MainMenu implements StateMethods {
     MenuGUI menuGUI;
     MenuButton play,settings,quit,logo;
@@ -41,11 +44,22 @@ public class MainMenu implements StateMethods {
     }
 
     @Override
-    public void MousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         if (isIn(e,play)){
-            menuGUI.startGame();
+            page=GAMEMODE;
         }
     }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
     private boolean isIn(MouseEvent e, MenuButton b) {
         return b.getBounds().contains(e.getX(), e.getY());
     }

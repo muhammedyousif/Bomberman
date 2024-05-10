@@ -34,6 +34,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     public boolean multiplayer;
     private boolean paused;
     private PauseOverlay pauseOverlay;
+    private Mouse mouse;
 
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
@@ -63,8 +64,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Bomberman man = new Bomberman(75, 75, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
+        mouse=new Mouse(this);
         addKeyListener(new Keyboard(this));
-        addMouseListener(new Mouse(this));
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
         pauseOverlay=new PauseOverlay(this);
         //socketClient.sendData("ping".getBytes());
     }
@@ -294,7 +297,17 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     @Override
-    public void MousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 
