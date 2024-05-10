@@ -51,8 +51,8 @@ public class Level {
     }
 
     public Bomb placeBomb(int x, int y){
-        int closest_x = 30;
-        int closest_y = 30;
+        int closest_x = block_width/2;
+        int closest_y = block_height/2;
         float distance = 500;
         for (ArrayList<Integer> tuple : snap_positions) {
             float currentDistance = distance(tuple.get(0), tuple.get(1), x, y);
@@ -113,7 +113,7 @@ public class Level {
         bombs = new ArrayList<>();
         int y = 0;
         int diff=0;
-        int xoffset=58;
+        int xoffset=58+1;
         int yoffset=120-60-block_height*2;
         String line;
         id=0;
@@ -172,8 +172,6 @@ public class Level {
                 grid.get(i).draw(g);
             }
             //grid.get(i).draw(g);
-
-
         }
         for(int i = 0; i < bombs.size(); i++){
             bombs.get(i).draw(g);
@@ -193,6 +191,10 @@ public class Level {
 
     public int getBlock_width() {
         return block_width;
+    }
+
+    public int getBlock_height() {
+        return block_height;
     }
 
     public ArrayList<Barricade> getBarricades() {
