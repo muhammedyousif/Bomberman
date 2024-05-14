@@ -4,12 +4,14 @@ import bomberman.Game.Bomberman;
 import bomberman.Game.GameEngine;
 import bomberman.Packets.*;
 import bomberman.Sprite.Box;
+import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.Sprite;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 import static bomberman.Game.Constants.*;
@@ -18,6 +20,7 @@ public class GameClient extends Thread{
     private InetAddress ipAddress;
     private DatagramSocket socket;
     private GameEngine gameEngine;
+    private Bomberman player;
     public GameClient(GameEngine gameEngine,String ipAddress){
         this.gameEngine=gameEngine;
         try {
@@ -29,6 +32,7 @@ public class GameClient extends Thread{
         catch (UnknownHostException e){
             e.printStackTrace();
         }
+        player = GameEngine.gameEngine.gameLogic.getLocal();
     }
     public void run(){
         while (true){
@@ -79,6 +83,10 @@ public class GameClient extends Thread{
                 p=new Packet05PlayerStatus(data);
                 handleStatus((Packet05PlayerStatus) p);
                 break;
+            case MONSTER:
+                p= new Packer07Monster((data));
+                handleMonster((Packer07Monster)p);
+                break;
             case RESET:
                 p=new Packet06Restart(data);
                 handleRestart((Packet06Restart) p);
@@ -86,6 +94,21 @@ public class GameClient extends Thread{
 
         }
     }
+
+    private void handleMonster(Packer07Monster p) {
+            List<Monster> monsterList= player.getLevel().getMonsters();
+            for (Monster monster : monsterList ){
+                if (monster.getId()==p.getMonsterId()) {
+                    //monster.x = p.getX();
+                    monster.hitbox.x = p.getX();
+                    //monster.y = p.getY();
+                    monster.hitbox.y = p.getY();
+                    monster.setAlive(p.isAlive());
+                }
+            }
+
+    }
+
     private void handleRestart(Packet06Restart p) {
         if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())){
             Bomberman player= gameEngine.gameLogic.getLocal();

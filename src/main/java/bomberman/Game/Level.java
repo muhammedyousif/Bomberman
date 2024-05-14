@@ -21,6 +21,7 @@ public class Level {
     private int gameWidth=900;
     private int gameHeight=800;
     private int id=0;
+    private int monsterId=0;
 
     public Level(String levelPath,GameEngine gameEngine) throws IOException {
         explosions = new ArrayList<Explosion>();
@@ -130,7 +131,8 @@ public class Level {
                     id++;
                 } else if (blockType == '3') {
                     Image image = new ImageIcon(getClass().getResource("/Assets/monster.png")).getImage();
-                    Monster monster = new Monster((x * block_width)+xoffset, (y * block_height)+yoffset, block_width, block_height);
+                    Monster monster = new Monster((x * block_width)+xoffset, (y * block_height)+yoffset, block_width, block_height,monsterId);
+                    monsterId++;
                     monster.setLevel(this);
                     //grid.add(monster);
                     //grid.add(null);
