@@ -333,7 +333,7 @@ public class Bomberman extends Entity{
         player_action=IDLE;
         died=false;
         x=SPAWN1;
-        y=SPAWN1;
+        y=SPAWN1Y;
         hitbox.x=x;
         hitbox.y=y;
         bombCounter=defaultBombCount;

@@ -24,7 +24,7 @@ public class MenuGUI implements StateMethods{
     public MenuGUI(){
         mainMenu=new MainMenu(this);
         gameModeMenu=new GameModeMenu(this);
-        frame = new JFrame();
+        frame = new JFrame("Bomberman");
         switchToGameEngine();
     }
     public void setStatusLabel(){

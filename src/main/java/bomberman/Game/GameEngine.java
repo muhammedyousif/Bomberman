@@ -73,7 +73,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             login.writeData(socketClient);
         }
         else {
-            Bomberman man = new Bomberman(SPAWN1, SPAWN1, 40, 50, username, gameLogic.getLevel());
+            Bomberman man = new Bomberman(SPAWN1, SPAWN1Y, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
         mouse=new Mouse(this);
