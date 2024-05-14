@@ -193,9 +193,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
                         getPlayers().get(i).update();
                     }
                 }
-                if (!multiplayer) {
-                    for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
-                        gameLogic.getLevel().getMonsters().get(i).update();
+
+                for (int i = 0; i < gameLogic.getLevel().getMonsters().size(); i++) {
+                    gameLogic.getLevel().getMonsters().get(i).update();
+                    if (multiplayer){
+
                     }
                 }
                 gameLogic.getLevel().tickBombs();

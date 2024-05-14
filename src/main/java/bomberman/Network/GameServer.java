@@ -3,6 +3,7 @@ package bomberman.Network;
 import bomberman.Game.GameEngine;
 import bomberman.Packets.*;
 import bomberman.Sprite.Box;
+import bomberman.Sprite.Monster;
 import bomberman.Sprite.PlayerMP;
 import bomberman.Sprite.Sprite;
 
@@ -84,10 +85,31 @@ public class GameServer extends Thread{
                 p=new Packet05PlayerStatus(data);
                 handleStatus((Packet05PlayerStatus) p);
                 break;
+            case MONSTER:
+                p=new Packer07Monster(data);
+                handleMonster((Packer07Monster) p);
+                break;
             case RESET:
                 p=new Packet06Restart(data);
                 handleRestart((Packet06Restart)p);
                 break;
+        }
+    }
+
+    private void handleMonster(Packer07Monster p) {
+        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())) {
+            for (PlayerMP player: connectedPlayers){
+                List<Monster> monsterList= player.getLevel().getMonsters();
+                for (Monster monster : monsterList ){
+                    if (monster.getId()==p.getMonsterId()) {
+                        monster.x = p.getX();
+                        monster.hitbox.x = p.getX();
+                        monster.y = p.getY();
+                        monster.hitbox.y = p.getY();
+                        monster.setAlive(p.isAlive());
+                    }
+                }
+            }
         }
     }
 
