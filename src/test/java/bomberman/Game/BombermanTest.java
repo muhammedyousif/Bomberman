@@ -58,7 +58,7 @@ class BombermanTest {
     }
     @Test
     void DiesFromMonster(){
-        monster=new Monster(75,75,60,60);
+        monster=new Monster(75,75,60,60,1);
         bomberman.x=75;
         bomberman.y=75;
         mockLevel.getMonsters().add(monster);

@@ -25,13 +25,14 @@ public class Monster extends Entity {
     private int aniSpeed=90; //minel kisebb a szam annal gyorsabb az animacio
     private int aniIndex;
     private boolean alive=true;
+    private int id;
 
-
-    public Monster(int x,int y,int width, int height){
+    public Monster(int x,int y,int width, int height,int id){
         super(x,y,width,height);
         this.speed = 1;
         this.random = new Random();
         this.headed = Headed.values()[random.nextInt(Headed.values().length)];
+        this.id=id;
         loadAnimations();
         initHitbox(x,y,55,50);
     }
@@ -279,5 +280,17 @@ public class Monster extends Entity {
 
     public void reset() {
 
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }
