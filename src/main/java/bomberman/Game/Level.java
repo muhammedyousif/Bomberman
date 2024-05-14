@@ -16,8 +16,8 @@ public class Level {
     private ArrayList<Monster> monsters;
     private ArrayList<ArrayList<Integer>> snap_positions = new ArrayList<>();
     private ArrayList<Barricade> barricades;
-    private final int block_width = 60;
-    private final int block_height = 60;
+    private final int block_width = 61;
+    private final int block_height = 61;
     private int gameWidth=900;
     private int gameHeight=800;
     private int id=0;
@@ -51,8 +51,8 @@ public class Level {
     }
 
     public Bomb placeBomb(int x, int y){
-        int closest_x = 30;
-        int closest_y = 30;
+        int closest_x = block_width/2;
+        int closest_y = block_height/2;
         float distance = 500;
         for (ArrayList<Integer> tuple : snap_positions) {
             float currentDistance = distance(tuple.get(0), tuple.get(1), x, y);
@@ -112,6 +112,9 @@ public class Level {
         BufferedReader br = new BufferedReader(new InputStreamReader(ist));
         bombs = new ArrayList<>();
         int y = 0;
+        int diff=0;
+        int xoffset=58+1;
+        int yoffset=120-60-block_height*2;
         String line;
         id=0;
         while ((line = br.readLine()) != null) {
@@ -120,14 +123,14 @@ public class Level {
 
                 if (blockType == '1') {
                     Image image = new ImageIcon(getClass().getResource("/Assets/wall.png")).getImage();
-                    grid.add(new Wall(x * block_width, y * block_height, block_width, block_height,image));
+                    grid.add(new Wall((x * block_width)+xoffset, (y * block_height)+yoffset, block_width, block_height,image));
                 } else if (blockType == '2') {
                     Image image = new ImageIcon(getClass().getResource("/Assets/box.png")).getImage();
-                    grid.add(new Box((int) (x * block_width+2.5), (int) (y * block_height+2.5), block_width-5, block_height-5, image,this,id));
+                    grid.add(new Box((int) (x * block_width+2.5)+xoffset, (int) (y * block_height+2.5)+yoffset, block_width-5, block_height-5, image,this,id));
                     id++;
                 } else if (blockType == '3') {
                     Image image = new ImageIcon(getClass().getResource("/Assets/monster.png")).getImage();
-                    Monster monster = new Monster(x * block_width, y * block_height, block_width, block_height);
+                    Monster monster = new Monster((x * block_width)+xoffset, (y * block_height)+yoffset, block_width, block_height);
                     monster.setLevel(this);
                     //grid.add(monster);
                     //grid.add(null);
@@ -165,7 +168,10 @@ public class Level {
 
     public void draw(Graphics g) {
         for (int i = 0; i <grid.size(); i++) {
-            grid.get(i).draw(g);
+            if (!(grid.get(i)instanceof Wall)) {
+                grid.get(i).draw(g);
+            }
+            //grid.get(i).draw(g);
         }
         for(int i = 0; i < bombs.size(); i++){
             bombs.get(i).draw(g);
@@ -185,6 +191,10 @@ public class Level {
 
     public int getBlock_width() {
         return block_width;
+    }
+
+    public int getBlock_height() {
+        return block_height;
     }
 
     public ArrayList<Barricade> getBarricades() {

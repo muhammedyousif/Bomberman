@@ -57,11 +57,11 @@ public class Bomb extends Sprite {
     }
 
     public void blowUp() {
-        level.explosions.add(new Explosion(x, y, level)); // Center explosion
-        explodeInDirection(-1, 0); // explode left
-        explodeInDirection(1, 0);  // explode right
-        explodeInDirection(0, -1); // explode up
-        explodeInDirection(0, 1);  // explode down
+        level.explosions.add(new Explosion(x, y, level));
+        explodeInDirection(-1, 0);
+        explodeInDirection(1, 0);
+        explodeInDirection(0, -1);
+        explodeInDirection(0, 1);
         level.bombs.remove(this);
         level.grid.remove(this);
     }
@@ -70,7 +70,7 @@ public class Bomb extends Sprite {
         boolean found = false;
         for (int idx = 1; idx <= this.strength && !found; idx++) {
             int pos_to_check_x = this.x + (60 * idx * dx);
-            int pos_to_check_y = this.y + (60 * idx * dy);
+            int pos_to_check_y = this.y + (level.getBlock_height() * idx * dy);
             int index = checkCollisionsLevel(pos_to_check_x, pos_to_check_y);
             if (index == -1) {
                 level.explosions.add(new Explosion(pos_to_check_x, pos_to_check_y, level));

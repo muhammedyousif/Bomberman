@@ -332,8 +332,8 @@ public class Bomberman extends Entity{
         alive=true;
         player_action=IDLE;
         died=false;
-        x=75;
-        y=75;
+        x=SPAWN1;
+        y=SPAWN1Y;
         hitbox.x=x;
         hitbox.y=y;
         bombCounter=defaultBombCount;

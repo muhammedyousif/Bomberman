@@ -30,6 +30,7 @@ public class Sprite {
 
     public void draw(Graphics g) {
         g.drawImage(image, x, y, width, height, null);
+        //drawHitbox(g);
     }
 
     public int getX() {
