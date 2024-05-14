@@ -162,9 +162,11 @@ public class Monster extends Entity {
         else{
             chooseHeaded(canMove);
         }
-        if (GameEngine.gameEngine.multiplayer) {
-            Packer07Monster packet = new Packer07Monster(GameEngine.gameEngine.getUsername(), id, hitbox.x, hitbox.y, alive);
-            GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+        if (GameEngine.gameEngine!=null) {
+            if (GameEngine.gameEngine.multiplayer) {
+                Packer07Monster packet = new Packer07Monster(GameEngine.gameEngine.getUsername(), id, hitbox.x, hitbox.y, alive);
+                GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+            }
         }
 
         moveBuffer = 3;
