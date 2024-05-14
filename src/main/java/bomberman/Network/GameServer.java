@@ -97,20 +97,19 @@ public class GameServer extends Thread{
     }
 
     private void handleMonster(Packer07Monster p) {
-        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())) {
             for (PlayerMP player: connectedPlayers){
                 List<Monster> monsterList= player.getLevel().getMonsters();
                 for (Monster monster : monsterList ){
                     if (monster.getId()==p.getMonsterId()) {
-                        monster.x = p.getX();
+                        //monster.x = p.getX();
                         monster.hitbox.x = p.getX();
-                        monster.y = p.getY();
+                        //monster.y = p.getY();
                         monster.hitbox.y = p.getY();
                         monster.setAlive(p.isAlive());
                     }
                 }
             }
-        }
+
     }
 
     private void handleRestart(Packet06Restart p) {
