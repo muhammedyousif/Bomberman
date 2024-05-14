@@ -62,7 +62,6 @@ public class GameModeMenu implements StateMethods {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.println("haha");
         if (isIn(e,singleplayer)){
             singleplayer.setMouseEntered(true);
         } else if (!isIn(e,singleplayer)) {

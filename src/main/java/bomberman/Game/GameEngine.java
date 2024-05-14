@@ -54,17 +54,17 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         this.menuGUI=menuGUI;
         setFocusable(true);
         startGameLoop();
-        /*int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
+        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
         if (multiplayerint==0)
             multiplayer=true;
         else {
             multiplayer=false;
-        }*/
+        }
         if (multiplayer) {
             startServer();
 
             username = JOptionPane.showInputDialog("Username:");
-            PlayerMP playerMP = new PlayerMP(80, 80, 40, 50, username, gameLogic.getLevel(), null, -1);
+            PlayerMP playerMP = new PlayerMP(SPAWN1, SPAWN1Y, 40, 50, username, gameLogic.getLevel(), null, -1);
             gameLogic.getPlayers().add(playerMP);
             Packet00Login login = new Packet00Login(playerMP.getUsername(), playerMP.x, playerMP.y);
             if (socketServer != null) {
