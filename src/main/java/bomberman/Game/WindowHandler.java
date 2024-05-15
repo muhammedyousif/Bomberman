@@ -24,8 +24,6 @@ public class WindowHandler implements WindowListener {
         if (GameEngine.gameEngine.multiplayer) {
             Packet01Disconnect packet = new Packet01Disconnect(menuGUI.GE.getUsername());
             packet.writeData(menuGUI.GE.getSocketClient());
-            //GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
-
         }
     }
 

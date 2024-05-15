@@ -3,6 +3,7 @@ package bomberman.UI;
 import bomberman.Game.Bomberman;
 import bomberman.Game.GameEngine;
 import bomberman.Game.Keyboard;
+import bomberman.Packets.Packet01Disconnect;
 import bomberman.Packets.Packet02Move;
 import bomberman.Packets.Packet06Restart;
 import bomberman.Sprite.Entity;
@@ -90,6 +91,10 @@ public class PauseOverlay {
                 gameEngine.restartGame();
             }
         } else if (isIn(e,quit)) {
+            if (GameEngine.gameEngine.multiplayer) {
+                Packet01Disconnect packet = new Packet01Disconnect(GameEngine.gameEngine.getUsername());
+                packet.writeData(GameEngine.gameEngine.getSocketClient());
+            }
             System.exit(0);
         }
     }
