@@ -21,10 +21,13 @@ public class MenuGUI implements StateMethods{
     private JLabel bigBombLabel;
     MainMenu mainMenu;
     GameModeMenu gameModeMenu;
+    MultiplayerMenu multiplayer;
     public MenuGUI(){
         mainMenu=new MainMenu(this);
         gameModeMenu=new GameModeMenu(this);
+        multiplayer=new MultiplayerMenu(this);
         frame = new JFrame("Bomberman");
+        windowHandler=new WindowHandler(this);
         switchToGameEngine();
     }
     public void setStatusLabel(){
@@ -142,6 +145,8 @@ public class MenuGUI implements StateMethods{
             case GAMEMODE:
                 gameModeMenu.update();
                 break;
+            case MULTIPLAYER:
+                multiplayer.update();
             default:
                 break;
         }
@@ -169,6 +174,9 @@ public class MenuGUI implements StateMethods{
             case GAMEMODE:
                 gameModeMenu.mousePressed(e);
                 break;
+            case MULTIPLAYER:
+                multiplayer.mousePressed(e);
+                break;
             default:
                 break;
         }
@@ -183,6 +191,9 @@ public class MenuGUI implements StateMethods{
                 break;
             case GAMEMODE:
                 gameModeMenu.mouseMoved(e);
+                break;
+            case MULTIPLAYER:
+                multiplayer.mouseMoved(e);
                 break;
             default:
                 break;
@@ -216,13 +227,16 @@ public class MenuGUI implements StateMethods{
             case GAMEMODE:
                 gameModeMenu.render(g);
                 break;
+            case MULTIPLAYER:
+                multiplayer.render(g);
+                break;
             default:
                 break;
 
         }
     }
     public void startGame(){
-        setStatusLabel();
         GameState.state=GameState.GAME;
+        setStatusLabel();
     }
 }

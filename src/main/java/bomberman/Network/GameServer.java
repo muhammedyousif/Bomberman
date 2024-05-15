@@ -56,7 +56,7 @@ public class GameServer extends Thread{
                 break;
             case LOGIN:
                 p = new Packet00Login(data);
-                System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ((Packet00Login) p).getUsername() + "has connected");
+                System.out.println("["+address.getHostAddress()+":"+ port+"] "+ ((Packet00Login) p).getUsername() + " has connected");
                 PlayerMP player = new PlayerMP(70,70,40,50, ((Packet00Login) p).getUsername(),gameEngine.gameLogic.getLevel(),address,port);
                 this.addConnection(player,(Packet00Login) p);
                 //connectedPlayers.add(player);
@@ -109,7 +109,6 @@ public class GameServer extends Thread{
                     }
                 }
             }
-
     }
 
     private void handleRestart(Packet06Restart p) {

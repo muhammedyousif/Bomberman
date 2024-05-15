@@ -38,7 +38,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private GameServer socketServer;
     private String username;
     public boolean server=false;
-    public boolean multiplayer;
+    public boolean multiplayer,serverhost;
     private boolean paused;
     private PauseOverlay pauseOverlay;
     private Mouse mouse;
@@ -54,7 +54,16 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         this.menuGUI=menuGUI;
         setFocusable(true);
         startGameLoop();
-        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
+        //int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
+        mouse=new Mouse(this);
+        addKeyListener(new Keyboard(this));
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
+        pauseOverlay=new PauseOverlay(this);
+        //socketClient.sendData("ping".getBytes());
+    }
+
+    public void multiplayerSetup(int multiplayerint,String username) {
         if (multiplayerint==0)
             multiplayer=true;
         else {
@@ -62,8 +71,8 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
         if (multiplayer) {
             startServer();
-
-            username = JOptionPane.showInputDialog("Username:");
+            this.username=username;
+            //username = JOptionPane.showInputDialog("Username:");
             PlayerMP playerMP = new PlayerMP(SPAWN1, SPAWN1Y, 40, 50, username, gameLogic.getLevel(), null, -1);
             gameLogic.getPlayers().add(playerMP);
             Packet00Login login = new Packet00Login(playerMP.getUsername(), playerMP.x, playerMP.y);
@@ -76,16 +85,10 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Bomberman man = new Bomberman(SPAWN1, SPAWN1Y, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
-        mouse=new Mouse(this);
-        addKeyListener(new Keyboard(this));
-        addMouseListener(mouse);
-        addMouseMotionListener(mouse);
-        pauseOverlay=new PauseOverlay(this);
-        //socketClient.sendData("ping".getBytes());
     }
 
     private synchronized void startServer() {
-        if (JOptionPane.showConfirmDialog(this,"Do you want to start the server?")==0){
+        if (serverhost){
             socketServer=new GameServer(this);
             socketServer.start();
             server=true;

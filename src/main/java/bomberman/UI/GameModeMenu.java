@@ -1,5 +1,6 @@
 package bomberman.UI;
 
+import bomberman.Game.GameEngine;
 import bomberman.Game.GameState;
 import bomberman.Game.StateMethods;
 
@@ -53,10 +54,14 @@ public class GameModeMenu implements StateMethods {
     @Override
     public void mousePressed(MouseEvent e) {
         if (isIn(e,singleplayer)){
+            GameEngine.gameEngine.multiplayerSetup(1,"");
             menuGUI.startGame();
         }
         if (isIn(e,back)){
             page=MAINMENU;
+        }
+        if (isIn(e,multiplayer)){
+            page=MULTIPLAYER;
         }
     }
 
