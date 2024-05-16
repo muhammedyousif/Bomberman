@@ -1,5 +1,6 @@
 package bomberman.UI;
 
+import bomberman.Game.GameEngine;
 import bomberman.Game.GameState;
 import bomberman.Game.StateMethods;
 
@@ -81,12 +82,26 @@ public class MapSelector implements StateMethods {
         if (isIn(e,cont)){
             switch (currentMapIndex){
                 case PINK:
-                    menuGUI.GE.setBackgroundimg(PINKLOC);
-                    menuGUI.startGame();
+                    menuGUI.GE.setBackgroundimg(PINK);
+                    if (GameEngine.gameEngine.multiplayer){
+                        GameEngine.gameEngine.serverhost=true;
+                        GameEngine.gameEngine.multiplayerSetup(0,"dick",PINK);
+                        menuGUI.startGame(PINK);
+                    }
+                    else {
+                        menuGUI.startGame(PINK);
+                    }
                     break;
                 case GREEN:
-                    menuGUI.GE.setBackgroundimg(GREENLOC);
-                    menuGUI.startGame();
+                    menuGUI.GE.setBackgroundimg(GREEN);
+                    if (GameEngine.gameEngine.multiplayer){
+                        GameEngine.gameEngine.serverhost=true;
+                        GameEngine.gameEngine.multiplayerSetup(0,"dick",GREEN);
+                        menuGUI.startGame(GREEN);
+                    }
+                    else {
+                        menuGUI.startGame(GREEN);
+                    }
                     break;
                 default:
                     break;

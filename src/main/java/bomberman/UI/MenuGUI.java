@@ -8,8 +8,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-import static bomberman.Game.Constants.GAME_HEIGHT;
-import static bomberman.Game.Constants.GAME_WIDTH;
+import static bomberman.Game.Constants.*;
 import static bomberman.UI.Page.page;
 
 
@@ -160,7 +159,7 @@ public class MenuGUI implements StateMethods{
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode()==KeyEvent.VK_ENTER){
-            startGame();
+            startGame(GREEN);
         }
     }
 
@@ -245,9 +244,16 @@ public class MenuGUI implements StateMethods{
 
         }
     }
-    public void startGame(){
-        GameEngine.gameEngine.multiplayerSetup(1,"");
+    public void startGame(int map){
+        GameEngine.gameEngine.multiplayerSetup(1,"",map);
         GameState.state=GameState.GAME;
         setStatusLabel();
+    }
+
+    public void joinGame() {
+        GameEngine.gameEngine.multiplayerSetup(1,"",-1);
+        GameState.state=GameState.GAME;
+        setStatusLabel();
+
     }
 }

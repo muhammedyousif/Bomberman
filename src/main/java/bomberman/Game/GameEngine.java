@@ -11,7 +11,6 @@ import bomberman.UI.PauseOverlay;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -57,7 +56,18 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         //socketClient.sendData("ping".getBytes());
     }
 
-    public void setBackgroundimg(String location) {
+    public void setBackgroundimg(int map) {
+        String location="";
+        switch (map){
+            case GREEN:
+                location=GREENLOC;
+                break;
+            case PINK:
+                location=PINKLOC;
+                break;
+            default:
+                break;
+        }
         try {
             InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream(location);
             background= ImageIO.read(backgroundlink);
@@ -66,14 +76,14 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
     }
 
-    public void multiplayerSetup(int multiplayerint,String username) {
+    public void multiplayerSetup(int multiplayerint,String username,int map) {
         if (multiplayerint==0)
             multiplayer=true;
         else {
             multiplayer=false;
         }
         if (multiplayer) {
-            startServer();
+            startServer(map);
             this.username=username;
             //username = JOptionPane.showInputDialog("Username:");
             PlayerMP playerMP = new PlayerMP(SPAWN1, SPAWN1Y, 40, 50, username, gameLogic.getLevel(), null, -1);
@@ -90,9 +100,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
     }
 
-    private synchronized void startServer() {
+    private synchronized void startServer(int map) {
         if (serverhost){
-            socketServer=new GameServer(this);
+            socketServer=new GameServer(this,map);
             socketServer.start();
             server=true;
         }

@@ -9,8 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import static bomberman.Game.Constants.GAME_WIDTH;
-import static bomberman.UI.Page.GAMEMODE;
-import static bomberman.UI.Page.page;
+import static bomberman.UI.Page.*;
 
 public class MultiplayerMenu implements StateMethods {
     private MenuGUI menuGUI;
@@ -59,14 +58,18 @@ public class MultiplayerMenu implements StateMethods {
             page=GAMEMODE;
         }
         if (isIn(e,start)){
+            page=MAP;
+
+/*
             GameEngine.gameEngine.serverhost=true;
             GameEngine.gameEngine.multiplayerSetup(0,"dick");
             menuGUI.startGame();
+*/
         }
         if (isIn(e,join)){
             GameEngine.gameEngine.serverhost=false;
-            GameEngine.gameEngine.multiplayerSetup(0,"rider");
-            menuGUI.startGame();
+            GameEngine.gameEngine.multiplayerSetup(0,"rider",-1);
+            menuGUI.joinGame();
         }
     }
 
