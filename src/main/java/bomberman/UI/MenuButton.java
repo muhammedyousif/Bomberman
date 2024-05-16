@@ -22,7 +22,9 @@ public class MenuButton {
     private BufferedImage torender;
     private float scale;
     public Rectangle bounds;
+    private boolean border=false;
     private boolean mouseEntered,mouseExited;
+    private boolean arrow=false;
 
     public MenuButton(int y,float scale, GameState state,String location){
         this.location=location;
@@ -72,7 +74,7 @@ public class MenuButton {
         }
     }
     public void update(){
-        if (image2!=null){
+        if (image2!=null && !arrow){
             if (mouseEntered){
                 torender=image2;
             }
@@ -80,13 +82,56 @@ public class MenuButton {
                 torender=image;
             }
         }
+        if (arrow){
+            if (mouseEntered){
+                bigArrow();
+            }
+            else {
+                smallArrow(0.2f);
+            }
+        }
     }
     public void render(Graphics g){
-        g.drawImage(torender, x, y, (int)(torender.getWidth() * scale), (int)(torender.getHeight() * scale), null);
+        Graphics2D g2d = (Graphics2D) g;
+
+        Stroke originalStroke = g2d.getStroke();
+        g.drawImage(torender, x, y, (int) (torender.getWidth() * scale), (int) (torender.getHeight() * scale), null);
+
+
+        if (border) {
+            drawBorder(g2d, originalStroke);
+        }
+    }
+
+    private void drawBorder(Graphics2D g2d, Stroke originalStroke) {
+        g2d.setColor(Color.WHITE);
+
+
+        float outlineWidth = 2f; // Adjust outline width as needed
+        Stroke outlineStroke = new BasicStroke(outlineWidth);
+
+        g2d.setStroke(outlineStroke);
+
+        g2d.drawRect(x - (int) outlineWidth, y - (int) outlineWidth,
+                (int) (torender.getWidth() * scale) + 2 * (int) outlineWidth,
+                (int) (torender.getHeight() * scale) + 2 * (int) outlineWidth);
+
+        g2d.setStroke(originalStroke);
+    }
+    public void bigArrow(){
+        setScale(0.22f);
+        setY(GAME_HEIGHT / 2 - (int)(getImage().getHeight() * getScale() / 2)+1);
+
+    }
+    public void smallArrow(float defaultscale){
+        setScale(defaultscale);
+        setY(GAME_HEIGHT / 2 - (int)(getImage().getHeight() * getScale() / 2)+1);
+
     }
     public int getX() {
         return x;
     }
+
 
     public int getY() {
         return y;
@@ -102,6 +147,10 @@ public class MenuButton {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public void setBorder(boolean border) {
+        this.border = border;
     }
 
     public float getScale() {
@@ -122,6 +171,30 @@ public class MenuButton {
 
     public boolean isMouseExited() {
         return mouseExited;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public boolean isArrow() {
+        return arrow;
+    }
+
+    public void setArrow(boolean arrow) {
+        this.arrow = arrow;
     }
 
     public void setMouseExited(boolean mouseExited) {

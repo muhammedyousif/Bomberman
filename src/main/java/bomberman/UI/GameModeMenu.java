@@ -54,8 +54,9 @@ public class GameModeMenu implements StateMethods {
     @Override
     public void mousePressed(MouseEvent e) {
         if (isIn(e,singleplayer)){
-            GameEngine.gameEngine.multiplayerSetup(1,"");
-            menuGUI.startGame();
+            //
+            //menuGUI.startGame();
+            page=MAP;
         }
         if (isIn(e,back)){
             page=MAINMENU;

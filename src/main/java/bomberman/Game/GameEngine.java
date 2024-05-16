@@ -26,7 +26,6 @@ import static bomberman.Game.Constants.*;
 
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
-    private InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream("Assets/backgroundpink.png");
     private BufferedImage background;
     MenuGUI menuGUI;
     public GameLogic gameLogic;
@@ -45,11 +44,6 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
-        try {
-            background= ImageIO.read(backgroundlink);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         gameLogic = new GameLogic(this);
         this.menuGUI=menuGUI;
         setFocusable(true);
@@ -61,6 +55,15 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         addMouseMotionListener(mouse);
         pauseOverlay=new PauseOverlay(this);
         //socketClient.sendData("ping".getBytes());
+    }
+
+    public void setBackgroundimg(String location) {
+        try {
+            InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream(location);
+            background= ImageIO.read(backgroundlink);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void multiplayerSetup(int multiplayerint,String username) {
