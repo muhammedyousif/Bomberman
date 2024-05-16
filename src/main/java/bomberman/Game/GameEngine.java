@@ -26,7 +26,7 @@ import static bomberman.Game.Constants.*;
 
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
-    private InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream("Assets/backgroundgreen.png");
+    private InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream("Assets/backgroundpink.png");
     private BufferedImage background;
     MenuGUI menuGUI;
     public GameLogic gameLogic;
@@ -312,6 +312,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
         }
     }
+
 
     @Override
     public void mousePressed(MouseEvent e) {

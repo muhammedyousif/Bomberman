@@ -1,25 +1,27 @@
 package bomberman.Game;
 import bomberman.Sprite.*;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class GameLogic {
     private Bomberman Local;
     private Level level;
+    private ArrayList<Level>levels;
     private ArrayList<Bomberman> players;
     private GameMode gamemode;
     public GameEngine gameEngine;
     public ArrayList<PowerUp> bombs;
     private boolean firstmove=false;
     public GameLogic(GameEngine gameEngine){
-        try{
-            this.level = new Level("Assets/level1.txt",gameEngine);
-        }catch(Exception e){
-            System.out.println(e);
-        }
+        levels=new ArrayList<>();
+        loadLevels(gameEngine);
+        level=levels.get(0);
         this.gameEngine=gameEngine;
         this.players = new ArrayList<>();
         bombs=new ArrayList<>();
@@ -27,6 +29,47 @@ public class GameLogic {
         //players.add(new PlayerMP(70,70,40,50,"Muhammed",level));
     }
 
+    private void loadLevels(GameEngine gameEngine) {
+        InputStream inputStream = getClass().getResourceAsStream("/Assets/greenlevel");
+        if (inputStream == null) {
+            System.err.println("Resource directory not found: /Assets/greenlevel");
+            return;
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        ArrayList<String> fileNames = new ArrayList<>();
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                fileNames.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (String fileName : fileNames) {
+            System.out.println(fileName);
+            String fileStream = ("Assets/greenlevel/" + fileName);
+            System.out.println(fileStream.toString());
+            if (fileStream != null) {
+                try {
+                    Level tmp = new Level(fileStream, gameEngine);
+                    levels.add(tmp);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                System.out.printf("lmao");
+            }
+        }
+    }
 
 
     public boolean spritesCollides(Sprite sprite1, Sprite sprite2) {
@@ -119,11 +162,7 @@ public class GameLogic {
     }
 
     public void reset() {
-        try{
-            this.level = new Level("Assets/level1.txt",gameEngine);
-        }catch(Exception e){
-            System.out.println(e);
-        }
+        loadLevels(gameEngine);
         bombs=new ArrayList<>();
         if (!gameEngine.multiplayer){
             getPlayers().get(0).setLevel(level);
