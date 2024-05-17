@@ -7,6 +7,7 @@ import bomberman.Game.StateMethods;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static bomberman.Game.Constants.*;
@@ -71,7 +72,7 @@ public class MapSelector implements StateMethods {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) throws IOException {
         if (isIn(e, srarrow)) {
             currentMapIndex = (currentMapIndex + 1) % maps.size();
         }
@@ -85,7 +86,7 @@ public class MapSelector implements StateMethods {
                     menuGUI.GE.setBackgroundimg(PINK);
                     if (GameEngine.gameEngine.multiplayer){
                         GameEngine.gameEngine.serverhost=true;
-                        GameEngine.gameEngine.multiplayerSetup(0,"dick",PINK);
+                        GameEngine.gameEngine.multiplayerSetup(0,"mu",PINK);
                         menuGUI.startGame(PINK);
                     }
                     else {
@@ -96,7 +97,7 @@ public class MapSelector implements StateMethods {
                     menuGUI.GE.setBackgroundimg(GREEN);
                     if (GameEngine.gameEngine.multiplayer){
                         GameEngine.gameEngine.serverhost=true;
-                        GameEngine.gameEngine.multiplayerSetup(0,"dick",GREEN);
+                        GameEngine.gameEngine.multiplayerSetup(0,"as",GREEN);
                         menuGUI.startGame(GREEN);
                     }
                     else {

@@ -10,7 +10,7 @@ public interface StateMethods {
     public void update();
     public void keyPressed(KeyEvent e) throws IOException;
     public void keyReleased(KeyEvent e);
-    public void mousePressed(MouseEvent e);
+    public void mousePressed(MouseEvent e) throws IOException;
     public void mouseMoved(MouseEvent e);
     public void mouseExited(MouseEvent e);
 }

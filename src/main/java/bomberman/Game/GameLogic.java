@@ -9,6 +9,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static bomberman.Game.Constants.SPAWN1;
+import static bomberman.Game.Constants.SPAWN1Y;
+
 public class GameLogic {
     private Bomberman Local;
     private Level level;
@@ -21,7 +24,7 @@ public class GameLogic {
     public GameLogic(GameEngine gameEngine) throws IOException {
         levels=new ArrayList<>();
         loadLevels(gameEngine);
-        level=levels.get(3);
+        level=levels.get(0);
         this.gameEngine=gameEngine;
         this.players = new ArrayList<>();
         bombs=new ArrayList<>();
@@ -195,6 +198,10 @@ public class GameLogic {
         level=new Level(path,gameEngine);
         bombs=new ArrayList<>();
         if (!gameEngine.multiplayer){
+            if (getPlayers().isEmpty()){
+                Bomberman man = new Bomberman(SPAWN1, SPAWN1Y, 40, 50, GameEngine.gameEngine.getUsername(),getLevel());
+                getPlayers().add(man);
+            }
             getPlayers().get(0).setLevel(level);
             getPlayers().get(0).reset();
         }

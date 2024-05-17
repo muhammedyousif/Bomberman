@@ -19,7 +19,11 @@ public class Mouse implements MouseListener, MouseMotionListener {
     public void mousePressed(MouseEvent e) {
         switch (GameState.state){
             case MENU:
-                gameEngine.menuGUI.mousePressed(e);
+                try {
+                    gameEngine.menuGUI.mousePressed(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case GAME:
                 if (gameEngine.isPaused()){

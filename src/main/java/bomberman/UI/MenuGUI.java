@@ -157,7 +157,7 @@ public class MenuGUI implements StateMethods{
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) throws IOException {
         if (e.getKeyCode()==KeyEvent.VK_ENTER){
             startGame(GREEN);
         }
@@ -169,7 +169,7 @@ public class MenuGUI implements StateMethods{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) throws IOException {
         switch (page){
             case MAINMENU:
                 mainMenu.mousePressed(e);
@@ -244,9 +244,18 @@ public class MenuGUI implements StateMethods{
 
         }
     }
-    public void startGame(int map){
-        if (!GE.multiplayer)
-            GameEngine.gameEngine.multiplayerSetup(1,"dada",map);
+    public void startGame(int map) throws IOException {
+        if (!GE.multiplayer) {
+            GameEngine.gameEngine.multiplayerSetup(1, "lala", map);
+            if (GameEngine.gameEngine.isPaused()) {
+                GameEngine.gameEngine.gameLogic.getPlayers().clear();
+                GE.remove(statusLabel);
+                GE.revalidate();
+                GE.repaint();
+                GameEngine.gameEngine.restartGame();
+                GameEngine.gameEngine.setPaused(false);
+            }
+        }
         GameState.state=GameState.GAME;
         setStatusLabel();
     }

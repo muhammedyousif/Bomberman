@@ -17,7 +17,11 @@ public class Keyboard implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (GameState.state){
             case MENU:
-                gameEngine.menuGUI.keyPressed(e);
+                try {
+                    gameEngine.menuGUI.keyPressed(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case GAME:
                 if (gameEngine.isPaused()) {
