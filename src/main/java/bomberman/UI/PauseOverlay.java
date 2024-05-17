@@ -2,7 +2,9 @@ package bomberman.UI;
 
 import bomberman.Game.Bomberman;
 import bomberman.Game.GameEngine;
+import bomberman.Game.GameState;
 import bomberman.Game.Keyboard;
+import bomberman.Packets.Packet01Disconnect;
 import bomberman.Packets.Packet02Move;
 import bomberman.Packets.Packet06Restart;
 import bomberman.Sprite.Entity;
@@ -44,11 +46,12 @@ public class PauseOverlay {
         int resumeY=270;
         int restartY=resumeY+space;
         int menuY=restartY+space;
-        int quitY=menuY;
+        int quitY=menuY+space;
         resume=new ActionButtons(0,resumeY,0,0,"Assets/resume.png",0.3f);
         restart=new ActionButtons(0,restartY,0,0,"Assets/restart.png",0.29f);
         //menu=new ActionButtons(x,menuY,actionW,actionH);
         quit=new ActionButtons(0,quitY,0,0,"Assets/quitdesktop.png",0.3f);
+        menu=new ActionButtons(0,menuY,0,0,"Assets/quitmenu.png",0.3f);
     }
 
     private void LoadImg(){
@@ -69,6 +72,7 @@ public class PauseOverlay {
         resume.draw(g);
         restart.draw(g);
         quit.draw(g);
+        menu.draw(g);
     }
     public void keyPressed(KeyEvent e){
         switch (e.getKeyCode()){
@@ -77,7 +81,7 @@ public class PauseOverlay {
                 break;
         }
     }
-    public void MousePressed(MouseEvent e){
+    public void MousePressed(MouseEvent e) throws IOException {
         if (isIn(e,resume)){
             pause=false;
         } else if (isIn(e,restart)) {
@@ -90,7 +94,19 @@ public class PauseOverlay {
                 gameEngine.restartGame();
             }
         } else if (isIn(e,quit)) {
+            if (GameEngine.gameEngine.multiplayer) {
+                Packet01Disconnect packet = new Packet01Disconnect(GameEngine.gameEngine.getUsername());
+                packet.writeData(GameEngine.gameEngine.getSocketClient());
+            }
             System.exit(0);
+        }
+        if (isIn(e,menu)){
+            if (GameEngine.gameEngine.multiplayer) {
+                Packet01Disconnect packet = new Packet01Disconnect(GameEngine.gameEngine.getUsername());
+                packet.writeData(GameEngine.gameEngine.getSocketClient());
+            }
+            GameState.state=GameState.MENU;
+            Page.page=Page.MAINMENU;
         }
     }
 

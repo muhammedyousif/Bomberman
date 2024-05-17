@@ -2,6 +2,7 @@ package bomberman.Game;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 public class Keyboard implements KeyListener {
     GameEngine gameEngine;
@@ -16,14 +17,22 @@ public class Keyboard implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (GameState.state){
             case MENU:
-                gameEngine.menuGUI.keyPressed(e);
+                try {
+                    gameEngine.menuGUI.keyPressed(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case GAME:
                 if (gameEngine.isPaused()) {
                     gameEngine.getPauseOverlay().keyPressed(e);
                 }
                 else {
-                    gameEngine.keyPressed(e);
+                    try {
+                        gameEngine.keyPressed(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
                 break;
             default:

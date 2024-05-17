@@ -21,6 +21,7 @@ public class GameClient extends Thread{
     private DatagramSocket socket;
     private GameEngine gameEngine;
     private Bomberman player;
+    private boolean recieved=false;
     public GameClient(GameEngine gameEngine,String ipAddress){
         this.gameEngine=gameEngine;
         try {
@@ -44,12 +45,16 @@ public class GameClient extends Thread{
                 throw new RuntimeException(e);
             }
             //System.out.println("server >" + new String( packet.getData()));
-            parsePacket(packet.getData(),packet.getAddress(),packet.getPort());
+            try {
+                parsePacket(packet.getData(),packet.getAddress(),packet.getPort());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         }
     }
 
-    private void parsePacket(byte[] data, InetAddress address, int port) {
+    private void parsePacket(byte[] data, InetAddress address, int port) throws IOException {
         Packet p=null;
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookUpPacket(message.substring(0,2));
@@ -91,6 +96,13 @@ public class GameClient extends Thread{
                 p=new Packet06Restart(data);
                 handleRestart((Packet06Restart) p);
                 break;
+            case MAP:
+                if (!recieved) {
+                    p = new Packet08Map(data);
+                    recieved=true;
+                    gameEngine.setBackgroundimg(((Packet08Map) p).getMap());
+                }
+                break;
 
         }
     }
@@ -109,13 +121,12 @@ public class GameClient extends Thread{
 
     }
 
-    private void handleRestart(Packet06Restart p) {
-        if (!Objects.equals(p.getUsername(), GameEngine.gameEngine.gameLogic.getLocal().getUsername())){
+    private void handleRestart(Packet06Restart p) throws IOException {
             Bomberman player= gameEngine.gameLogic.getLocal();
             player.getLevel().gameEngine.restartGame();
             player.reset();
             gameEngine.gameLogic.reset();
-        }
+
     }
 
 

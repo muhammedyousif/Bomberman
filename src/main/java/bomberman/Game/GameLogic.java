@@ -1,25 +1,30 @@
 package bomberman.Game;
 import bomberman.Sprite.*;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
+
+import static bomberman.Game.Constants.SPAWN1;
+import static bomberman.Game.Constants.SPAWN1Y;
 
 public class GameLogic {
     private Bomberman Local;
     private Level level;
+    private ArrayList<Level>levels;
     private ArrayList<Bomberman> players;
     private GameMode gamemode;
     public GameEngine gameEngine;
     public ArrayList<PowerUp> bombs;
     private boolean firstmove=false;
-    public GameLogic(GameEngine gameEngine){
-        try{
-            this.level = new Level("Assets/level1.txt",gameEngine);
-        }catch(Exception e){
-            System.out.println(e);
-        }
+    public GameLogic(GameEngine gameEngine) throws IOException {
+        levels=new ArrayList<>();
+        loadLevels(gameEngine);
+        level=levels.get(0);
         this.gameEngine=gameEngine;
         this.players = new ArrayList<>();
         bombs=new ArrayList<>();
@@ -27,6 +32,75 @@ public class GameLogic {
         //players.add(new PlayerMP(70,70,40,50,"Muhammed",level));
     }
 
+    private void loadLevels(GameEngine gameEngine) throws IOException {
+        InputStream inputStream = getClass().getResourceAsStream("/Assets/greenlevel");
+        InputStream inputStream2 = getClass().getResourceAsStream("/Assets/pinklevel");
+
+        if (inputStream == null) {
+            System.err.println("Resource directory not found: /Assets/greenlevel");
+            return;
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader reader2 = new BufferedReader(new InputStreamReader(inputStream2));
+
+        ArrayList<String> fileNames = new ArrayList<>();
+        String line;
+        ArrayList<String> fileNamesp = new ArrayList<>();
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                fileNames.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            while ((line = reader2.readLine()) != null) {
+                fileNamesp.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        for (String fileName : fileNames) {
+            System.out.println(fileName);
+            String fileStream = ("Assets/greenlevel/" + fileName);
+            System.out.println(fileStream.toString());
+            if (fileStream != null) {
+                try {
+                    Level tmp = new Level(fileStream, gameEngine);
+                    levels.add(tmp);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        for (String fileName : fileNamesp) {
+            System.out.println(fileName);
+            String fileStream = ("Assets/pinklevel/" + fileName);
+            System.out.println(fileStream.toString());
+            if (fileStream != null) {
+                try {
+                    Level tmp = new Level(fileStream, gameEngine);
+                    levels.add(tmp);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 
 
     public boolean spritesCollides(Sprite sprite1, Sprite sprite2) {
@@ -118,14 +192,16 @@ public class GameLogic {
         players.get(index).setRight(right);
     }
 
-    public void reset() {
-        try{
-            this.level = new Level("Assets/level1.txt",gameEngine);
-        }catch(Exception e){
-            System.out.println(e);
-        }
+    public void reset() throws IOException {
+        //level.reset();
+        String path=level.levelpath;
+        level=new Level(path,gameEngine);
         bombs=new ArrayList<>();
         if (!gameEngine.multiplayer){
+            if (getPlayers().isEmpty()){
+                Bomberman man = new Bomberman(SPAWN1, SPAWN1Y, 40, 50, GameEngine.gameEngine.getUsername(),getLevel());
+                getPlayers().add(man);
+            }
             getPlayers().get(0).setLevel(level);
             getPlayers().get(0).reset();
         }
@@ -136,6 +212,18 @@ public class GameLogic {
             }
         }
 
+    }
+
+    public ArrayList<Level> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(ArrayList<Level> levels) {
+        this.levels = levels;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
     }
 }
 

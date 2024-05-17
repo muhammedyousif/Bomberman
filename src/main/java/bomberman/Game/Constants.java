@@ -14,7 +14,10 @@ public class Constants {
     public static final int GAME_HEIGHT=790;
     public static final int SPAWN1=GAME_WIDTH/2;
     public static final int SPAWN1Y=30;
-
+    public static final int PINK=1;
+    public static final int GREEN=0;
+    public static final String GREENLOC="Assets/backgroundgreen.png";
+    public static final String PINKLOC="Assets/backgroundpink.png";
 
     public static int getSprite(int player_action){
         switch (player_action){

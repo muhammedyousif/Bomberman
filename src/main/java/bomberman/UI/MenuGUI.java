@@ -8,8 +8,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-import static bomberman.Game.Constants.GAME_HEIGHT;
-import static bomberman.Game.Constants.GAME_WIDTH;
+import static bomberman.Game.Constants.*;
 import static bomberman.UI.Page.page;
 
 
@@ -21,10 +20,15 @@ public class MenuGUI implements StateMethods{
     private JLabel bigBombLabel;
     MainMenu mainMenu;
     GameModeMenu gameModeMenu;
-    public MenuGUI(){
+    MultiplayerMenu multiplayer;
+    MapSelector mapSelector;
+    public MenuGUI() throws IOException {
         mainMenu=new MainMenu(this);
         gameModeMenu=new GameModeMenu(this);
+        multiplayer=new MultiplayerMenu(this);
         frame = new JFrame("Bomberman");
+        windowHandler=new WindowHandler(this);
+        mapSelector=new MapSelector(this);
         switchToGameEngine();
     }
     public void setStatusLabel(){
@@ -74,7 +78,7 @@ public class MenuGUI implements StateMethods{
         getmaniac();
 
     }
-    public void switchToGameEngine() {
+    public void switchToGameEngine() throws IOException {
         GE = new GameEngine(this);
         frame.add(GE);
         GE.setVisible(true);
@@ -142,6 +146,10 @@ public class MenuGUI implements StateMethods{
             case GAMEMODE:
                 gameModeMenu.update();
                 break;
+            case MULTIPLAYER:
+                multiplayer.update();
+            case MAP:
+                mapSelector.update();
             default:
                 break;
         }
@@ -149,9 +157,9 @@ public class MenuGUI implements StateMethods{
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) throws IOException {
         if (e.getKeyCode()==KeyEvent.VK_ENTER){
-            startGame();
+            startGame(GREEN);
         }
     }
 
@@ -161,7 +169,7 @@ public class MenuGUI implements StateMethods{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) throws IOException {
         switch (page){
             case MAINMENU:
                 mainMenu.mousePressed(e);
@@ -169,6 +177,11 @@ public class MenuGUI implements StateMethods{
             case GAMEMODE:
                 gameModeMenu.mousePressed(e);
                 break;
+            case MULTIPLAYER:
+                multiplayer.mousePressed(e);
+                break;
+            case MAP:
+                mapSelector.mousePressed(e);
             default:
                 break;
         }
@@ -184,6 +197,11 @@ public class MenuGUI implements StateMethods{
             case GAMEMODE:
                 gameModeMenu.mouseMoved(e);
                 break;
+            case MULTIPLAYER:
+                multiplayer.mouseMoved(e);
+                break;
+            case MAP:
+                mapSelector.mouseMoved(e);
             default:
                 break;
         }
@@ -216,13 +234,36 @@ public class MenuGUI implements StateMethods{
             case GAMEMODE:
                 gameModeMenu.render(g);
                 break;
+            case MULTIPLAYER:
+                multiplayer.render(g);
+                break;
+            case MAP:
+                mapSelector.render(g);
             default:
                 break;
 
         }
     }
-    public void startGame(){
-        setStatusLabel();
+    public void startGame(int map) throws IOException {
+        if (!GE.multiplayer) {
+            GameEngine.gameEngine.multiplayerSetup(1, "lala", map);
+            if (GameEngine.gameEngine.isPaused()) {
+                GameEngine.gameEngine.gameLogic.getPlayers().clear();
+                GE.remove(statusLabel);
+                GE.revalidate();
+                GE.repaint();
+                GameEngine.gameEngine.restartGame();
+                GameEngine.gameEngine.setPaused(false);
+            }
+        }
         GameState.state=GameState.GAME;
+        setStatusLabel();
+    }
+
+    public void joinGame() {
+        GameEngine.gameEngine.multiplayerSetup(0,"baba",-1);
+        GameState.state=GameState.GAME;
+        setStatusLabel();
+
     }
 }

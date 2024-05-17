@@ -11,7 +11,6 @@ import bomberman.UI.PauseOverlay;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -26,7 +25,6 @@ import static bomberman.Game.Constants.*;
 
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
-    private InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream("Assets/backgroundgreen.png");
     private BufferedImage background;
     MenuGUI menuGUI;
     public GameLogic gameLogic;
@@ -38,32 +36,60 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private GameServer socketServer;
     private String username;
     public boolean server=false;
-    public boolean multiplayer;
+    public boolean multiplayer,serverhost;
     private boolean paused;
     private PauseOverlay pauseOverlay;
     private Mouse mouse;
-
-    public GameEngine(MenuGUI menuGUI){
+    private int map;
+    public GameEngine(MenuGUI menuGUI) throws IOException {
         gameEngine=this;
-        try {
-            background= ImageIO.read(backgroundlink);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         gameLogic = new GameLogic(this);
         this.menuGUI=menuGUI;
         setFocusable(true);
         startGameLoop();
-        int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
+        //int multiplayerint= JOptionPane.showConfirmDialog(this,"Do you want to play multiplayer?");
+        mouse=new Mouse(this);
+        addKeyListener(new Keyboard(this));
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
+        pauseOverlay=new PauseOverlay(this);
+        //socketClient.sendData("ping".getBytes());
+    }
+
+    public void setBackgroundimg(int map) {
+        this.map=map;
+        String location="";
+        switch (map){
+            case GREEN:
+                location=GREENLOC;
+                gameLogic.setLevel(gameLogic.getLevels().get(0));
+                break;
+            case PINK:
+                location=PINKLOC;
+                gameLogic.setLevel(gameLogic.getLevels().get(3));
+
+                break;
+            default:
+                break;
+        }
+        try {
+            InputStream backgroundlink = getClass().getClassLoader().getResourceAsStream(location);
+            background= ImageIO.read(backgroundlink);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void multiplayerSetup(int multiplayerint,String username,int map) {
         if (multiplayerint==0)
             multiplayer=true;
         else {
             multiplayer=false;
         }
         if (multiplayer) {
-            startServer();
-
-            username = JOptionPane.showInputDialog("Username:");
+            startServer(map);
+            this.username=username;
+            //username = JOptionPane.showInputDialog("Username:");
             PlayerMP playerMP = new PlayerMP(SPAWN1, SPAWN1Y, 40, 50, username, gameLogic.getLevel(), null, -1);
             gameLogic.getPlayers().add(playerMP);
             Packet00Login login = new Packet00Login(playerMP.getUsername(), playerMP.x, playerMP.y);
@@ -76,17 +102,11 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
             Bomberman man = new Bomberman(SPAWN1, SPAWN1Y, 40, 50, username, gameLogic.getLevel());
             gameLogic.getPlayers().add(man);
         }
-        mouse=new Mouse(this);
-        addKeyListener(new Keyboard(this));
-        addMouseListener(mouse);
-        addMouseMotionListener(mouse);
-        pauseOverlay=new PauseOverlay(this);
-        //socketClient.sendData("ping".getBytes());
     }
 
-    private synchronized void startServer() {
-        if (JOptionPane.showConfirmDialog(this,"Do you want to start the server?")==0){
-            socketServer=new GameServer(this);
+    private synchronized void startServer(int map) {
+        if (serverhost){
+            socketServer=new GameServer(this,map);
             socketServer.start();
             server=true;
         }
@@ -232,7 +252,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) throws IOException {
         Entity playerMP=null;
         if (multiplayer)
             playerMP= getPlayers().get(gameLogic.getPlayerMPIndex(username));
@@ -310,6 +330,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         }
     }
 
+
     @Override
     public void mousePressed(MouseEvent e) {
 
@@ -325,7 +346,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     }
 
-    public void restartGame() {
+    public void restartGame() throws IOException {
         /*for (Bomberman man : gameLogic.getPlayers()){
             man.reset();
         }*/
@@ -374,5 +395,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     public PauseOverlay getPauseOverlay() {
         return pauseOverlay;
+    }
+
+    public int getMap() {
+        return map;
     }
 }

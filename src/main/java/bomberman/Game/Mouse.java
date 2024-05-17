@@ -3,6 +3,7 @@ package bomberman.Game;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 
 public class Mouse implements MouseListener, MouseMotionListener {
     GameEngine gameEngine;
@@ -18,11 +19,19 @@ public class Mouse implements MouseListener, MouseMotionListener {
     public void mousePressed(MouseEvent e) {
         switch (GameState.state){
             case MENU:
-                gameEngine.menuGUI.mousePressed(e);
+                try {
+                    gameEngine.menuGUI.mousePressed(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case GAME:
                 if (gameEngine.isPaused()){
-                    gameEngine.getPauseOverlay().MousePressed(e);
+                    try {
+                        gameEngine.getPauseOverlay().MousePressed(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
                 else {
                     gameEngine.mousePressed(e);

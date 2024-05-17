@@ -67,6 +67,43 @@ class BombermanTest {
         bomberman.update();
         assertTrue(monster.collides_player(bomberman), "Monster should collide with Bomberman");
     }
+    @Test
+    void move() {
+        bomberman.x+=10;
+        bomberman.y+=10;
+        assertEquals(85, bomberman.getX(), "Bomberman's X coordinate should be updated after moving");
+        assertEquals(85, bomberman.getY(), "Bomberman's Y coordinate should be updated after moving");
+    }
+
+    @Test
+    void isAliveInitially() {
+        assertTrue(bomberman.isAlive(), "Bomberman should be alive initially");
+    }
+
+    @Test
+    void isDeadAfterSetDead() {
+        bomberman.setAlive(false);
+        assertFalse(bomberman.isAlive(), "Bomberman should be dead after explicitly setting dead");
+    }
+
+    @Test
+    void isNotDeadAfterSetAlive() {
+        bomberman.setAlive(false);
+        bomberman.setAlive(true);
+        assertTrue(bomberman.isAlive(), "Bomberman should be alive after explicitly setting alive");
+    }
+    @Test
+    void placeMultipleBombs() {
+        // Place multiple bombs
+        bomberman.placeBomb();
+        bomberman.placeBomb();
+        bomberman.placeBomb();
+        // Verify that placeBomb method is called three times
+        verify(mockLevel, times(3)).placeBomb(anyInt(), anyInt());
+    }
+
+
+
 
 
 }
