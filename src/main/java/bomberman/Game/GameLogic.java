@@ -18,10 +18,10 @@ public class GameLogic {
     public GameEngine gameEngine;
     public ArrayList<PowerUp> bombs;
     private boolean firstmove=false;
-    public GameLogic(GameEngine gameEngine){
+    public GameLogic(GameEngine gameEngine) throws IOException {
         levels=new ArrayList<>();
         loadLevels(gameEngine);
-        level=levels.get(0);
+        level=levels.get(3);
         this.gameEngine=gameEngine;
         this.players = new ArrayList<>();
         bombs=new ArrayList<>();
@@ -29,16 +29,22 @@ public class GameLogic {
         //players.add(new PlayerMP(70,70,40,50,"Muhammed",level));
     }
 
-    private void loadLevels(GameEngine gameEngine) {
+    private void loadLevels(GameEngine gameEngine) throws IOException {
         InputStream inputStream = getClass().getResourceAsStream("/Assets/greenlevel");
+        InputStream inputStream2 = getClass().getResourceAsStream("/Assets/pinklevel");
+
         if (inputStream == null) {
             System.err.println("Resource directory not found: /Assets/greenlevel");
             return;
         }
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader reader2 = new BufferedReader(new InputStreamReader(inputStream2));
+
         ArrayList<String> fileNames = new ArrayList<>();
         String line;
+        ArrayList<String> fileNamesp = new ArrayList<>();
+
         try {
             while ((line = reader.readLine()) != null) {
                 fileNames.add(line);
@@ -52,7 +58,19 @@ public class GameLogic {
                 e.printStackTrace();
             }
         }
-
+        try {
+            while ((line = reader2.readLine()) != null) {
+                fileNamesp.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         for (String fileName : fileNames) {
             System.out.println(fileName);
             String fileStream = ("Assets/greenlevel/" + fileName);
@@ -65,8 +83,18 @@ public class GameLogic {
                     throw new RuntimeException(e);
                 }
             }
-            else {
-                System.out.printf("lmao");
+        }
+        for (String fileName : fileNamesp) {
+            System.out.println(fileName);
+            String fileStream = ("Assets/pinklevel/" + fileName);
+            System.out.println(fileStream.toString());
+            if (fileStream != null) {
+                try {
+                    Level tmp = new Level(fileStream, gameEngine);
+                    levels.add(tmp);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -177,6 +205,18 @@ public class GameLogic {
             }
         }
 
+    }
+
+    public ArrayList<Level> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(ArrayList<Level> levels) {
+        this.levels = levels;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
     }
 }
 

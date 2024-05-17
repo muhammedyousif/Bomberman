@@ -41,7 +41,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private PauseOverlay pauseOverlay;
     private Mouse mouse;
     private int map;
-    public GameEngine(MenuGUI menuGUI){
+    public GameEngine(MenuGUI menuGUI) throws IOException {
         gameEngine=this;
         gameLogic = new GameLogic(this);
         this.menuGUI=menuGUI;
@@ -62,9 +62,12 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
         switch (map){
             case GREEN:
                 location=GREENLOC;
+                gameLogic.setLevel(gameLogic.getLevels().get(0));
                 break;
             case PINK:
                 location=PINKLOC;
+                gameLogic.setLevel(gameLogic.getLevels().get(3));
+
                 break;
             default:
                 break;

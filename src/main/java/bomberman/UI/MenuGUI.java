@@ -22,7 +22,7 @@ public class MenuGUI implements StateMethods{
     GameModeMenu gameModeMenu;
     MultiplayerMenu multiplayer;
     MapSelector mapSelector;
-    public MenuGUI(){
+    public MenuGUI() throws IOException {
         mainMenu=new MainMenu(this);
         gameModeMenu=new GameModeMenu(this);
         multiplayer=new MultiplayerMenu(this);
@@ -78,7 +78,7 @@ public class MenuGUI implements StateMethods{
         getmaniac();
 
     }
-    public void switchToGameEngine() {
+    public void switchToGameEngine() throws IOException {
         GE = new GameEngine(this);
         frame.add(GE);
         GE.setVisible(true);
