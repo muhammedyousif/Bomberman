@@ -22,6 +22,7 @@ public class MenuGUI implements StateMethods{
     GameModeMenu gameModeMenu;
     MultiplayerMenu multiplayer;
     MapSelector mapSelector;
+    JPanel statusBar;
     public MenuGUI() throws IOException {
         mainMenu=new MainMenu(this);
         gameModeMenu=new GameModeMenu(this);
@@ -44,7 +45,7 @@ public class MenuGUI implements StateMethods{
             }
         }
         frame.getContentPane().add(GE);
-        JPanel statusBar = new JPanel();
+        statusBar = new JPanel();
         statusBar.setBackground(Color.BLACK);
         statusBar.setPreferredSize(new Dimension(GAME_WIDTH, 45));
         //bomb
@@ -249,9 +250,6 @@ public class MenuGUI implements StateMethods{
             GameEngine.gameEngine.multiplayerSetup(1, "lala", map);
             if (GameEngine.gameEngine.isPaused()) {
                 GameEngine.gameEngine.gameLogic.getPlayers().clear();
-                GE.remove(statusLabel);
-                GE.revalidate();
-                GE.repaint();
                 GameEngine.gameEngine.restartGame();
                 GameEngine.gameEngine.setPaused(false);
             }
@@ -266,4 +264,12 @@ public class MenuGUI implements StateMethods{
         setStatusLabel();
 
     }
+    public void switchToMenu() {
+        GameState.state = GameState.MENU;
+        Page.page = Page.MAINMENU;
+        GE.remove(statusBar);
+        GE.revalidate();
+        GE.repaint();
+    }
+
 }

@@ -26,7 +26,7 @@ import static bomberman.Game.Constants.*;
 
 public class GameEngine extends JPanel implements Runnable,StateMethods{
     private BufferedImage background;
-    MenuGUI menuGUI;
+    public MenuGUI menuGUI;
     public GameLogic gameLogic;
     private int FPS_SET=120;
     public static GameEngine gameEngine;

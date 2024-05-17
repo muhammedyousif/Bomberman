@@ -105,8 +105,17 @@ public class PauseOverlay {
                 Packet01Disconnect packet = new Packet01Disconnect(GameEngine.gameEngine.getUsername());
                 packet.writeData(GameEngine.gameEngine.getSocketClient());
             }
+/*
             GameState.state=GameState.MENU;
             Page.page=Page.MAINMENU;
+            MenuGUI menuGUI=gameEngine.menuGUI;
+            gameEngine.remove(menuGUI.getStatusLabel());
+            gameEngine.revalidate();
+            gameEngine.repaint();
+*/
+            gameEngine.menuGUI.switchToMenu();
+            //menuGUI.frame.remove(menuGUI.getStatusLabel());
+
         }
     }
 
