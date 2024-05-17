@@ -69,7 +69,7 @@ public class MultiplayerMenu implements StateMethods {
         }
         if (isIn(e,join)){
             GameEngine.gameEngine.serverhost=false;
-            GameEngine.gameEngine.multiplayerSetup(0,"rider",-1);
+            //GameEngine.gameEngine.multiplayerSetup(0,"rider",-1);
             menuGUI.joinGame();
         }
     }
