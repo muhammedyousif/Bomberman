@@ -22,9 +22,10 @@ public class Level {
     private int gameHeight=800;
     private int id=0;
     private int monsterId=0;
-
+    public String levelpath;
     public Level(String levelPath,GameEngine gameEngine) throws IOException {
         explosions = new ArrayList<Explosion>();
+        levelpath=levelPath;
         bombs = new ArrayList<Bomb>();
         monsters=new ArrayList<Monster>();
         grid = new ArrayList<>();
@@ -201,5 +202,17 @@ public class Level {
 
     public ArrayList<Barricade> getBarricades() {
         return barricades;
+    }
+
+    public void reset() throws IOException {
+        grid.clear();
+        bombs.clear();
+        monsters.clear();
+        explosions.clear();
+        bigBombs.clear();
+        barricades.clear();
+
+
+        fileToLevel(levelpath);
     }
 }

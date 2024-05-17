@@ -245,13 +245,14 @@ public class MenuGUI implements StateMethods{
         }
     }
     public void startGame(int map){
-        GameEngine.gameEngine.multiplayerSetup(1,"",map);
+        if (!GE.multiplayer)
+            GameEngine.gameEngine.multiplayerSetup(1,"dada",map);
         GameState.state=GameState.GAME;
         setStatusLabel();
     }
 
     public void joinGame() {
-        GameEngine.gameEngine.multiplayerSetup(1,"",-1);
+        GameEngine.gameEngine.multiplayerSetup(0,"baba",-1);
         GameState.state=GameState.GAME;
         setStatusLabel();
 

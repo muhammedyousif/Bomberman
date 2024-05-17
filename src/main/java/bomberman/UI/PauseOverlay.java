@@ -78,7 +78,7 @@ public class PauseOverlay {
                 break;
         }
     }
-    public void MousePressed(MouseEvent e){
+    public void MousePressed(MouseEvent e) throws IOException {
         if (isIn(e,resume)){
             pause=false;
         } else if (isIn(e,restart)) {

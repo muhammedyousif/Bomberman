@@ -38,7 +38,11 @@ public class GameServer extends Thread{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            parsePacket(packet.getData(),packet.getAddress(),packet.getPort());
+            try {
+                parsePacket(packet.getData(),packet.getAddress(),packet.getPort());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             /*String message = new String(packet.getData());
             System.out.println("client >" + message);
             if (message.trim().equalsIgnoreCase("ping"))
@@ -46,7 +50,7 @@ public class GameServer extends Thread{
         }
     }
 
-    private void parsePacket(byte[] data, InetAddress address, int port) {
+    private void parsePacket(byte[] data, InetAddress address, int port) throws IOException {
         Packet p=null;
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookUpPacket(message.substring(0,2));
@@ -93,6 +97,10 @@ public class GameServer extends Thread{
                 p=new Packet06Restart(data);
                 handleRestart((Packet06Restart)p);
                 break;
+            case MAP:
+                p=new Packet08Map(data);
+                p.writeData(this);
+                break;
         }
     }
 
@@ -111,7 +119,7 @@ public class GameServer extends Thread{
             }
     }
 
-    private void handleRestart(Packet06Restart p) {
+    private void handleRestart(Packet06Restart p) throws IOException {
         for (PlayerMP player: connectedPlayers){
             player.reset();
             player.getLevel().gameEngine.restartGame();

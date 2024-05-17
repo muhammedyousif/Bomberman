@@ -3,6 +3,7 @@ import bomberman.Game.Bomberman;
 import bomberman.Game.GameEngine;
 import bomberman.Game.Level;
 import bomberman.Packets.Packer07Monster;
+import bomberman.Packets.Packet08Map;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -166,6 +167,11 @@ public class Monster extends Entity {
             if (GameEngine.gameEngine.multiplayer) {
                 Packer07Monster packet = new Packer07Monster(GameEngine.gameEngine.getUsername(), id, hitbox.x, hitbox.y, alive);
                 GameEngine.gameEngine.getSocketClient().sendData(packet.getData());
+                if (GameEngine.gameEngine.serverhost) {
+                    Packet08Map p = new Packet08Map(GameEngine.gameEngine.getUsername(), GameEngine.gameEngine.getMap());
+                    GameEngine.gameEngine.getSocketClient().sendData(p.getData());
+                }
+
             }
         }
 

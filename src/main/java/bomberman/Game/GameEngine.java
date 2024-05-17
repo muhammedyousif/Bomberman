@@ -40,7 +40,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     private boolean paused;
     private PauseOverlay pauseOverlay;
     private Mouse mouse;
-
+    private int map;
     public GameEngine(MenuGUI menuGUI){
         gameEngine=this;
         gameLogic = new GameLogic(this);
@@ -57,6 +57,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     public void setBackgroundimg(int map) {
+        this.map=map;
         String location="";
         switch (map){
             case GREEN:
@@ -248,7 +249,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) throws IOException {
         Entity playerMP=null;
         if (multiplayer)
             playerMP= getPlayers().get(gameLogic.getPlayerMPIndex(username));
@@ -342,7 +343,7 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     }
 
-    public void restartGame() {
+    public void restartGame() throws IOException {
         /*for (Bomberman man : gameLogic.getPlayers()){
             man.reset();
         }*/
@@ -391,5 +392,9 @@ public class GameEngine extends JPanel implements Runnable,StateMethods{
 
     public PauseOverlay getPauseOverlay() {
         return pauseOverlay;
+    }
+
+    public int getMap() {
+        return map;
     }
 }

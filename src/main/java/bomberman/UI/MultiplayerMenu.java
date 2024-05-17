@@ -58,6 +58,7 @@ public class MultiplayerMenu implements StateMethods {
             page=GAMEMODE;
         }
         if (isIn(e,start)){
+            GameEngine.gameEngine.multiplayer=true;
             page=MAP;
 
 /*

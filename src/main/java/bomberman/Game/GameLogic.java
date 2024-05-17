@@ -161,8 +161,10 @@ public class GameLogic {
         players.get(index).setRight(right);
     }
 
-    public void reset() {
-        loadLevels(gameEngine);
+    public void reset() throws IOException {
+        //level.reset();
+        String path=level.levelpath;
+        level=new Level(path,gameEngine);
         bombs=new ArrayList<>();
         if (!gameEngine.multiplayer){
             getPlayers().get(0).setLevel(level);
